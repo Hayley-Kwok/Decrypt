@@ -1,0 +1,55 @@
+﻿@page "/"
+@using System.Text.Json
+@using Decrypt.Model.Facebook
+@using System.IO.Compression
+@inject DialogService _dialogService
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+<SharedAdvertisersTable/>
+
+<div class="row">
+	<div class="col-4">
+		<NumberCardWithTableDialog 
+			Title="SharedAdvertiser" Number="_advertisersUsingYourActivity?.SharedAdvertisers?.Count() ?? 0"
+			OnClickFunc="ShowAdvertisersUsingYourActivityDialog"/>
+	</div>
+</div>
+
+<h1>Load in zip files</h1>
+<InputFile OnChange="@LoadFiles"/>
+
+
+@code {
+	private static readonly JsonSerializerOptions Options = new ();
+	private const long MaxFileSize = 4294967296; // 4 GB
+	private AdvertisersUsingYourActivity? _advertisersUsingYourActivity;
+
+	private async Task LoadFiles(InputFileChangeEventArgs e)
+	{
+		//TODO: figure out a better way to do this
+		await using var stream = new MemoryStream();
+		await e.File.OpenReadStream(MaxFileSize).CopyToAsync(stream);
+		using var archive = new ZipArchive(stream);
+		foreach (var entry in archive.Entries)
+		{
+			if (entry.FullName.EndsWith("advertisers_using_your_activity_or_information.json", StringComparison.OrdinalIgnoreCase))
+			{
+				var unzippedEntryStream = entry.Open();
+				_advertisersUsingYourActivity = await JsonSerializer.DeserializeAsync<AdvertisersUsingYourActivity>(unzippedEntryStream, Options);
+			}
+		}
+		
+	}
+
+	private async Task ShowAdvertisersUsingYourActivityDialog()
+	{
+		await _dialogService.OpenAsync("Advertisers Using Your Activity", ds =>
+			@<div>
+				<h3>Yeaaaa Life is Good</h3>
+				<SharedAdvertisersTable/>
+			</div>
+			);
+	}
+}

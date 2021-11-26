@@ -1,0 +1,28 @@
+﻿<RadzenCard class="@GetClasses()" @onclick="OnClickFunc">
+	<h3>@Title</h3>
+	<h1 class="text-end me-3">@Number</h1>
+</RadzenCard>
+
+
+@code {
+	    
+	private const string DefaultClasses = "m-3 clickable";
+	
+	[Parameter]
+	public int Number { get; set; }
+
+	[Parameter]
+	public string? Title { get; set; }
+
+	[Parameter]
+	public string CustomClasses { get; set; } = "";
+
+	[Parameter, EditorRequired]
+	public Func<Task> OnClickFunc { get; set; } = null!;
+
+	private string GetClasses()
+	{
+		return CustomClasses + DefaultClasses;
+	}
+
+}
