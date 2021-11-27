@@ -1,17 +1,28 @@
 ﻿@using Decrypt.Model.Facebook
 
 <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true" 
-    Data="@SharedAdvertisers" TItem="SharedAdvertiser" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or">
+    Data="@SharedAdvertisers" TItem="SharedAdvertiser" LogicalFilterOperator="LogicalFilterOperator.Or">
     <Columns>
-	    <RadzenDataGridColumn TItem="SharedAdvertiser" Property="@nameof(SharedAdvertiser.Name)" Title="Advertiser Name" />
-        <RadzenDataGridColumn TItem="SharedAdvertiser" Property="@nameof(SharedAdvertiser.HasDataFileCustomAudience)" Title="Has Custom Audience File?"/>
-        <RadzenDataGridColumn TItem="SharedAdvertiser" Property="@nameof(SharedAdvertiser.HasRemarketingCustomAudience)" Title="Remarketing Audience?" />
-        <RadzenDataGridColumn TItem="SharedAdvertiser" Property="@nameof(SharedAdvertiser.HasInPersonStoreVisit)" Title="Has in person store visit?" />
+	    <RadzenDataGridColumn TItem="SharedAdvertiser" Property="@nameof(SharedAdvertiser.Name)" Title="@SharedAdvertiserDisplayNames.Name" />
+	    <RadzenDataGridColumn TItem="SharedAdvertiser" Property="@nameof(SharedAdvertiser.HasDataFileCustomAudience)" Title="@SharedAdvertiserDisplayNames.HasDataFileCustomAudience">
+		    <Template Context="advertiser">
+				@RadzenDataGridColumnFormat.TransformBoolToYesNo(advertiser.HasDataFileCustomAudience)
+		    </Template>
+		</RadzenDataGridColumn>
+	    <RadzenDataGridColumn TItem="SharedAdvertiser" Property="@nameof(SharedAdvertiser.HasRemarketingCustomAudience)" Title="@SharedAdvertiserDisplayNames.HasRemarketingCustomAudience" >
+		    <Template Context="advertiser">
+			    @RadzenDataGridColumnFormat.TransformBoolToYesNo(advertiser.HasRemarketingCustomAudience)
+		    </Template>
+	    </RadzenDataGridColumn>
+	    <RadzenDataGridColumn TItem="SharedAdvertiser" Property="@nameof(SharedAdvertiser.HasInPersonStoreVisit)" Title="@SharedAdvertiserDisplayNames.HasInPersonStoreVisit" >
+		    <Template Context="advertiser">
+			    @RadzenDataGridColumnFormat.TransformBoolToYesNo(advertiser.HasInPersonStoreVisit)
+		    </Template>
+	    </RadzenDataGridColumn>
     </Columns>
 </RadzenDataGrid>
 
 @code {
 	[Parameter]
     public IEnumerable<SharedAdvertiser> SharedAdvertisers { get; set; } = null!;
-
 }

@@ -32,7 +32,7 @@
 		using var archive = new ZipArchive(stream);
 		foreach (var entry in archive.Entries)
 		{
-			if (entry.FullName.EndsWith("advertisers_using_your_activity_or_information.json", StringComparison.OrdinalIgnoreCase))
+			if (entry.FullName.EndsWith(AdvertisersUsingYourActivity.Filepath, StringComparison.OrdinalIgnoreCase))
 			{
 				var unzippedEntryStream = entry.Open();
 				_advertisersUsingYourActivity = await JsonSerializer.DeserializeAsync<AdvertisersUsingYourActivity>(unzippedEntryStream, Options);
