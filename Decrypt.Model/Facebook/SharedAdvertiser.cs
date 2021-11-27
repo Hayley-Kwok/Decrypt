@@ -14,7 +14,7 @@ namespace Decrypt.Model.Facebook
         [JsonPropertyName("advertiser_name")]
 		public string? Name { get; set; }
 
-		[JsonPropertyName("has_data_file_custom_audience")]
+        [JsonPropertyName("has_data_file_custom_audience")]
         public bool HasDataFileCustomAudience { get; set; }
 
         [JsonPropertyName("has_remarketing_custom_audience")]

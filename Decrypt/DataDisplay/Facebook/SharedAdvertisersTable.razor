@@ -1,5 +1,17 @@
-﻿<h3>SharedAdvertisersTable</h3>
+﻿@using Decrypt.Model.Facebook
+
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true" 
+    Data="@SharedAdvertisers" TItem="SharedAdvertiser" ColumnWidth="300px" LogicalFilterOperator="LogicalFilterOperator.Or">
+    <Columns>
+	    <RadzenDataGridColumn TItem="SharedAdvertiser" Property="@nameof(SharedAdvertiser.Name)" Title="Advertiser Name" />
+        <RadzenDataGridColumn TItem="SharedAdvertiser" Property="@nameof(SharedAdvertiser.HasDataFileCustomAudience)" Title="Has Custom Audience File?"/>
+        <RadzenDataGridColumn TItem="SharedAdvertiser" Property="@nameof(SharedAdvertiser.HasRemarketingCustomAudience)" Title="Remarketing Audience?" />
+        <RadzenDataGridColumn TItem="SharedAdvertiser" Property="@nameof(SharedAdvertiser.HasInPersonStoreVisit)" Title="Has in person store visit?" />
+    </Columns>
+</RadzenDataGrid>
 
 @code {
+	[Parameter]
+    public IEnumerable<SharedAdvertiser> SharedAdvertisers { get; set; } = null!;
 
 }
