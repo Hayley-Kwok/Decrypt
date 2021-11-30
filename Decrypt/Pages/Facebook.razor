@@ -1,0 +1,28 @@
+﻿@page "/facebook"
+@using Decrypt.Model.Facebook
+@using Decrypt.Services
+
+@inject DialogService _dialogService
+@inject DataService _dataService
+
+<PageTitle>Facebook Data</PageTitle>
+<h1>Your Facebook Data</h1>
+
+<div class="row">
+	<div class="col-4">
+		<NumberCardWithTableDialog Title="SharedAdvertiser" 
+		                           Number="_dataService.FbRoot?.AdvertisersUsingYourActivity?.SharedAdvertisers?.Count() ?? 0"
+		                           OnClickFunc="ShowAdvertisersUsingYourActivityDialog" />
+	</div>
+</div>
+
+@code {
+	private async Task ShowAdvertisersUsingYourActivityDialog()
+	{
+		await _dialogService.OpenAsync<SharedAdvertisersTable>("Advertisers Using Your Activity",
+			new Dictionary<string, object>
+			{ { nameof(SharedAdvertisersTable.SharedAdvertisers), 
+				_dataService.FbRoot?.AdvertisersUsingYourActivity?.SharedAdvertisers ?? Array.Empty<SharedAdvertiser>() } },
+			new DialogOptions { Width = "90%", Height = "80%", Resizable = true }); //TODO: figure out dynamic sizing
+	}
+}

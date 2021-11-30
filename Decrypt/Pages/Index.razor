@@ -3,26 +3,20 @@
 @using Decrypt.Model.Facebook
 @using System.IO.Compression
 @using Decrypt.Model
-@inject DialogService _dialogService
+@using Decrypt.Services
 
-<PageTitle>Index</PageTitle>
-
-<h1>Hello, world!</h1>
-
-<div class="row">
-	<div class="col-4">
-		<NumberCardWithTableDialog Title="SharedAdvertiser" Number="_advertisersUsingYourActivity?.SharedAdvertisers?.Count() ?? 0"
-								   OnClickFunc="ShowAdvertisersUsingYourActivityDialog" />
-	</div>
-</div>
+@inject DataService _dataService
+<PageTitle>Home</PageTitle>
 
 <h1>Load in zip files</h1>
 <InputFile OnChange="@LoadFiles" />
 
+<a href="https://www.facebook.com/dyi/?referrer=ayi">Download your Facebook Data</a>
+
+
 
 @code {
 	private const long MaxFileSize = 4294967296; // 4 GB
-	private AdvertisersUsingYourActivity? _advertisersUsingYourActivity;
 
 	private async Task LoadFiles(InputFileChangeEventArgs e)
 	{
@@ -38,17 +32,11 @@
 			if (entry.FullName.EndsWith(AdvertisersUsingYourActivity.Filepath, StringComparison.OrdinalIgnoreCase))
 			{
 				var unzippedEntryStream = entry.Open();
-				_advertisersUsingYourActivity = await JsonSerializer.DeserializeAsync<AdvertisersUsingYourActivity>(unzippedEntryStream, options);
+				_dataService.FbRoot ??= new FbRoot();
+				_dataService.FbRoot.AdvertisersUsingYourActivity = await JsonSerializer.DeserializeAsync<AdvertisersUsingYourActivity>(unzippedEntryStream, options);
 			}
 		}
-
 	}
 
-	private async Task ShowAdvertisersUsingYourActivityDialog()
-	{
-		await _dialogService.OpenAsync<SharedAdvertisersTable>("Advertisers Using Your Activity",
-			new Dictionary<string, object>
-				{ { nameof(SharedAdvertisersTable.SharedAdvertisers), _advertisersUsingYourActivity?.SharedAdvertisers ?? Array.Empty<SharedAdvertiser>() } },
-			new DialogOptions { Width = "90%", Height = "80%", Resizable = true }); //TODO: figure out dynamic sizing
-	}
+	
 }

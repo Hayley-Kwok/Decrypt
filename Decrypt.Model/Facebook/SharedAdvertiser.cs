@@ -1,6 +1,5 @@
 ﻿using System.Text.Json.Serialization;
 
-//path: ads_information/advertisers_using_your_activity_or_information.json
 namespace Decrypt.Model.Facebook
 {
     public class AdvertisersUsingYourActivity
