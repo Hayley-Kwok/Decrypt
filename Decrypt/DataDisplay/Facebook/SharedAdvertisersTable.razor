@@ -1,15 +1,18 @@
 ﻿@using Decrypt.Model.Facebook
 
+@* TODO add description to custom audience *@
 <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true" 
     Data="@SharedAdvertisers" TItem="SharedAdvertiser" LogicalFilterOperator="LogicalFilterOperator.Or">
     <Columns>
 	    <RadzenDataGridColumn TItem="SharedAdvertiser" Property="@nameof(SharedAdvertiser.Name)" Title="@SharedAdvertiser.NameDisplayName" />
-	    <RadzenDataGridColumn TItem="SharedAdvertiser" Property="@nameof(SharedAdvertiser.HasDataFileCustomAudience)" Title="@SharedAdvertiser.HasDataFileCustomAudienceDisplayName">
+	    <RadzenDataGridColumn TItem="SharedAdvertiser" Property="@nameof(SharedAdvertiser.HasDataFileCustomAudience)">
+		    <HeaderTemplate><span data-toggle="tooltip" title="@SharedAdvertiser.HasDataFileCustomAudienceDescription">@SharedAdvertiser.HasDataFileCustomAudienceDisplayName  <i class="oi bi-info-circle"/></span>   </HeaderTemplate>
 		    <Template Context="advertiser">
 				@RadzenDataGridColumnFormat.TransformBoolToYesNo(advertiser.HasDataFileCustomAudience)
 		    </Template>
 		</RadzenDataGridColumn>
-	    <RadzenDataGridColumn TItem="SharedAdvertiser" Property="@nameof(SharedAdvertiser.HasRemarketingCustomAudience)" Title="@SharedAdvertiser.HasRemarketingCustomAudienceDisplayName" >
+	    <RadzenDataGridColumn TItem="SharedAdvertiser" Property="@nameof(SharedAdvertiser.HasRemarketingCustomAudience)">
+		    <HeaderTemplate><span data-toggle="tooltip" title="@SharedAdvertiser.HasRemarketingCustomAudienceDescription">@SharedAdvertiser.HasRemarketingCustomAudienceDisplayName  <i class="oi bi-info-circle"/></span>   </HeaderTemplate>
 		    <Template Context="advertiser">
 			    @RadzenDataGridColumnFormat.TransformBoolToYesNo(advertiser.HasRemarketingCustomAudience)
 		    </Template>
@@ -18,6 +21,9 @@
 		    <Template Context="advertiser">
 			    @RadzenDataGridColumnFormat.TransformBoolToYesNo(advertiser.HasInPersonStoreVisit)
 		    </Template>
+	    </RadzenDataGridColumn>
+	    <RadzenDataGridColumn TItem="SharedAdvertiser" Property="@nameof(SharedAdvertiser.IngestedOn)">
+		    <HeaderTemplate><span data-toggle="tooltip" title="@SharedAdvertiser.IngestedOnDescription">@SharedAdvertiser.IngestedOnDisplayName  <i class="oi bi-info-circle"/></span>   </HeaderTemplate>
 	    </RadzenDataGridColumn>
     </Columns>
 </RadzenDataGrid>

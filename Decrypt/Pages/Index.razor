@@ -9,10 +9,13 @@
 <PageTitle>Home</PageTitle>
 
 <h1>Load in zip files</h1>
-<InputFile OnChange="@LoadFiles" />
-
-<a href="https://www.facebook.com/dyi/?referrer=ayi">Download your Facebook Data</a>
-
+<div class="my-3">
+	<InputFile label="file_upload" title="file_upload" OnChange="@LoadFiles" accept=".zip" />
+</div>
+<div class="my-3">
+	<h3>Download Links:</h3>
+	<a href="https://www.facebook.com/dyi/?referrer=ayi" target="_blank">Download your Facebook Data</a>
+</div>
 
 
 @code {
@@ -22,6 +25,7 @@
 	{
 		var options = new JsonSerializerOptions();
 		options.Converters.Add(new FbConverter());
+		var ingestedOn = DateTimeOffset.Now;
 
 		//TODO: figure out a better way to do this
 		await using var stream = new MemoryStream();
@@ -33,7 +37,14 @@
 			{
 				var unzippedEntryStream = entry.Open();
 				_dataService.FbRoot ??= new FbRoot();
+				
 				_dataService.FbRoot.AdvertisersUsingYourActivity = await JsonSerializer.DeserializeAsync<AdvertisersUsingYourActivity>(unzippedEntryStream, options);
+
+				if (_dataService.FbRoot?.AdvertisersUsingYourActivity?.SharedAdvertisers == null) continue;
+				foreach (var advertiser in _dataService.FbRoot.AdvertisersUsingYourActivity.SharedAdvertisers)
+				{
+					advertiser.IngestedOn = ingestedOn;
+				}
 			}
 		}
 	}

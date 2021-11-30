@@ -19,7 +19,7 @@
 @code {
 	private async Task ShowAdvertisersUsingYourActivityDialog()
 	{
-		await _dialogService.OpenAsync<SharedAdvertisersTable>("Advertisers Using Your Activity",
+		await _dialogService.OpenAsync<SharedAdvertisersTable>("Advertisers Using Your Activity or Information",
 			new Dictionary<string, object>
 			{ { nameof(SharedAdvertisersTable.SharedAdvertisers), 
 				_dataService.FbRoot?.AdvertisersUsingYourActivity?.SharedAdvertisers ?? Array.Empty<SharedAdvertiser>() } },
