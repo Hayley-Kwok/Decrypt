@@ -1,10 +1,16 @@
 ﻿using System.Text.Json.Serialization;
+using Decrypt.Model.Shared.Interfaces;
 
 namespace Decrypt.Model.Facebook
 {
-    public class AdvertisersUsingYourActivity
+    public class AdvertisersUsingYourActivity : IIngestedFileComponent
     {
         public static readonly string Filepath = @"ads_information/advertisers_using_your_activity_or_information.json";
+        public static readonly string Title = "Advertisers Using Your Activity or Information";
+
+        public static readonly string Description =
+            "Advertisers can choose to show their ads to certain audiences. You may see ads because an advertiser has included you in an audience based on a list of information or your interactions with their website, app or store. Advertisers can use or upload a list of information that Facebook can match to your profile.";
+
 
         [JsonPropertyName("custom_audiences_all_types_v2")]
         public IEnumerable<SharedAdvertiser>? SharedAdvertisers { get; set; }

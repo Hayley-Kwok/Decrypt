@@ -46,6 +46,14 @@
 					advertiser.IngestedOn = ingestedOn;
 				}
 			}
+
+			if (entry.FullName.EndsWith(AdvertiserYouInteractedWith.Filepath, StringComparison.OrdinalIgnoreCase))
+			{
+				var unzippedEntryStream = entry.Open();
+				_dataService.FbRoot ??= new FbRoot();
+
+				_dataService.FbRoot.AdvertiserYouInteractedWith = await JsonSerializer.DeserializeAsync<AdvertiserYouInteractedWith>(unzippedEntryStream, options);
+			}
 		}
 	}
 
