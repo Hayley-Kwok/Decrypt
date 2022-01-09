@@ -1,9 +1,9 @@
-﻿namespace Decrypt.Model.Facebook
+﻿using Decrypt.Model.Shared.Interfaces;
+
+namespace Decrypt.Model.Facebook
 {
     public class FbRoot
     {
-        public AdvertisersUsingYourActivity? AdvertisersUsingYourActivity { get; set; }
-
-        public AdvertiserYouInteractedWith? AdvertiserYouInteractedWith { get; set; }
+        public Dictionary<string, IFileWrapper> AvailableData { get; set; } = new();
     }
 }

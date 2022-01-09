@@ -1,5 +1,12 @@
 ﻿@using Decrypt.Model.Facebook
 
+<p>
+	@AdvertisersUsingYourActivity.Description
+	<br/>
+	<a href="https://www.facebook.com/business/help/744354708981227?id=2469097953376494">More on Custom Audience</a>
+	<br/>
+</p>
+
 @* figure out dynamic sizing for page size*@
 <RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true"
                 Data="@SharedAdvertisers" TItem="SharedAdvertiser" LogicalFilterOperator="LogicalFilterOperator.Or" PageSize="12">
@@ -22,12 +29,9 @@
 				@RadzenDataGridColumnFormat.TransformBoolToYesNo(advertiser.HasInPersonStoreVisit)
 			</Template>
 		</RadzenDataGridColumn>
-		<RadzenDataGridColumn TItem="SharedAdvertiser" Property="@nameof(SharedAdvertiser.IngestedOn)">
-			<HeaderTemplate><span data-toggle="tooltip" title="@SharedAdvertiser.IngestedOnDescription">@SharedAdvertiser.IngestedOnDisplayName <i class="oi bi-info-circle"/></span> </HeaderTemplate>
-		</RadzenDataGridColumn>
 	</Columns>
 </RadzenDataGrid>
-<p><a href="https://www.facebook.com/business/help/744354708981227?id=2469097953376494">More on Custom Audience</a></p>
+
 @code {
 	[Parameter]
     public IEnumerable<SharedAdvertiser> SharedAdvertisers { get; set; } = null!;

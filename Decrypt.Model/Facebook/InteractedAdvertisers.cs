@@ -3,7 +3,7 @@ using Decrypt.Model.Shared.Interfaces;
 
 namespace Decrypt.Model.Facebook
 {
-    public class AdvertiserYouInteractedWith : IIngestedFileComponent
+    public class AdvertiserYouInteractedWith : IFileWrapper
     {
         public static readonly string Filepath = @"ads_information/advertisers_you've_interacted_with.json";
         public static readonly string Title = "Advertisers you have interacted with";

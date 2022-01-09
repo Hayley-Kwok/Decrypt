@@ -3,6 +3,7 @@
 @using Decrypt.Model.Facebook
 @using System.IO.Compression
 @using Decrypt.Model
+@using Decrypt.Model.Shared.Interfaces
 @using Decrypt.Services
 
 @inject DataService _dataService
@@ -19,40 +20,33 @@
 
 
 @code {
+
+	private readonly Dictionary<string, Type> _fileWrappers = new()
+	{
+		{ AdvertisersUsingYourActivity.Filepath, typeof(AdvertisersUsingYourActivity) }, 
+		{ AdvertiserYouInteractedWith.Filepath, typeof(AdvertiserYouInteractedWith) }
+	};
+
 	private const long MaxFileSize = 4294967296; // 4 GB
 
 	private async Task LoadFiles(InputFileChangeEventArgs e)
 	{
 		var options = new JsonSerializerOptions();
 		options.Converters.Add(new FbConverter());
-		var ingestedOn = DateTimeOffset.Now;
 
-		//TODO: figure out a better way to do this
+	//TODO: figure out a better way to do this
 		await using var stream = new MemoryStream();
 		await e.File.OpenReadStream(MaxFileSize).CopyToAsync(stream);
 		using var archive = new ZipArchive(stream);
 		foreach (var entry in archive.Entries)
 		{
-			if (entry.FullName.EndsWith(AdvertisersUsingYourActivity.Filepath, StringComparison.OrdinalIgnoreCase))
+			if (!_fileWrappers.TryGetValue(entry.FullName, out var wrapperType)) continue;
+			var unzippedEntryStream = entry.Open();
+			_dataService.FbRoot ??= new FbRoot();
+
+			if (await JsonSerializer.DeserializeAsync(unzippedEntryStream, wrapperType, options) is IFileWrapper wrapperObj)
 			{
-				var unzippedEntryStream = entry.Open();
-				_dataService.FbRoot ??= new FbRoot();
-				
-				_dataService.FbRoot.AdvertisersUsingYourActivity = await JsonSerializer.DeserializeAsync<AdvertisersUsingYourActivity>(unzippedEntryStream, options);
-
-				if (_dataService.FbRoot?.AdvertisersUsingYourActivity?.SharedAdvertisers == null) continue;
-				foreach (var advertiser in _dataService.FbRoot.AdvertisersUsingYourActivity.SharedAdvertisers)
-				{
-					advertiser.IngestedOn = ingestedOn;
-				}
-			}
-
-			if (entry.FullName.EndsWith(AdvertiserYouInteractedWith.Filepath, StringComparison.OrdinalIgnoreCase))
-			{
-				var unzippedEntryStream = entry.Open();
-				_dataService.FbRoot ??= new FbRoot();
-
-				_dataService.FbRoot.AdvertiserYouInteractedWith = await JsonSerializer.DeserializeAsync<AdvertiserYouInteractedWith>(unzippedEntryStream, options);
+				_dataService.FbRoot.AvailableData.TryAdd(wrapperType.Name, wrapperObj);
 			}
 		}
 	}

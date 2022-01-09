@@ -9,25 +9,33 @@
 <h1>Your Facebook Data</h1>
 
 <div class="row">
-	<div class="col-4">
-		<NumberCardWithTableDialog Title= "@AdvertisersUsingYourActivity.Title" 
-		                           Number="_dataService.FbRoot?.AdvertisersUsingYourActivity?.SharedAdvertisers?.Count() ?? 0"
-		                           OnClickFunc="ShowAdvertisersUsingYourActivityDialog" />
-	</div>
-	<div class="col-4">
-		<NumberCardWithTableDialog Title= "@AdvertiserYouInteractedWith.Title" 
-		                           Number="_dataService.FbRoot?.AdvertiserYouInteractedWith?.InteractedAdvertisers?.Count() ?? 0"
-		                           OnClickFunc="ShowAdvertisersUsingYourActivityDialog" /> @* todo: change the function *@
-	</div>
+	@if (_dataService.FbRoot?.AvailableData.TryGetValue(nameof(AdvertisersUsingYourActivity), out var wrapperObj)?? false)
+	{
+		<div class="col-4">
+			<NumberCardWithTableDialog Title="@AdvertisersUsingYourActivity.Title"
+			                           Number="((AdvertisersUsingYourActivity)wrapperObj).SharedAdvertisers?.Count() ?? 0"
+			                           OnClickFunc="ShowAdvertisersUsingYourActivityDialog"/>
+		</div>
+	}
+	@* <div class="col-4"> *@
+	@* 	<NumberCardWithTableDialog Title="@AdvertiserYouInteractedWith.Title" *@
+	@* 	                           Number="_dataService.FbRoot?.AdvertiserYouInteractedWith?.InteractedAdvertisers?.Count() ?? 0" *@
+	@* 	                           OnClickFunc="ShowAdvertisersUsingYourActivityDialog"/> $1$ todo: change the function #1# *@
+	@* </div> *@
 </div>
 
 @code {
 	private async Task ShowAdvertisersUsingYourActivityDialog()
 	{
-		await _dialogService.OpenAsync<SharedAdvertisersTable>(AdvertisersUsingYourActivity.Title,
-			new Dictionary<string, object>
-			{ { nameof(SharedAdvertisersTable.SharedAdvertisers), 
-				_dataService.FbRoot?.AdvertisersUsingYourActivity?.SharedAdvertisers ?? Array.Empty<SharedAdvertiser>() } },
-			new DialogOptions { Width = "90%", Height = "90%", Resizable = true });
+		if (_dataService.FbRoot?.AvailableData.TryGetValue(nameof(AdvertisersUsingYourActivity), out var wrapper)?? false)
+		{
+			var advertiserUsingYourActivity = wrapper as AdvertisersUsingYourActivity;
+			await _dialogService.OpenAsync<SharedAdvertisersTable>(AdvertisersUsingYourActivity.Title,
+				new Dictionary<string, object>
+				{ { nameof(SharedAdvertisersTable.SharedAdvertisers), 
+					advertiserUsingYourActivity?.SharedAdvertisers ?? Array.Empty<SharedAdvertiser>() } },
+				new DialogOptions { Width = "90%", Height = "90%", Resizable = true });
+		}
+		
 	}
 }

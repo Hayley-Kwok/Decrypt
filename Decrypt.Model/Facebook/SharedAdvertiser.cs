@@ -3,7 +3,7 @@ using Decrypt.Model.Shared.Interfaces;
 
 namespace Decrypt.Model.Facebook
 {
-    public class AdvertisersUsingYourActivity : IIngestedFileComponent
+    public class AdvertisersUsingYourActivity : IFileWrapper
     {
         public static readonly string Filepath = @"ads_information/advertisers_using_your_activity_or_information.json";
         public static readonly string Title = "Advertisers Using Your Activity or Information";
@@ -18,9 +18,6 @@ namespace Decrypt.Model.Facebook
 
     public class SharedAdvertiser
     {
-        public static readonly string IngestedOnDescription = "The time of the data being loaded in";
-        public static readonly string IngestedOnDisplayName = "Ingested On";
-        public DateTimeOffset IngestedOn { get; set; }
 
         public static readonly string NameDisplayName = "Advertiser Name";
         [JsonPropertyName("advertiser_name")]
