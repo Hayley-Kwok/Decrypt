@@ -15,10 +15,10 @@ var Options = new JsonSerializerOptions();
 await using var stream = new FileStream(@"C:\Users\wingk\hayley\uni\cs_year3_Sem1\diss\data\fb-json\ads_information\temp.json", FileMode.Open);
 var results = await JsonSerializer.DeserializeAsync<AdvertisersUsingYourActivity>(stream, Options);
 
-foreach (var result in results.SharedAdvertisers)
-{
-    Console.WriteLine(result.Name);
-}
+// foreach (var result in results.SharedAdvertisers)
+// {
+//     Console.WriteLine(result.Name);
+// }
 
 // var zipPath = @"C:\Users\wingk\hayley\uni\cs_year3_Sem1\diss\data\fb-json\ads_information.zip";
 // using (ZipArchive archive = ZipFile.OpenRead(zipPath))

@@ -45,7 +45,7 @@ namespace Decrypt.Model.Shared
             {
                 bool booValue => TransformBoolToYesNo(booValue),
                 string strValue => strValue,
-                _ => "NULL"
+                _ => value?.ToString() ?? "NULL"
             };
         }
     }

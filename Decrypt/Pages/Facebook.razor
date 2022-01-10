@@ -1,5 +1,5 @@
 ﻿@page "/facebook"
-@using Decrypt.Model.Facebook
+@using Decrypt.Model.Shared.Interfaces
 @using Decrypt.Services
 
 @inject DialogService _dialogService
@@ -9,35 +9,25 @@
 <h1>Your Facebook Data</h1>
 
 <div class="row">
-	@if (_dataService.FbRoot?.AvailableData.TryGetValue(nameof(AdvertisersUsingYourActivity), out var wrapperObj)?? false)
+	@foreach (var wrapper in _dataService.FbRoot?.AvailableData.Values!)
 	{
-		<div class="col-4">
-			<NumberCardWithTableDialog Title="@AdvertisersUsingYourActivity.Title"
-			                           Number="((AdvertisersUsingYourActivity)wrapperObj).SharedAdvertisers?.Count() ?? 0"
-			                           OnClickFunc="ShowAdvertisersUsingYourActivityDialog"/>
-		</div>
+		if (wrapper is ISingleListFile file)
+		{
+			_singleListFile = file;
+			<div class="col-4">
+				@NumberCardWithTableDialogInstance
+			</div>
+		}
 	}
-	@* <div class="col-4"> *@
-	@* 	<NumberCardWithTableDialog Title="@AdvertiserYouInteractedWith.Title" *@
-	@* 	                           Number="_dataService.FbRoot?.AdvertiserYouInteractedWith?.InteractedAdvertisers?.Count() ?? 0" *@
-	@* 	                           OnClickFunc="ShowAdvertisersUsingYourActivityDialog"/> $1$ todo: change the function #1# *@
-	@* </div> *@
 </div>
 
 @code {
-	private async Task ShowAdvertisersUsingYourActivityDialog()
+	ISingleListFile _singleListFile = null!;
+	RenderFragment NumberCardWithTableDialogInstance => builder =>
 	{
-		if (_dataService.FbRoot?.AvailableData.TryGetValue(nameof(AdvertisersUsingYourActivity), out var wrapper)?? false)
-		{
-			var advertiserUsingYourActivity = wrapper as AdvertisersUsingYourActivity;
-			await _dialogService.OpenAsync<DialogDataTable<SharedAdvertiser>>(AdvertisersUsingYourActivity.Title,
-				new Dictionary<string, object>
-				{ { nameof(DialogDataTable<SharedAdvertiser>.Items), 
-					advertiserUsingYourActivity?.SharedAdvertisers ?? Array.Empty<SharedAdvertiser>() },
-				  { nameof(DialogDataTable<SharedAdvertiser>.Description), AdvertisersUsingYourActivity.Description }
-				},
-				new DialogOptions { Width = "90%", Height = "90%", Resizable = true });
-		}
-		
-	}
+		var type = typeof(NumberCardWithSingleListTableDialog<>).MakeGenericType(_singleListFile.ItemsType);
+		builder.OpenComponent(1, type);
+		builder.AddAttribute(2, nameof(NumberCardWithSingleListTableDialog<dynamic>.SingleListFile), _singleListFile);
+		builder.CloseComponent();
+	};
 }

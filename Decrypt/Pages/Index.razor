@@ -34,7 +34,7 @@
 		var options = new JsonSerializerOptions();
 		options.Converters.Add(new FbConverter());
 
-	//TODO: figure out a better way to do this
+		//TODO: figure out a better way to do this
 		await using var stream = new MemoryStream();
 		await e.File.OpenReadStream(MaxFileSize).CopyToAsync(stream);
 		using var archive = new ZipArchive(stream);
@@ -50,6 +50,4 @@
 			}
 		}
 	}
-
-	
 }

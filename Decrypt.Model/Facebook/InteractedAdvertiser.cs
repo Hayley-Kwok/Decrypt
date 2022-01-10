@@ -3,17 +3,20 @@ using Decrypt.Model.Shared.Interfaces;
 
 namespace Decrypt.Model.Facebook
 {
-    public class AdvertiserYouInteractedWith : IFileWrapper
+    public class AdvertiserYouInteractedWith : ISingleListFile<InteractedAdvertiser>
     {
         public static readonly string Filepath = @"ads_information/advertisers_you've_interacted_with.json";
-        public static readonly string Title = "Advertisers you have interacted with";
-        public static readonly string Description = "Advertisers whose ads you've clicked on Facebook";
+        public string Description => "Advertisers whose ads you've clicked on Facebook";
+
+        public string Title => "Advertisers you have interacted with";
+
+        public Type ItemsType => typeof(InteractedAdvertiser);
 
         [JsonPropertyName("history_v2")]
-        public IEnumerable<InteractedAdvertisers>? InteractedAdvertisers { get; set; }
+        public IEnumerable<InteractedAdvertiser>? Items { get; set; }
     }
 
-    public class InteractedAdvertisers
+    public class InteractedAdvertiser
     {
         [JsonPropertyName("title")]
         public string? AdTitle { get; set; }
