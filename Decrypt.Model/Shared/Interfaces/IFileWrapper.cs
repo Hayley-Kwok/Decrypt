@@ -2,8 +2,8 @@
 {
     public interface IFileWrapper
     {
-        public static readonly string Filepath;
-        public static readonly string Title;
-        public static readonly string Description;
+        public static readonly string Filepath = "";
+        public static readonly string Title = "";
+        public static readonly string Description = "";
     }
 }

@@ -1,0 +1,46 @@
+﻿@using Decrypt.Model.Shared
+@using System.Reflection
+
+@typeparam TItem
+@if (!string.IsNullOrWhiteSpace(Description))
+{
+	<p>@((MarkupString)Description)</p>
+}
+
+@* figure out dynamic sizing for page size*@
+<RadzenDataGrid AllowFiltering="true" AllowColumnResize="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true"
+                Data="@Items" TItem="TItem" LogicalFilterOperator="LogicalFilterOperator.Or" PageSize="12" >
+	<Columns>
+		@foreach (var propInfo in PropertyInfos)
+		{
+			var dto = DisplayDataAttributeHelper.GetDTO(propInfo);
+		
+			<RadzenDataGridColumn TItem="TItem" Property="@propInfo.Name">
+				<HeaderTemplate>
+					@if (!string.IsNullOrWhiteSpace(dto.Description))
+					{
+						<span data-toggle="tooltip" title="@dto.Description">@dto.DisplayName <i class="oi bi-info-circle"/></span>
+					}
+					else
+					{
+						@dto.DisplayName
+					}
+				</HeaderTemplate>
+				<Template>
+					@DisplayDataAttributeHelper.FormatPropertyString(propInfo, context)
+				</Template>
+			</RadzenDataGridColumn>
+		}
+	</Columns>
+</RadzenDataGrid>
+
+@code {
+    private TItem FirstItem => Items.First();
+    private IEnumerable<PropertyInfo> PropertyInfos => DisplayDataAttributeHelper.GetPropertiesReflection(FirstItem!);
+
+
+	[Parameter]
+	public string Description { get; set; } = "";
+	[Parameter]
+    public IEnumerable<TItem> Items { get; set; } = null!;
+}
