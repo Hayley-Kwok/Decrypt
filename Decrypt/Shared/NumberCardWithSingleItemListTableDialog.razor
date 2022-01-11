@@ -1,0 +1,26 @@
+﻿@inject DialogService _dialogService
+
+@using Decrypt.Model.Shared.Interfaces
+
+@typeparam TItem 
+
+<NumberCardWithOnclick Title="@SingleItemListFile.Title"
+                           Number="SingleItemListFile.Items?.Count() ?? 0"
+                           OnClickFunc="ShowTableDialog"/>
+
+@code {
+
+    [Parameter]
+	public ISingleItemListFile<TItem> SingleItemListFile { get; set; } = null!;
+
+	private async Task ShowTableDialog()
+	{
+		await _dialogService.OpenAsync<SingleItemListTable<TItem>>(SingleItemListFile.Title,
+			new Dictionary<string, object>
+			{ { nameof(SingleItemListTable<TItem>.Items), 
+				SingleItemListFile.Items ?? Array.Empty<TItem>() },
+				{ nameof(SingleItemListTable<TItem>.Description), SingleItemListFile.Description }
+			},
+			new DialogOptions { Width = "90%", Height = "90%", Resizable = true });
+	}
+}

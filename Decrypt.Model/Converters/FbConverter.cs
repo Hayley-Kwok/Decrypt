@@ -5,6 +5,8 @@ using System.Text.RegularExpressions;
 
 namespace Decrypt.Model.Converters
 {
+    //what happened https://stackoverflow.com/questions/50008296/facebook-json-badly-encoded
+    //solution referenced from https://stackoverflow.com/questions/50799187/encoding-decoding-issue-with-facebook-json-messages-c-sharp-parsing
     public class FbConverter : JsonConverter<string>
     {
         public override string? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

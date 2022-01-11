@@ -1,11 +1,11 @@
 ﻿namespace Decrypt.Model.Shared.Interfaces;
 
-public interface ISingleListFile : IFileWrapper
+public interface ISingleItemListFile : IFileWrapper
 {
     Type ItemsType { get; }
 }
 
-public interface ISingleListFile<T> : ISingleListFile
+public interface ISingleItemListFile<T> : ISingleItemListFile
 {
     IEnumerable<T>? Items { get; set; }
 }

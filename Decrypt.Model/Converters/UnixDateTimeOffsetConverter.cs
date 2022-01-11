@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Decrypt.Model.Converters
 {
-    //referenced from https://stackoverflow.com/a/63884990
+    //solution referenced from https://stackoverflow.com/a/63884990
     public class UnixDateTimeOffsetConverter : JsonConverter<DateTimeOffset>
     {
         public override DateTimeOffset Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

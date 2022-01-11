@@ -9,25 +9,32 @@
 <h1>Your Facebook Data</h1>
 
 <div class="row">
-	@foreach (var wrapper in _dataService.FbRoot?.AvailableData.Values!)
+	@if (_dataService.FbRoot?.AvailableData.Values != null)
 	{
-		if (wrapper is ISingleListFile file)
+		foreach (var wrapper in _dataService.FbRoot?.AvailableData.Values!)
 		{
-			_singleListFile = file;
-			<div class="col-4">
-				@NumberCardWithTableDialogInstance
-			</div>
+			if (wrapper is ISingleItemListFile file)
+			{
+				_singleItemListFile = file;
+				<div class=@ColStr>
+					@NumberCardWithSingleItemListTableDialogInstance
+				</div>
+			}
 		}
 	}
 </div>
 
 @code {
-	ISingleListFile _singleListFile = null!;
-	RenderFragment NumberCardWithTableDialogInstance => builder =>
+	const int ColNumber = 3;
+	string ColStr => $"col-{12/ColNumber}";
+
+	ISingleItemListFile _singleItemListFile = null!;
+
+	RenderFragment NumberCardWithSingleItemListTableDialogInstance => builder =>
 	{
-		var type = typeof(NumberCardWithSingleListTableDialog<>).MakeGenericType(_singleListFile.ItemsType);
+		var type = typeof(NumberCardWithSingleItemListTableDialog<>).MakeGenericType(_singleItemListFile.ItemsType);
 		builder.OpenComponent(1, type);
-		builder.AddAttribute(2, nameof(NumberCardWithSingleListTableDialog<dynamic>.SingleListFile), _singleListFile);
+		builder.AddAttribute(2, nameof(NumberCardWithSingleItemListTableDialog<dynamic>.SingleItemListFile), _singleItemListFile);
 		builder.CloseComponent();
 	};
 }

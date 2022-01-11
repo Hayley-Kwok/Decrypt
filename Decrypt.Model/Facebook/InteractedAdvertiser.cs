@@ -5,7 +5,7 @@ using Decrypt.Model.Shared.Interfaces;
 
 namespace Decrypt.Model.Facebook
 {
-    public class AdvertiserYouInteractedWith : ISingleListFile<InteractedAdvertiser>
+    public class AdvertiserYouInteractedWith : ISingleItemListFile<InteractedAdvertiser>
     {
         public static readonly string Filepath = @"ads_information/advertisers_you've_interacted_with.json";
 
