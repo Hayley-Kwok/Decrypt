@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
-namespace Decrypt.Model
+namespace Decrypt.Model.Converters
 {
     public class FbConverter : JsonConverter<string>
     {

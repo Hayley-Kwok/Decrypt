@@ -5,11 +5,6 @@ namespace Decrypt.Model.Shared
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public class DisplayDataAttribute : Attribute
     {
-        public DisplayDataAttribute()
-        {
-            
-        }
-
         public DisplayDataAttribute(string displayName)
         {
             DisplayName = displayName;
@@ -21,9 +16,9 @@ namespace Decrypt.Model.Shared
             Description = description;
         }
 
-        public string? DisplayName { get; set; }
+        public string DisplayName { get; set; }
 
-        public string? Description { get; set; }
+        public string Description { get; set; } = "";
     }
 
     public static class DisplayDataAttributeHelper
@@ -31,7 +26,7 @@ namespace Decrypt.Model.Shared
         public static DisplayDataAttributeDTO GetDTO(PropertyInfo propertyInfo)
         {
             var attr = propertyInfo.GetCustomAttribute<DisplayDataAttribute>();
-            return new DisplayDataAttributeDTO(attr?.DisplayName, attr?.Description);
+            return new DisplayDataAttributeDTO(attr?.DisplayName ?? string.Empty, attr?.Description ?? string.Empty);
         }
 
         public static IEnumerable<PropertyInfo> GetPropertiesReflection(object obj) => obj.GetType().GetProperties();
@@ -45,20 +40,22 @@ namespace Decrypt.Model.Shared
             {
                 bool booValue => TransformBoolToYesNo(booValue),
                 string strValue => strValue,
-                _ => value?.ToString() ?? "NULL"
+                DateTimeOffset dateTime => dateTime.ToString("yyyy-MM-dd,HH:mm:ss"),
+                _ => value?.ToString() ?? "No data"
             };
         }
     }
 
     public class DisplayDataAttributeDTO
     {
-        public DisplayDataAttributeDTO(string? displayName, string? description)
+        public DisplayDataAttributeDTO(string displayName, string description)
         {
             DisplayName = displayName;
             Description = description;
         }
-        public string? DisplayName { get; set; }
 
-        public string? Description { get; set; }
+        public string DisplayName { get; set; }
+
+        public string Description { get; set; }
     }
 }
