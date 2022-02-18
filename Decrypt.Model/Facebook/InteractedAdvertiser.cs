@@ -24,7 +24,7 @@ namespace Decrypt.Model.Facebook
         [DisplayData("Title", "The title of the Ad")]
         public string? AdTitle { get; set; }
 
-        [JsonPropertyName("action")]
+        [JsonPropertyName("action")] 
         [DisplayData(nameof(Interaction), "The interaction with the Ad")]
         public string? Interaction { get; set; }
 

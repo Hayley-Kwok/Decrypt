@@ -13,12 +13,23 @@
 	{
 		foreach (var wrapper in _dataService.FbRoot?.AvailableData.Values!)
 		{
-			if (wrapper is ISingleItemListFile file)
+			switch (wrapper)
 			{
-				_singleItemListFile = file;
-				<div class=@ColStr>
-					@NumberCardWithSingleItemListTableDialogInstance
-				</div>
+				case ISingleItemListFile itemList: 
+					_singleItemListFile = itemList;
+					<div class=@_colStr>
+						@NumberCardWithSingleItemListTableDialogInstance
+					</div>
+					break;
+
+				case ISingleStringList stringList:
+					_singleStringList = stringList;
+					<div class="@_colStr">
+						<NumberCardWithOnclick OnClickFunc="() => ShowDataListTableDialog()"
+						                       Number="stringList.Items?.Count() ?? 0"
+						                       Title="@stringList.Title"/>
+					</div>
+					break;
 			}
 		}
 	}
@@ -26,9 +37,10 @@
 
 @code {
 	const int ColNumber = 3;
-	string ColStr => $"col-{12/ColNumber}";
+	string _colStr => $"col-{12/ColNumber}";
 
 	ISingleItemListFile _singleItemListFile = null!;
+	ISingleStringList _singleStringList = null!;
 
 	RenderFragment NumberCardWithSingleItemListTableDialogInstance => builder =>
 	{
@@ -37,4 +49,16 @@
 		builder.AddAttribute(2, nameof(NumberCardWithSingleItemListTableDialog<dynamic>.SingleItemListFile), _singleItemListFile);
 		builder.CloseComponent();
 	};
+
+	private async Task ShowDataListTableDialog()
+	{
+		await _dialogService.OpenAsync<DataListTable<string>>(_singleStringList.Title,
+			new Dictionary<string, object>
+			{
+				{ nameof(DataListTable<string>.Items), _singleStringList.Items?? Array.Empty<string>() },
+				{ nameof(DataListTable<string>.Description), _singleStringList.Description }
+			},
+			new DialogOptions { Width = "90%", Height = "90%", Resizable = true });
+	}
+
 }

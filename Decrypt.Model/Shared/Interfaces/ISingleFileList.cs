@@ -2,7 +2,7 @@
 
 public interface ISingleItemListFile : IFileWrapper
 {
-    Type ItemsType { get; }
+    Type ItemsType { get; } //TODO: just reflection?
 }
 
 public interface ISingleItemListFile<T> : ISingleItemListFile

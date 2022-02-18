@@ -1,0 +1,40 @@
+﻿@typeparam TItem 
+
+@if (!string.IsNullOrWhiteSpace(Description))
+{
+	<p>@((MarkupString)Description)</p>
+}
+<RadzenDataList WrapItems="true" AllowPaging="true" Data="@Items" TItem="TItem" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+	<Template Context="item">
+		<RadzenCard class="my-0 p-0" Style="width: 100%; overflow: hidden;">
+			<div class="ms-0 me-sm-0">
+				<div class="d-flex row">
+					<div class="col-md-3 p-3 new-status justify-content-start">
+						New
+					</div>
+					<div class="col-md-9 p-3 text-center">
+						@item
+					</div>
+				</div>
+			</div>
+		</RadzenCard>
+	</Template>
+</RadzenDataList>
+<style>
+	.new-status {
+		color: #077d1d;
+		text-align: center;
+		background-color: rgba(165, 252, 134, .1);
+		font-size: 20px;
+		font-weight: bold;
+		line-height: 20px;
+		letter-spacing: -0.02em;
+	}
+</style>
+@code {
+
+	[Parameter]
+	public IEnumerable<TItem>? Items { get; set; }
+	[Parameter]
+	public string Description { get; set; } = "";
+}

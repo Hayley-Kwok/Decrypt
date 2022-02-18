@@ -7,30 +7,37 @@
 @using Decrypt.Services
 
 @inject DataService _dataService
+@inject DialogService _dialogService
+
 <PageTitle>Home</PageTitle>
 
 <h1>Load in zip files</h1>
 <div class="my-3">
-	<InputFile label="file_upload" title="file_upload" OnChange="@LoadFiles" accept=".zip" />
+	<InputFile label="file_upload" title="file_upload" OnChange="@LoadFiles" accept=".zip"/>
 </div>
 <div class="my-3">
 	<h3>Download Links:</h3>
 	<a href="https://www.facebook.com/dyi/?referrer=ayi" target="_blank">Download your Facebook Data</a>
 </div>
 
+<div>@_generationDate</div>
 
 @code {
 
-	private readonly Dictionary<string, Type> _fileWrappers = new()
+	private readonly Dictionary<string, Type> _availableFileWrappers = new()
 	{
 		{ AdvertisersUsingYourActivity.Filepath, typeof(AdvertisersUsingYourActivity) }, 
-		{ AdvertiserYouInteractedWith.Filepath, typeof(AdvertiserYouInteractedWith) }
+		{ AdvertiserYouInteractedWith.Filepath, typeof(AdvertiserYouInteractedWith) },
+		{ InferredTopics.Filepath, typeof(InferredTopics)}
 	};
 
 	private const long MaxFileSize = 4294967296; // 4 GB
 
+	private DateTime? _generationDate;
 	private async Task LoadFiles(InputFileChangeEventArgs e)
 	{
+		await AskForGenerationDate();
+
 		var options = new JsonSerializerOptions();
 		options.Converters.Add(new FbConverter());
 
@@ -40,7 +47,7 @@
 		using var archive = new ZipArchive(stream);
 		foreach (var entry in archive.Entries)
 		{
-			if (!_fileWrappers.TryGetValue(entry.FullName, out var wrapperType)) continue;
+			if (!_availableFileWrappers.TryGetValue(entry.FullName, out var wrapperType)) continue;
 			var unzippedEntryStream = entry.Open();
 			_dataService.FbRoot ??= new FbRoot();
 
@@ -49,5 +56,17 @@
 				_dataService.FbRoot.AvailableData.TryAdd(wrapperType.Name, wrapperObj);
 			}
 		}
+	}
+
+	private async Task AskForGenerationDate()
+	{
+		await _dialogService.OpenAsync("Generation Date of the file",
+			ds =>
+				@<div>
+					<RadzenDatePicker @bind-Value=@_generationDate DateFormat="dd/MM/yyyy"/>
+					<RadzenButton Text="Ok" Click="() => ds.Close(true)" tyle="width: 80px;" />
+				</div>,
+			new DialogOptions { ShowClose = false }
+			);
 	}
 }
