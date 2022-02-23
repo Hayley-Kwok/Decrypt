@@ -33,10 +33,9 @@
 
 	private const long MaxFileSize = 4294967296; // 4 GB
 
-	private DateTime? _generationDate;
+	private DateTimeOffset? _generationDate;
 	private async Task LoadFiles(InputFileChangeEventArgs e)
 	{
-		await AskForGenerationDate();
 
 		var options = new JsonSerializerOptions();
 		options.Converters.Add(new FbConverter());
@@ -44,6 +43,7 @@
 		//TODO: figure out a better way to do this
 		await using var stream = new MemoryStream();
 		await e.File.OpenReadStream(MaxFileSize).CopyToAsync(stream);
+		_generationDate = e.File.LastModified;
 		using var archive = new ZipArchive(stream);
 		foreach (var entry in archive.Entries)
 		{
@@ -56,17 +56,5 @@
 				_dataService.FbRoot.AvailableData.TryAdd(wrapperType.Name, wrapperObj);
 			}
 		}
-	}
-
-	private async Task AskForGenerationDate()
-	{
-		await _dialogService.OpenAsync("Generation Date of the file",
-			ds =>
-				@<div>
-					<RadzenDatePicker @bind-Value=@_generationDate DateFormat="dd/MM/yyyy"/>
-					<RadzenButton Text="Ok" Click="() => ds.Close(true)" tyle="width: 80px;" />
-				</div>,
-			new DialogOptions { ShowClose = false }
-			);
 	}
 }
