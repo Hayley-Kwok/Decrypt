@@ -7,8 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Decrypt.Model\Decrypt.Model.csproj" />
-  </ItemGroup>
-
+	<ItemGroup>
+		<ProjectReference Include="..\Decrypt.Model.Shared\Decrypt.Model.Shared.csproj" />
+		<ProjectReference Include="..\Decrypt.Model.Facebook\Decrypt.Model.Facebook.csproj" />
+	</ItemGroup>
 </Project>

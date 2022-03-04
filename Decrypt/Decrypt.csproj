@@ -14,7 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Decrypt.Model\Decrypt.Model.csproj" />
+    <ProjectReference Include="..\Decrypt.Model.Shared\Decrypt.Model.Shared.csproj" />
+    <ProjectReference Include="..\Decrypt.Model.Facebook\Decrypt.Model.Facebook.csproj" />
   </ItemGroup>
 
   <ItemGroup>

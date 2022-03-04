@@ -4,7 +4,7 @@ using System.IO.Compression;
 using Decrypt.Model.Facebook;
 using System.Text.Json;
 using Decrypt.Model;
-using Decrypt.Model.Converters;
+using Decrypt.Model.Facebook.Converters;
 
 Console.WriteLine("Hello, World!");
 

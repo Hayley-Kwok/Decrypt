@@ -3,7 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
-namespace Decrypt.Model.Converters
+namespace Decrypt.Model.Facebook.Converters
 {
     //what happened https://stackoverflow.com/questions/50008296/facebook-json-badly-encoded
     //solution referenced from https://stackoverflow.com/questions/50799187/encoding-decoding-issue-with-facebook-json-messages-c-sharp-parsing
