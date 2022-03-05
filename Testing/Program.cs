@@ -1,10 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.IO.Compression;
 using Decrypt.Model.Facebook;
 using System.Text.Json;
-using Decrypt.Model;
-using Decrypt.Model.Facebook.Converters;
+using Decrypt.Model.Shared.Converters;
 
 Console.WriteLine("Hello, World!");
 

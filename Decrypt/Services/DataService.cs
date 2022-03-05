@@ -1,9 +1,9 @@
-﻿using Decrypt.Model.Facebook;
+﻿using Decrypt.Model.Shared;
 
 namespace Decrypt.Services
 {
     public class DataService
     {
-        public FbRoot? FbRoot { get; set; }
+        public CompanyRoot? FbRoot { get; set; }
     }
 }

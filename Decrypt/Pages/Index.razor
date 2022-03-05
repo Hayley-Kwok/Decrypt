@@ -1,12 +1,13 @@
 ﻿@page "/"
 @using System.Text.Json
-@using Decrypt.Model.Facebook
 @using System.IO.Compression
-@using Decrypt.Model.Facebook.Converters
+@using Decrypt.Model.Shared
+@using Decrypt.Model.Shared.Converters
 @using Decrypt.Model.Shared.Interfaces
 @using Decrypt.Services
 
 @inject DataService _dataService
+@inject ConfigService _configService
 @inject DialogService _dialogService
 
 <PageTitle>Home</PageTitle>
@@ -23,14 +24,6 @@
 <div>@_generationDate</div>
 
 @code {
-
-	private readonly Dictionary<string, Type> _availableFileWrappers = new()
-	{
-		{ AdvertisersUsingYourActivity.Filepath, typeof(AdvertisersUsingYourActivity) }, 
-		{ AdvertiserYouInteractedWith.Filepath, typeof(AdvertiserYouInteractedWith) },
-		{ InferredTopics.Filepath, typeof(InferredTopics)}
-	};
-
 	private const long MaxFileSize = 4294967296; // 4 GB
 
 	private DateTimeOffset? _generationDate;
@@ -47,9 +40,9 @@
 		using var archive = new ZipArchive(stream);
 		foreach (var entry in archive.Entries)
 		{
-			if (!_availableFileWrappers.TryGetValue(entry.FullName, out var wrapperType)) continue;
+			if (!_configService.AvailableFileWrappers.TryGetValue(entry.FullName, out var wrapperType)) continue;
 			var unzippedEntryStream = entry.Open();
-			_dataService.FbRoot ??= new FbRoot();
+			_dataService.FbRoot ??= new CompanyRoot();
 
 			if (await JsonSerializer.DeserializeAsync(unzippedEntryStream, wrapperType, options) is IFileWrapper wrapperObj)
 			{
