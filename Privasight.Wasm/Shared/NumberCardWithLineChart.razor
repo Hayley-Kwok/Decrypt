@@ -1,0 +1,39 @@
+﻿@using Privasight.Model.Shared
+
+<RadzenCard class="@GetClasses()" @onclick="OnClickFunc">
+	<h3>@Title</h3>
+	<div class="row">
+		<LineChartForCard Title="@Title" Items="Items"/>
+		<h1 class="col-md-2 text-lg-center text-end align-self-end">
+			@Items?.Last().Number
+		</h1>
+	</div>
+</RadzenCard>
+
+
+@code {
+	private const string DefaultClasses = "m-lg-3 m-2 h-90 clickable";
+
+	[Parameter]
+	public IEnumerable<LineChartItem>? Items { get; set; } = new[]
+	{
+		new LineChartItem(0, DateTime.Parse("02/02/2022 00:00:00")),
+		new LineChartItem(1, DateTime.Parse("03/02/2022 00:00:00")), 
+		new LineChartItem(2, DateTime.Parse("04/02/2022 00:00:00")),
+		new LineChartItem(2, DateTime.Parse("05/02/2022 00:00:00"))
+	};
+
+	[Parameter]
+	public string? Title { get; set; } = "Inferred Topics";
+
+	[Parameter]
+	public string CustomClasses { get; set; } = "";
+
+	[Parameter, EditorRequired]
+	public Func<Task> OnClickFunc { get; set; } = null!;
+
+	private string GetClasses()
+	{
+		return CustomClasses + DefaultClasses;
+	}
+}

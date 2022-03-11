@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>Privasight.Model.Facebook</AssemblyName>
+    <RootNamespace>Privasight.Model.Facebook</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Privasight.Model.Shared\Privasight.Model.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
