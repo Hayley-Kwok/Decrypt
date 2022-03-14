@@ -1,14 +1,14 @@
 ﻿@page "/"
-@using System.Text.Json
-@using System.IO.Compression
-@using Privasight.Model.Shared
-@using Privasight.Model.Shared.Converters
-@using Privasight.Model.Shared.Interfaces
+@using System.Runtime.InteropServices
+@using Microsoft.EntityFrameworkCore
+@using Privasight.Model.Facebook.Data
 @using Privasight.Wasm.Services
 
 @inject DataService _dataService
 @inject ConfigService _configService
 @inject DialogService _dialogService
+@inject IJSRuntime _js
+@inject IDbContextFactory<FbContext> _dbContextFactory
 
 <PageTitle>Home</PageTitle>
 
@@ -24,30 +24,32 @@
 <div>@_generationDate</div>
 
 @code {
-	private const long MaxFileSize = 4294967296; // 4 GB
+	
+	
 
-	private DateTimeOffset? _generationDate;
+	private DateTimeOffset _generationDate;
 	private async Task LoadFiles(InputFileChangeEventArgs e)
 	{
+		var (newData, generationDate) = await DataAccessHelper.TransformJsonToObj(e, _configService);
+		
+		//this line is here only for the display on the FE
+		_generationDate = generationDate;
 
-		var options = new JsonSerializerOptions();
-		options.Converters.Add(new FbConverter());
+		DataAccessHelper.AddGenerationDate(newData, generationDate);
+		await DataAccessHelper.LoadDataIntoDatabase(newData, _dbContextFactory);
+		await DataAccessHelper.GetLatestAvailableData(_dbContextFactory, _dataService);
+	}
 
-		//TODO: figure out a better way to do this
-		await using var stream = new MemoryStream();
-		await e.File.OpenReadStream(MaxFileSize).CopyToAsync(stream);
-		_generationDate = e.File.LastModified;
-		using var archive = new ZipArchive(stream);
-		foreach (var entry in archive.Entries)
+	protected override async Task OnInitializedAsync()
+	{
+		if (RuntimeInformation.IsOSPlatform(OSPlatform.Create("browser")))
 		{
-			if (!_configService.AvailableFileWrappers.TryGetValue(entry.FullName, out var wrapperType)) continue;
-			var unzippedEntryStream = entry.Open();
-			_dataService.FbRoot ??= new CompanyRoot();
-
-			if (await JsonSerializer.DeserializeAsync(unzippedEntryStream, wrapperType, options) is IFileWrapper wrapperObj)
-			{
-				_dataService.FbRoot.AvailableData.TryAdd(wrapperType.Name, wrapperObj);
-			}
+			// create SQLite database file in browser
+			var module = await _js.InvokeAsync<IJSObjectReference>("import", "./dbstorage.js");
+			await module.InvokeVoidAsync("synchronizeFileWithIndexedDb", DataAccessHelper.SqliteDbFilename);
 		}
+
+		await DataAccessHelper.GetDbContext(_dbContextFactory);
+		await base.OnInitializedAsync();
 	}
 }

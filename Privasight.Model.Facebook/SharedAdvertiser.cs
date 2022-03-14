@@ -18,7 +18,7 @@ public class AdvertisersUsingYourActivity : ISingleItemListFile<SharedAdvertiser
     public IEnumerable<SharedAdvertiser>? Items { get; set; }
 }
 
-public class SharedAdvertiser
+public class SharedAdvertiser : DbTableObj
 {
     [JsonPropertyName("advertiser_name")]
     [DisplayData("Advertiser Name")]
