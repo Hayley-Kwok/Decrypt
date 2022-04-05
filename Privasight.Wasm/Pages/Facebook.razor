@@ -1,12 +1,9 @@
 ﻿@page "/facebook"
 @using Privasight.Model.Shared.Interfaces
 @using Privasight.Wasm.Services
-@using Microsoft.EntityFrameworkCore
-@using Privasight.Model.Facebook.Data
 
 @inject DialogService _dialogService
 @inject DataService _dataService
-@inject IDbContextFactory<FbContext> _dbContextFactory
 
 <PageTitle>Facebook Data</PageTitle>
 <h1>Your Facebook Data</h1>
@@ -71,7 +68,8 @@
 	{
 		if (_dataService.FbRoot?.AvailableData == null)
 		{
-			await DataAccessHelper.GetLatestAvailableData(_dbContextFactory, _dataService);
+			//await DataAccessHelper.GetLatestAvailableData(_dbContextFactory, _dataService);
 		}
+		await base.OnInitializedAsync();
 	}
 }

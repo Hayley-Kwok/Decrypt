@@ -1,14 +1,10 @@
 ﻿@page "/"
-@using System.Runtime.InteropServices
-@using Microsoft.EntityFrameworkCore
-@using Privasight.Model.Facebook.Data
+@using Privasight.Model.Shared
 @using Privasight.Wasm.Services
 
 @inject DataService _dataService
 @inject ConfigService _configService
 @inject DialogService _dialogService
-@inject IJSRuntime _js
-@inject IDbContextFactory<FbContext> _dbContextFactory
 
 <PageTitle>Home</PageTitle>
 
@@ -24,32 +20,27 @@
 <div>@_generationDate</div>
 
 @code {
-	
-	
+
+
 
 	private DateTimeOffset _generationDate;
 	private async Task LoadFiles(InputFileChangeEventArgs e)
 	{
 		var (newData, generationDate) = await DataAccessHelper.TransformJsonToObj(e, _configService);
-		
+
 		//this line is here only for the display on the FE
 		_generationDate = generationDate;
 
 		DataAccessHelper.AddGenerationDate(newData, generationDate);
-		await DataAccessHelper.LoadDataIntoDatabase(newData, _dbContextFactory);
-		await DataAccessHelper.GetLatestAvailableData(_dbContextFactory, _dataService);
+
+		_dataService.FbRoot ??= new CompanyRoot();
+		_dataService.FbRoot.AvailableData = newData;
+		//await DataAccessHelper.LoadDataIntoDatabase(newData, _dbContextFactory);
+		//await DataAccessHelper.GetLatestAvailableData(_dbContextFactory, _dataService);
 	}
 
 	protected override async Task OnInitializedAsync()
 	{
-		if (RuntimeInformation.IsOSPlatform(OSPlatform.Create("browser")))
-		{
-			// create SQLite database file in browser
-			var module = await _js.InvokeAsync<IJSObjectReference>("import", "./dbstorage.js");
-			await module.InvokeVoidAsync("synchronizeFileWithIndexedDb", DataAccessHelper.SqliteDbFilename);
-		}
-
-		await DataAccessHelper.GetDbContext(_dbContextFactory);
 		await base.OnInitializedAsync();
 	}
 }

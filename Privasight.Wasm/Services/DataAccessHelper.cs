@@ -1,10 +1,6 @@
 ﻿using System.IO.Compression;
 using System.Text.Json;
 using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.EntityFrameworkCore;
-using Privasight.Model.Facebook;
-using Privasight.Model.Facebook.Data;
-using Privasight.Model.Shared;
 using Privasight.Model.Shared.Converters;
 using Privasight.Model.Shared.Interfaces;
 
@@ -13,8 +9,7 @@ namespace Privasight.Wasm.Services
     public static class DataAccessHelper
     {
         private const long MaxFileSize = 4294967296; // 4 GB
-        public const string SqliteDbFilename = "app.db";
-
+      
         public static async Task<(Dictionary<string, IFileWrapper> newData, DateTimeOffset generationDate)> TransformJsonToObj(InputFileChangeEventArgs e, ConfigService configService)
         {
             var newData = new Dictionary<string, IFileWrapper>();
@@ -58,54 +53,9 @@ namespace Privasight.Wasm.Services
             }
         }
 
-        public static async Task LoadDataIntoDatabase(Dictionary<string, IFileWrapper> newData, IDbContextFactory<FbContext> dbContextFactory)
-        {
-            await using var db = await GetDbContext(dbContextFactory);
-
-            foreach (var pair in newData)
-            {
-                switch (pair.Key)
-                {
-                    case nameof(AdvertiserYouInteractedWith):
-                        if (pair.Value is AdvertiserYouInteractedWith { Items: { } } advertiserYouInteractedWith)
-                        {
-                            await db.InteractedAdvertisers.AddRangeAsync(advertiserYouInteractedWith.Items);
-                        }
-                        break;
-                    case nameof(AdvertisersUsingYourActivity):
-                        if (pair.Value is AdvertisersUsingYourActivity {Items: { } } advertisersUsingYourActivity)
-                        {
-                        	// await db.SharedAdvertisers.AddRangeAsync(advertisersUsingYourActivity.Items);
-                        }
-                        break;
-                    case nameof(InferredTopics):
-                        break;
-                }
-            }
-
-            await db.SaveChangesAsync();
-        }
-
-        public static async Task GetLatestAvailableData(IDbContextFactory<FbContext> dbContextFactory, DataService dataService)
-        {
-            await using var db = await GetDbContext(dbContextFactory);
-            dataService.FbRoot ??= new CompanyRoot();
-            dataService.FbRoot.AvailableData = new Dictionary<string, IFileWrapper>();
-
-            // var sharedAdvertisers = db.SharedAdvertisers.ToList();
-            // dataService.FbRoot.AvailableData.Add(nameof(AdvertisersUsingYourActivity), new AdvertisersUsingYourActivity{ Items = sharedAdvertisers});
-
-            var interactedAdvertisers = db.InteractedAdvertisers.ToList();
-            dataService.FbRoot.AvailableData.Add(nameof(AdvertiserYouInteractedWith), new AdvertiserYouInteractedWith() { Items = interactedAdvertisers });
-        }
-
-        public static async Task<FbContext> GetDbContext(IDbContextFactory<FbContext> dbContextFactory)
-        {
-            var db = await dbContextFactory.CreateDbContextAsync();
-            // await db.Database.EnsureDeletedAsync();
-            await db.Database.EnsureCreatedAsync();
-            // await db.SaveChangesAsync();
-            return db;
-        }
+        //public static async Task LoadDataIntoDatabase(Dictionary<string, IFileWrapper> newData)
+        //{
+        //  
+        //}
     }
 }
