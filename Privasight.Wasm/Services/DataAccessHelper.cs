@@ -52,10 +52,5 @@ namespace Privasight.Wasm.Services
                 }
             }
         }
-
-        //public static async Task LoadDataIntoDatabase(Dictionary<string, IFileWrapper> newData)
-        //{
-        //  
-        //}
     }
 }

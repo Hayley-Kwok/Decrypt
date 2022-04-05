@@ -1,10 +1,13 @@
 ﻿@page "/"
 @using Privasight.Model.Shared
 @using Privasight.Wasm.Services
+@using Blazored.LocalStorage
+@using Privasight.Model.Shared.Interfaces
 
 @inject DataService _dataService
 @inject ConfigService _configService
 @inject DialogService _dialogService
+@inject ILocalStorageService _localStorage
 
 <PageTitle>Home</PageTitle>
 
@@ -21,8 +24,6 @@
 
 @code {
 
-
-
 	private DateTimeOffset _generationDate;
 	private async Task LoadFiles(InputFileChangeEventArgs e)
 	{
@@ -33,10 +34,16 @@
 
 		DataAccessHelper.AddGenerationDate(newData, generationDate);
 
+		await LoadDataIntoStorage(newData);
+	}
+	
+	public async Task LoadDataIntoStorage(Dictionary<string, IFileWrapper> newData)
+	{
 		_dataService.FbRoot ??= new CompanyRoot();
-		_dataService.FbRoot.AvailableData = newData;
-		//await DataAccessHelper.LoadDataIntoDatabase(newData, _dbContextFactory);
-		//await DataAccessHelper.GetLatestAvailableData(_dbContextFactory, _dataService);
+		//TODO update the data with existing instead of overwrite
+		_dataService.FbRoot.AvailableData = newData; 
+
+		await _localStorage.SetItemAsync(nameof(_dataService.FbRoot), _dataService.FbRoot);
 	}
 
 	protected override async Task OnInitializedAsync()

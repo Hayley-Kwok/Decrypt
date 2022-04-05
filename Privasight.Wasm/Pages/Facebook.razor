@@ -1,9 +1,12 @@
 ﻿@page "/facebook"
 @using Privasight.Model.Shared.Interfaces
 @using Privasight.Wasm.Services
+@using Blazored.LocalStorage
+@using Privasight.Model.Shared
 
 @inject DialogService _dialogService
 @inject DataService _dataService
+@inject ILocalStorageService _localStorage
 
 <PageTitle>Facebook Data</PageTitle>
 <h1>Your Facebook Data</h1>
@@ -66,10 +69,9 @@
 
 	protected override async Task OnInitializedAsync()
 	{
-		if (_dataService.FbRoot?.AvailableData == null)
-		{
-			//await DataAccessHelper.GetLatestAvailableData(_dbContextFactory, _dataService);
-		}
+		//todo maybe remove dataservice abstraction and make it local variable instead
+		_dataService.FbRoot = await _localStorage.GetItemAsync<CompanyRoot>(nameof(_dataService.FbRoot));
+		
 		await base.OnInitializedAsync();
 	}
 }
