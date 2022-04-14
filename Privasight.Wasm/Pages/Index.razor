@@ -16,21 +16,14 @@
 	<InputFile label="file_upload" title="file_upload" OnChange="@LoadFiles" accept=".zip"/>
 </div>
 <div class="my-3">
-	<h3>Download Links:</h3>
-	<a href="https://www.facebook.com/dyi/?referrer=ayi" target="_blank">Download your Facebook Data</a>
+	<RadzenButton Text="How to download your Facebook data" Click=@OpenFbInfoDialog ButtonStyle="ButtonStyle.Info"/>
 </div>
-
-<div>@_generationDate</div>
 
 @code {
 
-	private DateTimeOffset _generationDate;
 	private async Task LoadFiles(InputFileChangeEventArgs e)
 	{
 		var (newData, generationDate) = await DataAccessHelper.TransformJsonToObj(e, _configService);
-
-		//this line is here only for the display on the FE
-		_generationDate = generationDate;
 
 		DataAccessHelper.AddGenerationDate(newData, generationDate);
 
@@ -44,6 +37,12 @@
 		_dataService.FbRoot.AvailableData = newData; 
 
 		await _localStorage.SetItemAsync(nameof(_dataService.FbRoot), _dataService.FbRoot);
+	}
+
+	public async Task OpenFbInfoDialog()
+	{
+		await _dialogService.OpenAsync<FBDownloadInstruction>("How to download your Facebook Data",
+			options: new DialogOptions { Width = "95%", Height = "95%", Resizable = true });
 	}
 
 	protected override async Task OnInitializedAsync()
