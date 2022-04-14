@@ -7,6 +7,7 @@ namespace Privasight.Model.Facebook
     {
         public static readonly string Filepath = @"your_topics/your_topics.json";
 
+        public Type ItemsType => typeof(string);
         public string Title => "Inferred Topics";
         public string Description => "A collection of topics determined by your activity on Facebook that is used to create recommendations for you in different areas of Facebook such as News Feed, News and Watch";
 

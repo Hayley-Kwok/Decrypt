@@ -41,13 +41,20 @@ namespace Privasight.Wasm.Services
         {
             foreach (var wrapper in newData.Values)
             {
-                if (wrapper is ISingleItemListFile)
+                switch (wrapper)
                 {
-                    //todo improve this
-                    dynamic singleItemList = wrapper;
-                    foreach (var item in singleItemList.Items)
+                    case ISingleStringList:
+                        continue;
+                    case ISingleItemListFile:
                     {
-                        item.GeneratedOn = generationDate;
+                        //todo improve this
+                        dynamic singleItemList = wrapper;
+                        foreach (var item in singleItemList.Items)
+                        {
+                            item.GeneratedOn = generationDate;
+                        }
+
+                        break;
                     }
                 }
             }

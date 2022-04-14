@@ -1,7 +1,6 @@
 ﻿namespace Privasight.Model.Shared.Interfaces
 {
-    public interface ISingleStringList : IFileWrapper
+    public interface ISingleStringList : ISingleItemListFile<string>
     {
-        IEnumerable<string>? Items { get; set; }
     }
 }

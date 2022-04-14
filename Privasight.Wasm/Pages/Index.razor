@@ -1,13 +1,9 @@
 ﻿@page "/"
-@using Privasight.Model.Shared
 @using Privasight.Wasm.Services
-@using Blazored.LocalStorage
-@using Privasight.Model.Shared.Interfaces
 
 @inject DataService _dataService
 @inject ConfigService _configService
 @inject DialogService _dialogService
-@inject ILocalStorageService _localStorage
 
 <PageTitle>Home</PageTitle>
 
@@ -27,16 +23,7 @@
 
 		DataAccessHelper.AddGenerationDate(newData, generationDate);
 
-		await LoadDataIntoStorage(newData);
-	}
-	
-	public async Task LoadDataIntoStorage(Dictionary<string, IFileWrapper> newData)
-	{
-		_dataService.FbRoot ??= new CompanyRoot();
-		//TODO update the data with existing instead of overwrite
-		_dataService.FbRoot.AvailableData = newData; 
-
-		await _localStorage.SetItemAsync(nameof(_dataService.FbRoot), _dataService.FbRoot);
+		_dataService.LoadDataIntoStorage(newData);
 	}
 
 	public async Task OpenFbInfoDialog()

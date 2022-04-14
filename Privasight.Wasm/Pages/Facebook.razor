@@ -1,12 +1,9 @@
 ﻿@page "/facebook"
 @using Privasight.Model.Shared.Interfaces
 @using Privasight.Wasm.Services
-@using Blazored.LocalStorage
-@using Privasight.Model.Shared
 
 @inject DialogService _dialogService
 @inject DataService _dataService
-@inject ILocalStorageService _localStorage
 
 <PageTitle>Facebook Data</PageTitle>
 <h1>Your Facebook Data</h1>
@@ -21,19 +18,19 @@
 		{
 			switch (wrapper)
 			{
-				case ISingleItemListFile itemList:
-					_singleItemListFile = itemList;
-					<div class=@_colStr>
-						@NumberCardWithSingleItemListTableDialogInstance
-					</div>
-					break;
-
 				case ISingleStringList stringList:
 					_singleStringList = stringList;
 					<div class="@_colStr">
 						<NumberCardWithOnclick OnClickFunc="() => ShowDataListTableDialog()"
 						                       Number="stringList.Items?.Count() ?? 0"
 						                       Title="@stringList.Title"/>
+					</div>
+					break;
+
+				case ISingleItemListFile itemList:
+					_singleItemListFile = itemList;
+					<div class=@_colStr>
+						@NumberCardWithSingleItemListTableDialogInstance
 					</div>
 					break;
 			}
@@ -65,13 +62,5 @@
 				{ nameof(DataListTable<string>.Description), _singleStringList.Description }
 			},
 			new DialogOptions { Width = "90%", Height = "90%", Resizable = true });
-	}
-
-	protected override async Task OnInitializedAsync()
-	{
-		//todo maybe remove dataservice abstraction and make it local variable instead
-		_dataService.FbRoot = await _localStorage.GetItemAsync<CompanyRoot>(nameof(_dataService.FbRoot));
-		
-		await base.OnInitializedAsync();
 	}
 }
