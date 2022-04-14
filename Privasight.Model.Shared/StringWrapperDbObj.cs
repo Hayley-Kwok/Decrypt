@@ -3,6 +3,9 @@ using Privasight.Model.Shared.Attributes;
 
 namespace Privasight.Model.Shared
 {
+    /// <summary>
+    /// Used for transforming a Json String list to a list of object with generation date
+    /// </summary>
     public class StringWrapperDbObj : DbTableObj
     {
         [DisplayData("Title")]

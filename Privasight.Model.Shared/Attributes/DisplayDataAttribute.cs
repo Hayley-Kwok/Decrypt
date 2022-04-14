@@ -1,5 +1,8 @@
 ﻿namespace Privasight.Model.Shared.Attributes
 {
+    /// <summary>
+    /// Specific the DisplayName and Description of each property for the display in DataListTable
+    /// </summary>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
     public class DisplayDataAttribute : Attribute
     {

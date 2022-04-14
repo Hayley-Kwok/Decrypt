@@ -5,9 +5,17 @@ using System.Text.RegularExpressions;
 
 namespace Privasight.Model.Shared.Converters
 {
-    //what happened https://stackoverflow.com/questions/50008296/facebook-json-badly-encoded
-    //solution referenced from https://stackoverflow.com/questions/50799187/encoding-decoding-issue-with-facebook-json-messages-c-sharp-parsing
-    //the same problem is also found in Instagram data
+    /// <summary>
+    /// There is an issue with the Data from Meta. It seems to be incorrectly encoded.
+    /// So all string data from them have to go through this converter to be properly decoded.
+    /// </summary>
+    /// 
+    /// <remarks>
+    /// what happened https://stackoverflow.com/questions/50008296/facebook-json-badly-encoded
+    /// solution referenced from https://stackoverflow.com/questions/50799187/encoding-decoding-issue-with-facebook-json-messages-c-sharp-parsing
+    /// the same problem is also found in Instagram data
+    /// </remarks>
+    
     public class FbConverter : JsonConverter<string>
     {
         public override string? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)

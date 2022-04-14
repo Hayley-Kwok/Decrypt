@@ -2,7 +2,7 @@
 
 @using Privasight.Model.Shared.Interfaces
 
-@typeparam TItem 
+@typeparam TItem where TItem : Privasight.Model.Shared.AbstractClasses.DbTableObj
 
 <NumberCardWithOnclick Title="@SingleItemListFile.Title"
                            Number="SingleItemListFile.Items?.Count() ?? 0"

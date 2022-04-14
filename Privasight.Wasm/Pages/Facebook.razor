@@ -50,7 +50,7 @@
 	{
 		var type = typeof(NumberCardWithSingleItemListTableDialog<>).MakeGenericType(_singleItemListFile.ItemsType);
 		builder.OpenComponent(1, type);
-		builder.AddAttribute(2, nameof(NumberCardWithSingleItemListTableDialog<dynamic>.SingleItemListFile), _singleItemListFile);
+		builder.AddAttribute(2,"SingleItemListFile", _singleItemListFile);
 		builder.CloseComponent();
 	};
 

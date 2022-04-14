@@ -3,6 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace Privasight.Model.Shared.Converters
 {
+    /// <summary>
+    /// Json Converter that turn a string in the json file to the StringWrapperDbObj
+    /// </summary>
     public class StringWrapperDbObjConverter : JsonConverter<StringWrapperDbObj>
     {
         public override StringWrapperDbObj? Read(ref Utf8JsonReader reader, Type typeToConvert,

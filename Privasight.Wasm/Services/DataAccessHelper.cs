@@ -44,8 +44,6 @@ namespace Privasight.Wasm.Services
             {
                 switch (wrapper)
                 {
-                    case ISingleStringList:
-                        continue;
                     case ISingleItemListFile:
                     {
                         //todo improve this

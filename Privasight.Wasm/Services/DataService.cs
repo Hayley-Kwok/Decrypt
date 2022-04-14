@@ -24,7 +24,7 @@ public class DataService
     {
         foreach (var (key, value) in newData)
         {
-            if (FbRoot.AvailableData.ContainsKey(key))
+            if (FbRoot!.AvailableData.ContainsKey(key))
             {
                 if (FbRoot.AvailableData[key] is ISingleItemListFile singleItemList)
                 {
