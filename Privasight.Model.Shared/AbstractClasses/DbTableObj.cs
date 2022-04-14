@@ -1,4 +1,6 @@
-﻿namespace Privasight.Model.Shared.Interfaces;
+﻿using Privasight.Model.Shared.Attributes;
+
+namespace Privasight.Model.Shared.AbstractClasses;
 
 public abstract class DbTableObj
 {

@@ -1,26 +1,7 @@
 ﻿using System.Reflection;
 
-namespace Privasight.Model.Shared
+namespace Privasight.Model.Shared.Attributes
 {
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-    public class DisplayDataAttribute : Attribute
-    {
-        public DisplayDataAttribute(string displayName)
-        {
-            DisplayName = displayName;
-        }
-
-        public DisplayDataAttribute(string displayName, string description)
-        {
-            DisplayName = displayName;
-            Description = description;
-        }
-
-        public string DisplayName { get; set; }
-
-        public string Description { get; set; } = "";
-    }
-
     public static class DisplayDataAttributeHelper
     {
         public static DisplayDataAttributeDTO GetDTO(PropertyInfo propertyInfo)
@@ -44,18 +25,5 @@ namespace Privasight.Model.Shared
                 _ => value?.ToString() ?? "No data"
             };
         }
-    }
-
-    public class DisplayDataAttributeDTO
-    {
-        public DisplayDataAttributeDTO(string displayName, string description)
-        {
-            DisplayName = displayName;
-            Description = description;
-        }
-
-        public string DisplayName { get; set; }
-
-        public string Description { get; set; }
     }
 }

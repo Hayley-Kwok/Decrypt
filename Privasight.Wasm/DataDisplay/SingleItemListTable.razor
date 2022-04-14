@@ -1,7 +1,8 @@
-﻿@using Privasight.Model.Shared
+﻿@using Privasight.Model.Shared.Attributes
 @using System.Reflection
 
 @typeparam TItem
+
 @if (!string.IsNullOrWhiteSpace(Description))
 {
 	<p>@((MarkupString)Description)</p>

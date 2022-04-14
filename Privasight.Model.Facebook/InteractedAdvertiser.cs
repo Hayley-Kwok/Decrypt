@@ -1,5 +1,6 @@
 ﻿using System.Text.Json.Serialization;
-using Privasight.Model.Shared;
+using Privasight.Model.Shared.AbstractClasses;
+using Privasight.Model.Shared.Attributes;
 using Privasight.Model.Shared.Converters;
 using Privasight.Model.Shared.Interfaces;
 

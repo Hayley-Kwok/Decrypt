@@ -15,6 +15,7 @@ namespace Privasight.Wasm.Services
             var newData = new Dictionary<string, IFileWrapper>();
             var options = new JsonSerializerOptions();
             options.Converters.Add(new FbConverter());
+            options.Converters.Add(new StringWrapperDbObjConverter());
 
             //TODO: figure out a better way to do this
             await using var stream = new MemoryStream();

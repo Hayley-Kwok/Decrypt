@@ -1,6 +1,7 @@
 ﻿@page "/facebook"
 @using Privasight.Model.Shared.Interfaces
 @using Privasight.Wasm.Services
+@using Privasight.Model.Shared
 
 @inject DialogService _dialogService
 @inject DataService _dataService
@@ -18,7 +19,7 @@
 		{
 			switch (wrapper)
 			{
-				case ISingleStringList stringList:
+				case ISingleItemListFile<StringWrapperDbObj> stringList:
 					_singleStringList = stringList;
 					<div class="@_colStr">
 						<NumberCardWithOnclick OnClickFunc="() => ShowDataListTableDialog()"
@@ -43,7 +44,7 @@
 	string _colStr => $"col-md-{12/ColNumber}";
 
 	ISingleItemListFile _singleItemListFile = null!;
-	ISingleStringList _singleStringList = null!;
+	ISingleItemListFile<StringWrapperDbObj> _singleStringList = null!;
 
 	RenderFragment NumberCardWithSingleItemListTableDialogInstance => builder =>
 	{
@@ -55,10 +56,10 @@
 
 	private async Task ShowDataListTableDialog()
 	{
-		await _dialogService.OpenAsync<DataListTable<string>>(_singleStringList.Title,
+		await _dialogService.OpenAsync<DataListTable<StringWrapperDbObj>>(_singleStringList.Title,
 			new Dictionary<string, object>
 			{
-				{ nameof(DataListTable<string>.Items), _singleStringList.Items?? Array.Empty<string>() },
+				{ nameof(DataListTable<string>.Items), _singleStringList.Items?? Array.Empty<StringWrapperDbObj>() },
 				{ nameof(DataListTable<string>.Description), _singleStringList.Description }
 			},
 			new DialogOptions { Width = "90%", Height = "90%", Resizable = true });
