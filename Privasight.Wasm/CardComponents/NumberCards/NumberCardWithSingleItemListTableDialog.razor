@@ -1,10 +1,12 @@
 ﻿@inject DialogService _dialogService
 
 @using Privasight.Model.Shared.Interfaces
+@using Privasight.Wasm.CardComponents.Tables
+@using Privasight.Wasm.CardComponents.NumberCards.Base
 
 @typeparam TItem where TItem : Privasight.Model.Shared.AbstractClasses.DbTableObj
 
-<NumberCardWithOnclick Title="@SingleItemListFile.Title"
+<PlainNumberCard Title="@SingleItemListFile.Title"
                            Number="SingleItemListFile.Items?.Count() ?? 0"
                            OnClickFunc="ShowTableDialog"/>
 

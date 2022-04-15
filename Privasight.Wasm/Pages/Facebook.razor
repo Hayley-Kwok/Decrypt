@@ -1,7 +1,10 @@
 ﻿@page "/facebook"
 @using Privasight.Model.Shared.Interfaces
+@using Privasight.Wasm.CardComponents.NumberCards.Base
 @using Privasight.Wasm.Services
 @using Privasight.Model.Shared
+@using Privasight.Wasm.CardComponents.NumberCards
+@using Privasight.Wasm.CardComponents.Tables
 
 @inject DialogService _dialogService
 @inject DataService _dataService
@@ -22,7 +25,7 @@
 				case ISingleItemListFile<StringWrapperDbObj> stringList:
 					_singleStringList = stringList;
 					<div class="@_colStr">
-						<NumberCardWithOnclick OnClickFunc="() => ShowDataListTableDialog()"
+						<PlainNumberCard OnClickFunc="() => ShowDataListTableDialog()"
 						                       Number="stringList.Items?.Count() ?? 0"
 						                       Title="@stringList.Title"/>
 					</div>
@@ -49,6 +52,15 @@
 	RenderFragment NumberCardWithSingleItemListTableDialogInstance => builder =>
 	{
 		var t = SingleItemListFileHelper.GetItemsT(_singleItemListFile);
+		var type = typeof(NumberCardWithSingleItemListTableDialog<>).MakeGenericType(t);
+		builder.OpenComponent(1, type);
+		builder.AddAttribute(2,"SingleItemListFile", _singleItemListFile);
+		builder.CloseComponent();
+	};
+
+	RenderFragment NumberCardWithDataListTableDialogInstance => builder =>
+	{
+		var t = SingleItemListFileHelper.GetItemsT(_singleStringList);
 		var type = typeof(NumberCardWithSingleItemListTableDialog<>).MakeGenericType(t);
 		builder.OpenComponent(1, type);
 		builder.AddAttribute(2,"SingleItemListFile", _singleItemListFile);
