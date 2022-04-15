@@ -1,0 +1,61 @@
+﻿@inject DialogService _dialogService
+
+@using Privasight.Model.Shared.Interfaces
+@using Privasight.Wasm.CardComponents.Tables
+@using Privasight.Wasm.CardComponents.NumberCards.Base
+
+@typeparam TItem where TItem : Privasight.Model.Shared.AbstractClasses.DbTableObj
+
+<NumberCard Title="@SingleItemListFile.Title"
+                           Number="SingleItemListFile.Items?.Count() ?? 0"
+                           OnClickFunc="ShowTableDialog"/>
+
+@code {
+
+    [Parameter, EditorRequired]
+	public ISingleItemListFile<TItem> SingleItemListFile { get; set; } = null!;
+
+	[Parameter, EditorRequired]
+	public AvailableTables ChosenTable { get; set; }
+
+	[Parameter]
+	public string DisplayPropertyName { get; set; } = "";
+
+	private async Task ShowTableDialog()
+	{
+		switch (ChosenTable)
+		{
+			case AvailableTables.DataList:
+				await ShowDataListTableDialog();
+				return;
+			case AvailableTables.DetailedTable:
+				await ShowDetailedTableDialog();
+				return;
+			default:
+				throw new ArgumentOutOfRangeException();
+		}
+	}
+
+	private async Task ShowDetailedTableDialog()
+	{
+		await _dialogService.OpenAsync<DetailedTable<TItem>>(SingleItemListFile.Title,
+			new Dictionary<string, object>
+			{ 
+				{ nameof(DetailedTable<TItem>.Items), SingleItemListFile.Items ?? Array.Empty<TItem>() },
+				{ nameof(DetailedTable<TItem>.Description), SingleItemListFile.Description }
+			},
+			new DialogOptions { Width = "90%", Height = "90%", Resizable = true });
+	}
+
+	private async Task ShowDataListTableDialog()
+	{
+		await _dialogService.OpenAsync<DataListTable<TItem>>(SingleItemListFile.Title,
+			new Dictionary<string, object>
+			{
+				{ nameof(DataListTable<dynamic>.Items), SingleItemListFile.Items?? Array.Empty<TItem>() },
+				{ nameof(DataListTable<dynamic>.Description), SingleItemListFile.Description },
+				{ nameof(DataListTable<dynamic>.DisplayPropertyName), DisplayPropertyName }
+			},
+			new DialogOptions { Width = "90%", Height = "90%", Resizable = true });
+	}
+}

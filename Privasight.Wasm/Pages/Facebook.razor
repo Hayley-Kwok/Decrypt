@@ -3,6 +3,7 @@
 @using Privasight.Wasm.CardComponents.NumberCards.Base
 @using Privasight.Wasm.Services
 @using Privasight.Model.Shared
+@using Privasight.Model.Shared.AbstractClasses
 @using Privasight.Wasm.CardComponents.NumberCards
 @using Privasight.Wasm.CardComponents.Tables
 
@@ -25,9 +26,7 @@
 				case ISingleItemListFile<StringWrapperDbObj> stringList:
 					_singleStringList = stringList;
 					<div class="@_colStr">
-						<PlainNumberCard OnClickFunc="() => ShowDataListTableDialog()"
-						                       Number="stringList.Items?.Count() ?? 0"
-						                       Title="@stringList.Title"/>
+						@NumberCardWithDataListTableDialogInstance
 					</div>
 					break;
 
@@ -47,37 +46,28 @@
 	string _colStr => $"col-md-{12/ColNumber}";
 
 	ISingleItemListFile _singleItemListFile = null!;
-	ISingleItemListFile<StringWrapperDbObj> _singleStringList = null!;
+	ISingleItemListFile _singleStringList = null!;
 
 	RenderFragment NumberCardWithSingleItemListTableDialogInstance => builder =>
 	{
 		var t = SingleItemListFileHelper.GetItemsT(_singleItemListFile);
-		var type = typeof(NumberCardWithSingleItemListTableDialog<>).MakeGenericType(t);
+		var type = typeof(NumberCardWithTableDialog<>).MakeGenericType(t);
 		builder.OpenComponent(1, type);
-		builder.AddAttribute(2,"SingleItemListFile", _singleItemListFile);
+		builder.AddAttribute(2,nameof(NumberCardWithTableDialog<DbTableObj>.SingleItemListFile), _singleItemListFile);
+		builder.AddAttribute(3, nameof(NumberCardWithTableDialog<DbTableObj>.ChosenTable), AvailableTables.DetailedTable);
 		builder.CloseComponent();
 	};
 
 	RenderFragment NumberCardWithDataListTableDialogInstance => builder =>
 	{
 		var t = SingleItemListFileHelper.GetItemsT(_singleStringList);
-		var type = typeof(NumberCardWithSingleItemListTableDialog<>).MakeGenericType(t);
+		var type = typeof(NumberCardWithTableDialog<>).MakeGenericType(t);
 		builder.OpenComponent(1, type);
-		builder.AddAttribute(2,"SingleItemListFile", _singleItemListFile);
+		builder.AddAttribute(2,nameof(NumberCardWithTableDialog<DbTableObj>.SingleItemListFile), _singleStringList);
+		builder.AddAttribute(3, nameof(NumberCardWithTableDialog<DbTableObj>.ChosenTable), AvailableTables.DataList);
+		builder.AddAttribute(4, nameof(NumberCardWithTableDialog<DbTableObj>.DisplayPropertyName), nameof(StringWrapperDbObj.StrVal));
 		builder.CloseComponent();
 	};
-
-	private async Task ShowDataListTableDialog()
-	{
-		await _dialogService.OpenAsync<DataListTable<StringWrapperDbObj>>(_singleStringList.Title,
-			new Dictionary<string, object>
-			{
-				{ nameof(DataListTable<dynamic>.Items), _singleStringList.Items?? Array.Empty<StringWrapperDbObj>() },
-				{ nameof(DataListTable<dynamic>.Description), _singleStringList.Description },
-				{ nameof(DataListTable<dynamic>.DisplayPropertyName), nameof(StringWrapperDbObj.StrVal) }
-			},
-			new DialogOptions { Width = "90%", Height = "90%", Resizable = true });
-	}
 
 	protected override async Task OnInitializedAsync()
 	{
