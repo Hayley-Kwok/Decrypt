@@ -8,19 +8,14 @@
 </div>
 
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="facebook">
-                <span class="oi bi-facebook" aria-hidden="true"></span> Facebook Data
-            </NavLink>
-        </div>
- 
-    </nav>
+	<nav class="flex-column">
+		<RadzenPanelMenu>
+			<RadzenPanelMenuItem Text="Facebook" Icon="facebook" Expanded="true" Path="/">
+				<RadzenPanelMenuItem Text="Load in Data" Path="/" Icon="backup"/>
+				<RadzenPanelMenuItem Text="Default Dashboard" Path="facebook" Icon="assessment"/>
+			</RadzenPanelMenuItem>
+		</RadzenPanelMenu>
+	</nav>
 </div>
 
 @code {

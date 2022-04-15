@@ -70,3 +70,7 @@ a, .btn-link {
 .h-90 {
     height: 90%;
 }
+
+a {
+    text-decoration: none !important;
+}
