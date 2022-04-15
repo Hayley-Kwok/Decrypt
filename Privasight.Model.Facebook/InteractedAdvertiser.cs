@@ -13,8 +13,6 @@ namespace Privasight.Model.Facebook
         public string Title => "Advertisers you have interacted with";
         public string Description => "Advertisers whose ads you've clicked on Facebook";
 
-        public Type ItemsType => typeof(InteractedAdvertiser);
-
         [JsonPropertyName("history_v2")]
         public IEnumerable<InteractedAdvertiser>? Items { get; set; }
     }

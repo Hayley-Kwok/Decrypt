@@ -7,10 +7,6 @@ namespace Privasight.Model.Shared.Interfaces;
 /// </summary>
 public interface ISingleItemListFile : IFileWrapper
 {
-    /// <summary>
-    /// The T in ISingleItemListFile<T>
-    /// </summary>
-    Type ItemsType { get; }
 }
 
 /// <summary>
@@ -20,4 +16,27 @@ public interface ISingleItemListFile : IFileWrapper
 public interface ISingleItemListFile<T> : ISingleItemListFile where T : DbTableObj
 {
     IEnumerable<T>? Items { get; set; }
+}
+
+public static class SingleItemListFileHelper {
+    /// <summary>
+    /// Get the T in the ISingleItemListFile<T> of singleItemList
+    /// </summary>
+    /// <param name="singleItemList"></param>
+    /// <returns>T in singleItemList</returns>
+    /// <exception cref="Exception">Throw exception when singleItemList doesn't implement ISingleItemListFile<T></exception>
+    public static Type GetItemsT(ISingleItemListFile singleItemList)
+    {
+        foreach (var interfaceType in singleItemList.GetType().GetInterfaces())
+        {
+            if (interfaceType.IsGenericType &&
+                interfaceType.GetGenericTypeDefinition()
+                == typeof(ISingleItemListFile<>))
+            {
+                return interfaceType.GetGenericArguments()[0];
+            }
+        }
+
+        throw new Exception("singleItemList does not implement ISingleItemListFile<T>");
+    }
 }

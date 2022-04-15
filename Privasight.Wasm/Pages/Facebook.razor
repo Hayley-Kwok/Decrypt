@@ -48,7 +48,8 @@
 
 	RenderFragment NumberCardWithSingleItemListTableDialogInstance => builder =>
 	{
-		var type = typeof(NumberCardWithSingleItemListTableDialog<>).MakeGenericType(_singleItemListFile.ItemsType);
+		var t = SingleItemListFileHelper.GetItemsT(_singleItemListFile);
+		var type = typeof(NumberCardWithSingleItemListTableDialog<>).MakeGenericType(t);
 		builder.OpenComponent(1, type);
 		builder.AddAttribute(2,"SingleItemListFile", _singleItemListFile);
 		builder.CloseComponent();

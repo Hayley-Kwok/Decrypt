@@ -13,8 +13,6 @@ public class AdvertisersUsingYourActivity : ISingleItemListFile<SharedAdvertiser
 
     public string Title => "Advertisers Using Your Activity or Information";
 
-    public Type ItemsType => typeof(SharedAdvertiser);
-
     [JsonPropertyName("custom_audiences_all_types_v2")]
     public IEnumerable<SharedAdvertiser>? Items { get; set; }
 }
