@@ -8,8 +8,8 @@ namespace Privasight.Wasm.Services
 {
     public static class DataAccessHelper
     {
-        private const long MaxFileSize = 4294967296; // 4 GB
-      
+        private const long MaxFileSize = 560000000; // ~512 MB
+
         public static async Task<(Dictionary<string, IFileWrapper> newData, DateTimeOffset generationDate)> TransformJsonToObj(InputFileChangeEventArgs e, ConfigService configService)
         {
             var newData = new Dictionary<string, IFileWrapper>();

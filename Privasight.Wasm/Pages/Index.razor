@@ -26,12 +26,19 @@
 	private async Task LoadFiles(InputFileChangeEventArgs e)
 	{
 		_message = "loading";
-		var (newData, generationDate) = await DataAccessHelper.TransformJsonToObj(e, _configService);
+		try
+		{
+			var (newData, generationDate) = await DataAccessHelper.TransformJsonToObj(e, _configService);
+			DataAccessHelper.AddGenerationDate(newData, generationDate);
 
-		DataAccessHelper.AddGenerationDate(newData, generationDate);
-
-		await _dataService.LoadDataIntoStorage(newData);
-		_message = "loading finished";
+			await _dataService.LoadDataIntoStorage(newData);
+			_message = "loading finished";
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+			_message = "The file is too large. The file size limit is 512 MB.";
+		}
 	}
 
 	public async Task OpenFbInfoDialog()
