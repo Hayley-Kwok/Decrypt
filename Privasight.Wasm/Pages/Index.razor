@@ -23,7 +23,7 @@
 
 		DataAccessHelper.AddGenerationDate(newData, generationDate);
 
-		_dataService.LoadDataIntoStorage(newData);
+		await _dataService.LoadDataIntoStorage(newData);
 	}
 
 	public async Task OpenFbInfoDialog()

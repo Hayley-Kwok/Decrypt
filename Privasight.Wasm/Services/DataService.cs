@@ -6,22 +6,22 @@ namespace Privasight.Wasm.Services;
 
 public class DataService
 {
-    private CompanyRoot? _fbRoot;
-    private readonly ISyncLocalStorageService _localStorage;
+    private readonly ILocalStorageService _localStorage;
 
-    public CompanyRoot? FbRoot
-    {
-        get => _fbRoot ??= GetFbRootFromStorage();
-        private set => _fbRoot = value;
-    }
+    public CompanyRoot? FbRoot { get; private set; }
 
-    public DataService(ISyncLocalStorageService localStorage)
+    public DataService(ILocalStorageService localStorage)
     {
         _localStorage = localStorage;
     }
 
-    public void LoadDataIntoStorage(Dictionary<string, IFileWrapper> newData)
+    public async Task LoadDataIntoStorage(Dictionary<string, IFileWrapper> newData)
     {
+        if (FbRoot == null)
+        {
+            await SetFbRootFromStorage();
+        }
+
         foreach (var (key, value) in newData)
         {
             if (FbRoot!.AvailableData.ContainsKey(key))
@@ -46,13 +46,12 @@ public class DataService
             }
         }
 
-        _localStorage.SetItem(nameof(FbRoot), FbRoot);
+        await _localStorage.SetItemAsync(nameof(FbRoot), FbRoot);
     }
 
-    private CompanyRoot GetFbRootFromStorage()
-    {
-        var storageData = _localStorage.GetItem<CompanyRoot>(nameof(FbRoot));
-
-        return storageData ?? new CompanyRoot();
+    public async Task SetFbRootFromStorage()
+    { 
+        var storageData = await _localStorage.GetItemAsync<CompanyRoot>(nameof(FbRoot));
+        FbRoot = storageData ?? new CompanyRoot();
     }
 }

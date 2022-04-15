@@ -15,7 +15,7 @@
 	</div>
 	@if (_dataService.FbRoot?.AvailableData.Values != null)
 	{
-		foreach (var wrapper in _dataService.FbRoot?.AvailableData.Values!)
+		foreach (var wrapper in _dataService.FbRoot.AvailableData.Values)
 		{
 			switch (wrapper)
 			{
@@ -63,5 +63,13 @@
 				{ nameof(DataListTable<string>.Description), _singleStringList.Description }
 			},
 			new DialogOptions { Width = "90%", Height = "90%", Resizable = true });
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		if (_dataService.FbRoot == null)
+		{
+			await _dataService.SetFbRootFromStorage();
+		}
 	}
 }
