@@ -1,4 +1,4 @@
-﻿namespace Privasight.Wasm.CardComponents.Tables
+﻿namespace Privasight.Wasm.UI.CardComponents.Tables
 {
 	public enum AvailableTables
 	{

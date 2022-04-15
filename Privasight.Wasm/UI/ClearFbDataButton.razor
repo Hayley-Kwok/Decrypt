@@ -1,0 +1,21 @@
+﻿@using Privasight.Wasm.Services
+
+@inject DataService _dataService
+@inject NotificationService _notificationService
+
+<RadzenButton class="@Class"
+              Text="Delete Existing Loaded Facebook Data"
+              ButtonStyle="ButtonStyle.Danger"
+              Click="@RemoveFbData"/>
+
+@code {
+
+	[Parameter]
+	public string Class { get; set; } = "";
+
+	public async Task RemoveFbData()
+	{
+		await _dataService.RemoveFbData();
+		_notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Facebook Data Removed Successfully", Duration = 4000 });
+	}
+}

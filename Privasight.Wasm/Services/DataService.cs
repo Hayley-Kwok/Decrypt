@@ -1,14 +1,34 @@
-﻿using Blazored.LocalStorage;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using Blazored.LocalStorage;
 using Privasight.Model.Shared;
 using Privasight.Model.Shared.Interfaces;
 
 namespace Privasight.Wasm.Services;
 
-public class DataService
+public class DataService : INotifyPropertyChanged
 {
     private readonly ILocalStorageService _localStorage;
+    private CompanyRoot? _fbRoot;
 
-    public CompanyRoot? FbRoot { get; private set; }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    public CompanyRoot? FbRoot
+    {
+        get => _fbRoot;
+        private set
+        {
+            if (_fbRoot != null && _fbRoot.Equals(value)) return;
+            _fbRoot = value;
+            OnPropertyChanged();
+        }
+    }
 
     public DataService(ILocalStorageService localStorage)
     {
@@ -46,6 +66,7 @@ public class DataService
             }
         }
 
+        OnPropertyChanged(nameof(FbRoot));
         await _localStorage.SetItemAsync(nameof(FbRoot), FbRoot);
     }
 
@@ -53,5 +74,11 @@ public class DataService
     { 
         var storageData = await _localStorage.GetItemAsync<CompanyRoot>(nameof(FbRoot));
         FbRoot = storageData ?? new CompanyRoot();
+    }
+
+    public async Task RemoveFbData()
+    {
+        await _localStorage.RemoveItemAsync(nameof(FbRoot));
+        FbRoot = new CompanyRoot();
     }
 }

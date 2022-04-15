@@ -1,20 +1,26 @@
 ﻿@page "/facebook"
 @using Privasight.Model.Shared.Interfaces
-@using Privasight.Wasm.CardComponents.NumberCards.Base
+@using Privasight.Wasm.UI.CardComponents.NumberCards.Base
 @using Privasight.Wasm.Services
 @using Privasight.Model.Shared
 @using Privasight.Model.Shared.AbstractClasses
-@using Privasight.Wasm.CardComponents.NumberCards
-@using Privasight.Wasm.CardComponents.Tables
+@using Privasight.Wasm.UI
+@using Privasight.Wasm.UI.CardComponents.NumberCards
+@using Privasight.Wasm.UI.CardComponents.Tables
+@using System.ComponentModel
+
+@implements IDisposable
 
 @inject DialogService _dialogService
 @inject DataService _dataService
 
 <PageTitle>Facebook Data</PageTitle>
-<h1>Your Facebook Data</h1>
-
+<div class="d-flex justify-content-between">
+	<div><h1>Your Facebook Data</h1></div>
+	<div><ClearFbDataButton/></div>
+</div>
 <div class="row">
-	<div class=@_colStr>
+	<div class="@_colStr">
 		<NumberCardWithLineChart OnClickFunc="() => Task.CompletedTask"/>
 	</div>
 	@if (_dataService.FbRoot?.AvailableData.Values != null)
@@ -24,7 +30,7 @@
 			switch (wrapper)
 			{
 				case ISingleItemListFile<StringWrapperDbObj> stringList:
-					_singleStringList = stringList;
+					_singleItemListFile = stringList;
 					<div class="@_colStr">
 						@NumberCardWithDataListTableDialogInstance
 					</div>
@@ -42,11 +48,10 @@
 </div>
 
 @code {
-	const int ColNumber = 3;
-	string _colStr => $"col-md-{12/ColNumber}";
-
-	ISingleItemListFile _singleItemListFile = null!;
-	ISingleItemListFile _singleStringList = null!;
+	private const int ColNumber = 3;
+	private string _colStr => $"col-md-{12/ColNumber}";
+	
+	private ISingleItemListFile _singleItemListFile = null!;
 
 	RenderFragment NumberCardWithSingleItemListTableDialogInstance => builder =>
 	{
@@ -60,20 +65,28 @@
 
 	RenderFragment NumberCardWithDataListTableDialogInstance => builder =>
 	{
-		var t = SingleItemListFileHelper.GetItemsT(_singleStringList);
+		var t = SingleItemListFileHelper.GetItemsT(_singleItemListFile);
 		var type = typeof(NumberCardWithTableDialog<>).MakeGenericType(t);
 		builder.OpenComponent(1, type);
-		builder.AddAttribute(2,nameof(NumberCardWithTableDialog<DbTableObj>.SingleItemListFile), _singleStringList);
+		builder.AddAttribute(2,nameof(NumberCardWithTableDialog<DbTableObj>.SingleItemListFile), _singleItemListFile);
 		builder.AddAttribute(3, nameof(NumberCardWithTableDialog<DbTableObj>.ChosenTable), AvailableTables.DataList);
 		builder.AddAttribute(4, nameof(NumberCardWithTableDialog<DbTableObj>.DisplayPropertyName), nameof(StringWrapperDbObj.StrVal));
 		builder.CloseComponent();
 	};
 
+	public void Dispose() => _dataService.PropertyChanged -= PropertyHasChanged;
+
 	protected override async Task OnInitializedAsync()
 	{
+		_dataService.PropertyChanged += PropertyHasChanged;
 		if (_dataService.FbRoot == null)
 		{
 			await _dataService.SetFbRootFromStorage();
 		}
+	}
+
+	private void PropertyHasChanged(object? sender, PropertyChangedEventArgs args)
+	{
+		StateHasChanged();
 	}
 }
