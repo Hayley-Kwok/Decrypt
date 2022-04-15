@@ -11,29 +11,32 @@
 <div class="my-3">
 	<InputFile label="file_upload" title="file_upload" OnChange="@LoadFiles" accept=".zip"/>
 </div>
+@if (!string.IsNullOrWhiteSpace(_message))
+{
+	<div>Data loading Status: @_message</div>
+}
+
 <div class="my-3">
 	<RadzenButton Text="How to download your Facebook data" Click=@OpenFbInfoDialog ButtonStyle="ButtonStyle.Info"/>
 </div>
 
 @code {
+	private string _message = "";
 
 	private async Task LoadFiles(InputFileChangeEventArgs e)
 	{
+		_message = "loading";
 		var (newData, generationDate) = await DataAccessHelper.TransformJsonToObj(e, _configService);
 
 		DataAccessHelper.AddGenerationDate(newData, generationDate);
 
 		await _dataService.LoadDataIntoStorage(newData);
+		_message = "loading finished";
 	}
 
 	public async Task OpenFbInfoDialog()
 	{
 		await _dialogService.OpenAsync<FBDownloadInstruction>("How to download your Facebook Data",
 			options: new DialogOptions { Width = "95%", Height = "95%", Resizable = true });
-	}
-
-	protected override async Task OnInitializedAsync()
-	{
-		await base.OnInitializedAsync();
 	}
 }
