@@ -60,8 +60,9 @@
 		await _dialogService.OpenAsync<DataListTable<StringWrapperDbObj>>(_singleStringList.Title,
 			new Dictionary<string, object>
 			{
-				{ nameof(DataListTable<string>.Items), _singleStringList.Items?? Array.Empty<StringWrapperDbObj>() },
-				{ nameof(DataListTable<string>.Description), _singleStringList.Description }
+				{ nameof(DataListTable<dynamic>.Items), _singleStringList.Items?? Array.Empty<StringWrapperDbObj>() },
+				{ nameof(DataListTable<dynamic>.Description), _singleStringList.Description },
+				{ nameof(DataListTable<dynamic>.DisplayPropertyName), nameof(StringWrapperDbObj.StrVal) }
 			},
 			new DialogOptions { Width = "90%", Height = "90%", Resizable = true });
 	}

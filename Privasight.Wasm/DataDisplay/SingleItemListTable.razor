@@ -1,5 +1,5 @@
-﻿@using Privasight.Model.Shared.Attributes
-@using System.Reflection
+﻿@using System.Reflection
+@using Privasight.Model.Shared.Helpers
 
 @typeparam TItem
 
@@ -37,7 +37,7 @@
 
 @code {
     private TItem FirstItem => Items.First();
-    private IEnumerable<PropertyInfo> PropertyInfos => DisplayDataAttributeHelper.GetPropertiesReflection(FirstItem!);
+    private IEnumerable<PropertyInfo> PropertyInfos => ReflectionHelper.GetProperties(FirstItem!);
 
 	[Parameter]
 	public string Description { get; set; } = "";

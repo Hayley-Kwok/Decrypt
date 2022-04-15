@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
+using Privasight.Model.Shared.Attributes;
 
-namespace Privasight.Model.Shared.Attributes
+namespace Privasight.Model.Shared.Helpers
 {
     public static class DisplayDataAttributeHelper
     {
@@ -9,8 +10,6 @@ namespace Privasight.Model.Shared.Attributes
             var attr = propertyInfo.GetCustomAttribute<DisplayDataAttribute>();
             return new DisplayDataAttributeDTO(attr?.DisplayName ?? string.Empty, attr?.Description ?? string.Empty);
         }
-
-        public static IEnumerable<PropertyInfo> GetPropertiesReflection(object obj) => obj.GetType().GetProperties();
 
         private static string TransformBoolToYesNo(bool val) => val ? "Yes" : "No";
         public static string FormatPropertyString(PropertyInfo propertyInfo, object obj)

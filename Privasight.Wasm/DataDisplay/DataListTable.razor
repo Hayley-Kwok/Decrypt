@@ -1,4 +1,6 @@
-﻿@typeparam TItem 
+﻿@using Privasight.Model.Shared.Helpers
+
+@typeparam TItem 
 
 @if (!string.IsNullOrWhiteSpace(Description))
 {
@@ -13,7 +15,7 @@
 						New
 					</div>
 					<div class="col-md-9 p-3 text-center">
-						@item
+						@ReflectionHelper.GetPropertyStrValue(item!, DisplayPropertyName)
 					</div>
 				</div>
 			</div>
@@ -33,6 +35,8 @@
 </style>
 @code {
 
+	[Parameter]
+	public string DisplayPropertyName { get; set; } = "";
 	[Parameter]
 	public IEnumerable<TItem>? Items { get; set; }
 	[Parameter]
