@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using Privasight.Model.Shared.Attributes;
+using Privasight.Model.Shared.Display.Attributes;
 
 namespace Privasight.Model.Shared.Helpers
 {

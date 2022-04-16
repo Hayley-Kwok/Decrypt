@@ -1,6 +1,6 @@
-﻿using Privasight.Model.Shared.Attributes;
+﻿using Privasight.Model.Shared.Display.Attributes;
 
-namespace Privasight.Model.Shared.AbstractClasses;
+namespace Privasight.Model.Shared.DataStructures.AbstractClasses;
 
 /// <summary>
 /// A wrapper object for Items in ISingleItemListFile 

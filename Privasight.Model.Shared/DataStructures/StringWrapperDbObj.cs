@@ -1,7 +1,7 @@
-﻿using Privasight.Model.Shared.AbstractClasses;
-using Privasight.Model.Shared.Attributes;
+﻿using Privasight.Model.Shared.DataStructures.AbstractClasses;
+using Privasight.Model.Shared.Display.Attributes;
 
-namespace Privasight.Model.Shared
+namespace Privasight.Model.Shared.DataStructures
 {
     /// <summary>
     /// Used for transforming a Json String list to a list of object with generation date

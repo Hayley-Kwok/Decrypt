@@ -2,8 +2,8 @@
 using System.Runtime.CompilerServices;
 using Blazored.LocalStorage;
 using Privasight.Model.Facebook;
-using Privasight.Model.Shared;
-using Privasight.Model.Shared.Interfaces;
+using Privasight.Model.Shared.DataStructures;
+using Privasight.Model.Shared.DataStructures.Interfaces;
 
 namespace Privasight.Wasm.Services;
 

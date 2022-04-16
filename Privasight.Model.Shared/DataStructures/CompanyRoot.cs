@@ -1,6 +1,6 @@
-﻿using Privasight.Model.Shared.Interfaces;
+﻿using Privasight.Model.Shared.DataStructures.Interfaces;
 
-namespace Privasight.Model.Shared
+namespace Privasight.Model.Shared.DataStructures
 {
     /// <summary>
     /// Root object for storing the transformed data from the zip file

@@ -1,10 +1,9 @@
 ﻿@inject DialogService _dialogService
-
-@using Privasight.Model.Shared.Interfaces
 @using Privasight.Wasm.UI.CardComponents.NumberCards.Base
 @using Privasight.Wasm.UI.CardComponents.Tables
+@using Privasight.Model.Shared.DataStructures.Interfaces
 
-@typeparam TItem where TItem : Privasight.Model.Shared.AbstractClasses.DbTableObj
+@typeparam TItem where TItem : Privasight.Model.Shared.DataStructures.AbstractClasses.DbTableObj
 
 <NumberCard Title="@SingleItemListFile.Title"
                            Number="SingleItemListFile.Items?.Count() ?? 0"

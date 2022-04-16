@@ -1,4 +1,4 @@
-﻿namespace Privasight.Model.Shared
+﻿namespace Privasight.Model.Shared.Display
 {
     public class LineChartItem
     {

@@ -1,6 +1,6 @@
-﻿using Privasight.Model.Shared.AbstractClasses;
+﻿using Privasight.Model.Shared.DataStructures.AbstractClasses;
 
-namespace Privasight.Model.Shared.Interfaces;
+namespace Privasight.Model.Shared.DataStructures.Interfaces;
 
 /// <summary>
 /// A Helper interface for ISingleItemListFile

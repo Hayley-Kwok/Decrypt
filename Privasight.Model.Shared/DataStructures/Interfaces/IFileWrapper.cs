@@ -1,4 +1,4 @@
-﻿namespace Privasight.Model.Shared.Interfaces;
+﻿namespace Privasight.Model.Shared.DataStructures.Interfaces;
 
 /// <summary>
 /// Wrapper interface for each Json File from the zip folder.

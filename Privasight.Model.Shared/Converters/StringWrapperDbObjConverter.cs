@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using Privasight.Model.Shared.DataStructures;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Privasight.Model.Shared.Converters

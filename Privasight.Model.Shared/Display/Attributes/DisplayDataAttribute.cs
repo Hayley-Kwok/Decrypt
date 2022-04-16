@@ -1,4 +1,4 @@
-﻿namespace Privasight.Model.Shared.Attributes
+﻿namespace Privasight.Model.Shared.Display.Attributes
 {
     /// <summary>
     /// Specific the DisplayName and Description of each property for the display in DataListTable

@@ -2,7 +2,7 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Components.Forms;
 using Privasight.Model.Shared.Converters;
-using Privasight.Model.Shared.Interfaces;
+using Privasight.Model.Shared.DataStructures.Interfaces;
 
 namespace Privasight.Wasm.Services
 {

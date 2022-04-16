@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
-using Privasight.Model.Shared.AbstractClasses;
-using Privasight.Model.Shared.Attributes;
-using Privasight.Model.Shared.Interfaces;
+using Privasight.Model.Shared.DataStructures.AbstractClasses;
+using Privasight.Model.Shared.DataStructures.Interfaces;
+using Privasight.Model.Shared.Display.Attributes;
 
 namespace Privasight.Model.Facebook;
 
