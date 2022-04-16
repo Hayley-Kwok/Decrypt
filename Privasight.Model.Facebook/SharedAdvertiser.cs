@@ -9,7 +9,7 @@ public class AdvertisersUsingYourActivity : ISingleItemListFile<SharedAdvertiser
 {
     public static readonly string Filepath = @"ads_information/advertisers_using_your_activity_or_information.json";
     public string Description =>
-        @"Advertisers can choose to show their ads to certain audiences. You may see ads because an advertiser has included you in an audience based on a list of information or your interactions with their website, app or store. Advertisers can use or upload a list of information that Facebook can match to your profile.<br/><a href=""https://www.facebook.com/business/help/744354708981227?id=2469097953376494"">More on Custom Audience</a><br/>";
+        @"Advertisers can choose to show their ads to certain audiences. You may see ads because an advertiser has included you in an audience based on a list of information or your interactions with their website, app or store. Advertisers can use or upload a list of information that Facebook can match to your profile.<br/><a class=""text-decoration-underline"" href=""https://www.facebook.com/business/help/744354708981227?id=2469097953376494"">More on Custom Audience</a><br/>";
 
     public string Title => "Advertisers Using Your Activity or Information";
 

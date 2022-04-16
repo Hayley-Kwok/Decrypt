@@ -6,9 +6,8 @@
 @using Privasight.Model.Shared.DataStructures.Interfaces
 @using Privasight.Wasm.UI
 @using Privasight.Wasm.UI.CardComponents.NumberCards
-@using Privasight.Wasm.UI.CardComponents.NumberCards.Base
-@using Privasight.Wasm.UI.CardComponents.Tables
 @using System.ComponentModel
+@using Privasight.Model.Shared.DataStructures.Dashboard
 
 @implements IDisposable
 
@@ -21,9 +20,6 @@
 	<div><ClearFbDataButton/></div>
 </div>
 <div class="row">
-	<div class="@_colStr">
-		<NumberCardWithLineChart OnClickFunc="() => Task.CompletedTask"/>
-	</div>
 	@if (_dataService.FbRoot?.AvailableData.Values != null)
 	{
 		foreach (var wrapper in _dataService.FbRoot.AvailableData.Values)
@@ -72,6 +68,7 @@
 		builder.AddAttribute(2,nameof(NumberCardWithTableDialog<DbTableObj>.SingleItemListFile), _singleItemListFile);
 		builder.AddAttribute(3, nameof(NumberCardWithTableDialog<DbTableObj>.ChosenTable), AvailableTables.DataList);
 		builder.AddAttribute(4, nameof(NumberCardWithTableDialog<DbTableObj>.DisplayPropertyName), nameof(StringWrapperDbObj.StrVal));
+		builder.AddAttribute(5, nameof(NumberCardWithTableDialog<DbTableObj>.ShowLineChart), true);
 		builder.CloseComponent();
 	};
 

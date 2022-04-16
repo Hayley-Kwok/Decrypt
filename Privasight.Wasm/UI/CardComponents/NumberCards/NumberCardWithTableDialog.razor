@@ -2,12 +2,15 @@
 @using Privasight.Wasm.UI.CardComponents.NumberCards.Base
 @using Privasight.Wasm.UI.CardComponents.Tables
 @using Privasight.Model.Shared.DataStructures.Interfaces
+@using Privasight.Model.Shared.DataStructures.Dashboard
 
 @typeparam TItem where TItem : Privasight.Model.Shared.DataStructures.AbstractClasses.DbTableObj
 
-<NumberCard Title="@SingleItemListFile.Title"
-                           Number="SingleItemListFile.Items?.Count() ?? 0"
-                           OnClickFunc="ShowTableDialog"/>
+<NumberCard
+		Title="@SingleItemListFile.Title"
+		Number="SingleItemListFile.Items?.Count() ?? 0"
+		ShowLineChart="@ShowLineChart"
+		OnClickFunc="ShowTableDialog"/>
 
 @code {
 
@@ -16,6 +19,9 @@
 
 	[Parameter, EditorRequired]
 	public AvailableTables ChosenTable { get; set; }
+
+	[Parameter]
+	public bool ShowLineChart { get; set; }
 
 	[Parameter]
 	public string DisplayPropertyName { get; set; } = "";
@@ -30,8 +36,9 @@
 			case AvailableTables.DetailedTable:
 				await ShowDetailedTableDialog();
 				return;
+			case AvailableTables.Nothing:
 			default:
-				throw new ArgumentOutOfRangeException();
+				return;
 		}
 	}
 
