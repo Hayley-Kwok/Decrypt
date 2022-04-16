@@ -1,10 +1,8 @@
-﻿using Privasight.Model.Facebook;
+﻿namespace Privasight.Model.Facebook;
 
-namespace Privasight.Wasm.Services;
-
-public class ConfigService
+public static class FbConfig
 {
-    public readonly Dictionary<string, Type> AvailableFileWrappers = new()
+    public static readonly Dictionary<string, Type> AvailableFileWrappers = new()
     {
         { AdvertisersUsingYourActivity.Filepath, typeof(AdvertisersUsingYourActivity) },
         { AdvertiserYouInteractedWith.Filepath, typeof(AdvertiserYouInteractedWith) },

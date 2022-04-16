@@ -6,11 +6,11 @@ using Privasight.Model.Shared.Interfaces;
 
 namespace Privasight.Wasm.Services
 {
-    public static class DataAccessHelper
+    public static class DataLoadInHelper
     {
         private const long MaxFileSize = 560000000; // ~512 MB
 
-        public static async Task<(Dictionary<string, IFileWrapper> newData, DateTimeOffset generationDate)> TransformJsonToObj(InputFileChangeEventArgs e, ConfigService configService)
+        public static async Task<(Dictionary<string, IFileWrapper> newData, DateTimeOffset generationDate)> TransformJsonToObj(InputFileChangeEventArgs e, Dictionary<string, Type> availableFileWrappers)
         {
             var newData = new Dictionary<string, IFileWrapper>();
             var options = new JsonSerializerOptions();
@@ -26,7 +26,7 @@ namespace Privasight.Wasm.Services
             using var archive = new ZipArchive(stream);
             foreach (var entry in archive.Entries)
             {
-                if (!configService.AvailableFileWrappers.TryGetValue(entry.FullName, out var wrapperType)) continue;
+                if (!availableFileWrappers.TryGetValue(entry.FullName, out var wrapperType)) continue;
                 var unzippedEntryStream = entry.Open();
 
                 if (await JsonSerializer.DeserializeAsync(unzippedEntryStream, wrapperType, options) is IFileWrapper wrapperObj)

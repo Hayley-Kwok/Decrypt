@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Blazored.LocalStorage;
+using Privasight.Model.Facebook;
 using Privasight.Model.Shared;
 using Privasight.Model.Shared.Interfaces;
 
@@ -9,16 +10,17 @@ namespace Privasight.Wasm.Services;
 public class DataService : INotifyPropertyChanged
 {
     private readonly ILocalStorageService _localStorage;
-    private CompanyRoot? _fbRoot;
-
-
+    
+    #region PropertyChanged
     public event PropertyChangedEventHandler? PropertyChanged;
 
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+    #endregion
 
+    private CompanyRoot? _fbRoot;
     public CompanyRoot? FbRoot
     {
         get => _fbRoot;
@@ -30,12 +32,14 @@ public class DataService : INotifyPropertyChanged
         }
     }
 
+    public Dictionary<string, Type> AvailableFileWrappers => FbConfig.AvailableFileWrappers;
+
     public DataService(ILocalStorageService localStorage)
     {
         _localStorage = localStorage;
     }
 
-    public async Task LoadDataIntoStorage(Dictionary<string, IFileWrapper> newData)
+    public async Task LoadFbDataIntoStorage(Dictionary<string, IFileWrapper> newData)
     {
         if (FbRoot == null)
         {

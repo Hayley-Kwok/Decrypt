@@ -3,7 +3,6 @@
 @using Privasight.Wasm.UI
 
 @inject DataService _dataService
-@inject ConfigService _configService
 @inject DialogService _dialogService
 @inject NotificationService _notificationService
 
@@ -32,10 +31,10 @@
 		_message = "Loading ...";
 		try
 		{
-			var (newData, generationDate) = await DataAccessHelper.TransformJsonToObj(e, _configService);
-			DataAccessHelper.AddGenerationDate(newData, generationDate);
+			var (newData, generationDate) = await DataLoadInHelper.TransformJsonToObj(e, _dataService.AvailableFileWrappers);
+			DataLoadInHelper.AddGenerationDate(newData, generationDate);
 
-			await _dataService.LoadDataIntoStorage(newData);
+			await _dataService.LoadFbDataIntoStorage(newData);
 			_message = "loading finished";
 			_notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Data loaded in successfully", Duration = 4000 });
 		}
