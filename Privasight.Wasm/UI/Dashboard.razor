@@ -1,0 +1,89 @@
+﻿@using Privasight.Wasm.Services
+@using Privasight.Model.Shared.DataStructures
+@using Privasight.Model.Shared.DataStructures.AbstractClasses
+@using Privasight.Model.Shared.DataStructures.Interfaces
+@using Privasight.Wasm.UI.CardComponents.NumberCards
+@using Privasight.Wasm.UI.CardComponents
+@using System.ComponentModel
+@using System.Reflection.Metadata
+@using Privasight.Model.Shared.DataStructures.Dashboard
+@using Privasight.Model.Shared.Helpers
+
+@implements IDisposable
+
+@inject DialogService _dialogService
+@inject DataService _dataService
+
+<div class="d-flex justify-content-between">
+	<div>
+		<h1>@Setting.Name</h1>
+	</div>
+	<div>
+		<ClearFbDataButton/>
+	</div>
+</div>
+<div class="row">
+	@foreach (var (fileWrapperTypeName, dialogType, cardType) in Setting.CardSettings)
+	{
+		if (_dataService.FbRoot != null &&
+			_dataService.FbRoot.AvailableData.TryGetValue(fileWrapperTypeName, out var data))
+		{
+			if (data is ISingleItemListFile singleItemList)
+			{
+				_singleItemListFile = singleItemList;
+				_cardType = cardType;
+				_dialogType = dialogType;
+				<div class="@_colStr">
+					@NumberCardWithDialogInstance
+				</div>
+			} 
+		}
+		else
+		{
+			<div class="@_colStr">
+				<NoDataCard Title="@fileWrapperTypeName"/>
+			</div>
+		}
+	}
+</div>
+
+@code {
+	private const int ColNumber = 3;
+	private string _colStr => $"col-md-{12 / ColNumber}";
+
+	private ISingleItemListFile _singleItemListFile = null!;
+	private CardTypes _cardType;
+	private DialogTypes _dialogType;
+
+	[Parameter, EditorRequired]
+	public DashboardSetting Setting { get; set; } = null!;
+
+	RenderFragment NumberCardWithDialogInstance => builder =>
+	{
+		var t = SingleItemListFileHelper.GetItemsT(_singleItemListFile);
+		var type = typeof(NumberCardWithDialog<>).MakeGenericType(t);
+		builder.OpenComponent(1, type);
+		builder.AddAttribute(2, nameof(NumberCardWithDialog<DbTableObj>.SingleItemListFile), _singleItemListFile);
+		builder.AddAttribute(3, nameof(NumberCardWithDialog<DbTableObj>.ChosenDialog), _dialogType);
+		//TODO update this to get this from user
+		builder.AddAttribute(4, nameof(NumberCardWithDialog<DbTableObj>.DisplayPropertyName), nameof(StringWrapperDbObj.StrVal));
+		builder.AddAttribute(5, nameof(NumberCardWithDialog<DbTableObj>.CardType), _cardType);
+		builder.CloseComponent();
+	};
+
+	public void Dispose() => _dataService.PropertyChanged -= PropertyHasChanged;
+
+	protected override async Task OnInitializedAsync()
+	{
+		_dataService.PropertyChanged += PropertyHasChanged;
+		if (_dataService.FbRoot == null)
+		{
+			await _dataService.SetFbRootFromStorage();
+		}
+	}
+
+	private void PropertyHasChanged(object? sender, PropertyChangedEventArgs args)
+	{
+		StateHasChanged();
+	}
+}

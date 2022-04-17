@@ -1,8 +1,9 @@
 ﻿@using Privasight.Model.Shared.Display
+@using Privasight.Model.Shared.DataStructures.Dashboard
 
 <RadzenCard class="@GetClasses()" @onclick="OnClickFunc">
 	<h3>@Title</h3>
-	@if (ShowLineChart)
+	@if (CardType == CardTypes.WithLineChart)
 	{
 		<div class="row">
 			<LineChart Title="@Title" Items="Items"/>
@@ -25,7 +26,7 @@
 	public Func<Task> OnClickFunc { get; set; } = () => Task.CompletedTask;
 
 	[Parameter]
-	public bool ShowLineChart { get; set; }
+	public CardTypes CardType { get; set; }
 
 	[Parameter]
 	public IEnumerable<LineChartItem>? Items { get; set; } = new[]
@@ -40,7 +41,7 @@
 	public int Number { get; set; }
 
 	[Parameter]
-	public string? Title { get; set; }
+	public string Title { get; set; } = "";
 
 	[Parameter]
 	public string CustomClasses { get; set; } = "";

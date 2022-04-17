@@ -1,95 +1,41 @@
-﻿@page "/facebook"
+﻿@page "/facebook/dashboard/default"
 
+@using Privasight.Wasm.UI
+@using Privasight.Model.Shared.DataStructures.Dashboard
+@using Privasight.Model.Shared.DataStructures.Interfaces
 @using Privasight.Wasm.Services
 @using Privasight.Model.Shared.DataStructures
-@using Privasight.Model.Shared.DataStructures.AbstractClasses
-@using Privasight.Model.Shared.DataStructures.Interfaces
-@using Privasight.Wasm.UI
-@using Privasight.Wasm.UI.CardComponents.NumberCards
-@using System.ComponentModel
-@using Privasight.Model.Shared.DataStructures.Dashboard
 
-@implements IDisposable
-
-@inject DialogService _dialogService
 @inject DataService _dataService
 
-<PageTitle>Facebook Data</PageTitle>
-<div class="d-flex justify-content-between">
-	<div>
-		<h1>Your Facebook Data</h1>
-	</div>
-	<div>
-		<ClearFbDataButton/>
-	</div>
-</div>
-<div class="row">
-	@if (_dataService.FbRoot?.AvailableData.Values != null)
-	{
-		foreach (var wrapper in _dataService.FbRoot.AvailableData.Values)
-		{
-			switch (wrapper)
-			{
-				case ISingleItemListFile<StringWrapperDbObj> stringList:
-					_singleItemListFile = stringList;
-					<div class="@_colStr">
-						@NumberCardWithDataListTableDialogInstance
-					</div>
-					break;
+<PageTitle>All Available Facebook Data</PageTitle>
 
-				case ISingleItemListFile itemList:
-					_singleItemListFile = itemList;
-					<div class=@_colStr>
-						@NumberCardWithSingleItemListTableDialogInstance
-					</div>
-					break;
+<Dashboard Setting="GetDefaultDashboardSetting()"/>
+@code {
+
+	private DashboardSetting GetDefaultDashboardSetting()
+	{
+		var cardSettings = new HashSet<CardSetting>();
+
+		foreach (var fileWrapperType in _dataService.AvailableFileWrappers.Values)
+		{
+			CardSetting? card = null;
+
+			if (fileWrapperType.GetInterfaces().Contains(typeof(ISingleItemListFile<StringWrapperDbObj>)))
+			{
+				card = new CardSetting(fileWrapperType.Name, DialogTypes.DataList, CardTypes.WithLineChart);
+			}
+			else if (fileWrapperType.GetInterfaces().Contains(typeof(ISingleItemListFile)))
+			{
+				card = new CardSetting(fileWrapperType.Name, DialogTypes.DetailedTable);
+			}
+
+			if (card != null)
+			{
+				cardSettings.Add(card);
 			}
 		}
+
+		return new DashboardSetting(cardSettings, "All Available Data");
 	}
-</div>
-
-@code {
-	private const int ColNumber = 3;
-	private string _colStr => $"col-md-{12 / ColNumber}";
-
-	private ISingleItemListFile _singleItemListFile = null!;
-
-	RenderFragment NumberCardWithSingleItemListTableDialogInstance => builder =>
-	{
-		var t = SingleItemListFileHelper.GetItemsT(_singleItemListFile);
-		var type = typeof(NumberCardWithDialog<>).MakeGenericType(t);
-		builder.OpenComponent(1, type);
-		builder.AddAttribute(2, nameof(NumberCardWithDialog<DbTableObj>.SingleItemListFile), _singleItemListFile);
-		builder.AddAttribute(3, nameof(NumberCardWithDialog<DbTableObj>.ChosenDialog), DialogTypes.DetailedTable);
-		builder.CloseComponent();
-	};
-
-	RenderFragment NumberCardWithDataListTableDialogInstance => builder =>
-	{
-		var t = SingleItemListFileHelper.GetItemsT(_singleItemListFile);
-		var type = typeof(NumberCardWithDialog<>).MakeGenericType(t);
-		builder.OpenComponent(1, type);
-		builder.AddAttribute(2, nameof(NumberCardWithDialog<DbTableObj>.SingleItemListFile), _singleItemListFile);
-		builder.AddAttribute(3, nameof(NumberCardWithDialog<DbTableObj>.ChosenDialog), DialogTypes.DataList);
-		builder.AddAttribute(4, nameof(NumberCardWithDialog<DbTableObj>.DisplayPropertyName), nameof(StringWrapperDbObj.StrVal));
-		builder.AddAttribute(5, nameof(NumberCardWithDialog<DbTableObj>.ShowLineChart), true);
-		builder.CloseComponent();
-	};
-
-	public void Dispose() => _dataService.PropertyChanged -= PropertyHasChanged;
-
-	protected override async Task OnInitializedAsync()
-	{
-		_dataService.PropertyChanged += PropertyHasChanged;
-		if (_dataService.FbRoot == null)
-		{
-			await _dataService.SetFbRootFromStorage();
-		}
-	}
-
-	private void PropertyHasChanged(object? sender, PropertyChangedEventArgs args)
-	{
-		StateHasChanged();
-	}
-
 }
