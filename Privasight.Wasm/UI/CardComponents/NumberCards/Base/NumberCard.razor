@@ -21,8 +21,8 @@
 @code {
 	private const string DefaultClasses = "m-lg-3 m-2 h-90 clickable";
 
-	[Parameter, EditorRequired]
-	public Func<Task> OnClickFunc { get; set; } = null!;
+	[Parameter]
+	public Func<Task> OnClickFunc { get; set; } = () => Task.CompletedTask;
 
 	[Parameter]
 	public bool ShowLineChart { get; set; }

@@ -34,7 +34,7 @@
 			var (newData, generationDate) = await DataLoadInHelper.TransformJsonToObj(e, _dataService.AvailableFileWrappers);
 			DataLoadInHelper.AddGenerationDate(newData, generationDate);
 
-			await _dataService.LoadFbDataIntoStorage(newData);
+			await _dataService.UpdateFbData(newData);
 			_message = "loading finished";
 			_notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Data loaded in successfully", Duration = 4000 });
 		}

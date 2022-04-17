@@ -16,8 +16,12 @@
 
 <PageTitle>Facebook Data</PageTitle>
 <div class="d-flex justify-content-between">
-	<div><h1>Your Facebook Data</h1></div>
-	<div><ClearFbDataButton/></div>
+	<div>
+		<h1>Your Facebook Data</h1>
+	</div>
+	<div>
+		<ClearFbDataButton/>
+	</div>
 </div>
 <div class="row">
 	@if (_dataService.FbRoot?.AvailableData.Values != null)
@@ -46,29 +50,29 @@
 
 @code {
 	private const int ColNumber = 3;
-	private string _colStr => $"col-md-{12/ColNumber}";
-	
+	private string _colStr => $"col-md-{12 / ColNumber}";
+
 	private ISingleItemListFile _singleItemListFile = null!;
 
 	RenderFragment NumberCardWithSingleItemListTableDialogInstance => builder =>
 	{
 		var t = SingleItemListFileHelper.GetItemsT(_singleItemListFile);
-		var type = typeof(NumberCardWithTableDialog<>).MakeGenericType(t);
+		var type = typeof(NumberCardWithDialog<>).MakeGenericType(t);
 		builder.OpenComponent(1, type);
-		builder.AddAttribute(2,nameof(NumberCardWithTableDialog<DbTableObj>.SingleItemListFile), _singleItemListFile);
-		builder.AddAttribute(3, nameof(NumberCardWithTableDialog<DbTableObj>.ChosenTable), AvailableTables.DetailedTable);
+		builder.AddAttribute(2, nameof(NumberCardWithDialog<DbTableObj>.SingleItemListFile), _singleItemListFile);
+		builder.AddAttribute(3, nameof(NumberCardWithDialog<DbTableObj>.ChosenDialog), DialogTypes.DetailedTable);
 		builder.CloseComponent();
 	};
 
 	RenderFragment NumberCardWithDataListTableDialogInstance => builder =>
 	{
 		var t = SingleItemListFileHelper.GetItemsT(_singleItemListFile);
-		var type = typeof(NumberCardWithTableDialog<>).MakeGenericType(t);
+		var type = typeof(NumberCardWithDialog<>).MakeGenericType(t);
 		builder.OpenComponent(1, type);
-		builder.AddAttribute(2,nameof(NumberCardWithTableDialog<DbTableObj>.SingleItemListFile), _singleItemListFile);
-		builder.AddAttribute(3, nameof(NumberCardWithTableDialog<DbTableObj>.ChosenTable), AvailableTables.DataList);
-		builder.AddAttribute(4, nameof(NumberCardWithTableDialog<DbTableObj>.DisplayPropertyName), nameof(StringWrapperDbObj.StrVal));
-		builder.AddAttribute(5, nameof(NumberCardWithTableDialog<DbTableObj>.ShowLineChart), true);
+		builder.AddAttribute(2, nameof(NumberCardWithDialog<DbTableObj>.SingleItemListFile), _singleItemListFile);
+		builder.AddAttribute(3, nameof(NumberCardWithDialog<DbTableObj>.ChosenDialog), DialogTypes.DataList);
+		builder.AddAttribute(4, nameof(NumberCardWithDialog<DbTableObj>.DisplayPropertyName), nameof(StringWrapperDbObj.StrVal));
+		builder.AddAttribute(5, nameof(NumberCardWithDialog<DbTableObj>.ShowLineChart), true);
 		builder.CloseComponent();
 	};
 
@@ -87,4 +91,5 @@
 	{
 		StateHasChanged();
 	}
+
 }

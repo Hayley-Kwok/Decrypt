@@ -1,0 +1,25 @@
+﻿@page "/manageDashboards"
+
+@using Privasight.Wasm.Services
+@using Privasight.Model.Shared.DataStructures.Dashboard
+@using Privasight.Wasm.UI.ManageDashboard
+
+@inject DataService _dataService
+
+<h1>Manage Dashboards</h1>
+
+<h3>Current Dashboards</h3>
+<RadzenListBox @bind-Value=@_chosenDashboard 
+               Data="@_dataService.FbDashboardSettings"
+               TextProperty="@nameof(DashboardSetting.Name)" 
+               Class="h-100 w-100" />
+
+<div class="my-3">
+	<CreateNewDashboard/>	
+</div>
+
+@code {
+	private DashboardSetting _chosenDashboard = new (new HashSet<CardSetting>());
+
+	//todo oninitialized get dashboard from memory
+}

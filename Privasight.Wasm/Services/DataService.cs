@@ -7,7 +7,7 @@ using Privasight.Model.Shared.DataStructures.Interfaces;
 
 namespace Privasight.Wasm.Services;
 
-public class DataService : INotifyPropertyChanged
+public partial class DataService : INotifyPropertyChanged
 {
     private readonly ILocalStorageService _localStorage;
     
@@ -39,7 +39,7 @@ public class DataService : INotifyPropertyChanged
         _localStorage = localStorage;
     }
 
-    public async Task LoadFbDataIntoStorage(Dictionary<string, IFileWrapper> newData)
+    public async Task UpdateFbData(Dictionary<string, IFileWrapper> newData)
     {
         if (FbRoot == null)
         {

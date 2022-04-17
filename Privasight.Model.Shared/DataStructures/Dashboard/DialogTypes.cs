@@ -1,6 +1,6 @@
 ﻿namespace Privasight.Model.Shared.DataStructures.Dashboard
 {
-	public enum AvailableTables
+	public enum DialogTypes
 	{
 		Nothing,
 		DataList,
