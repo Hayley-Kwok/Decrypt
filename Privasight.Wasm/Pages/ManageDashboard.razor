@@ -3,23 +3,84 @@
 @using Privasight.Wasm.Services
 @using Privasight.Model.Shared.DataStructures.Dashboard
 @using Privasight.Wasm.UI.ManageDashboard
+@using System.ComponentModel
+
+@implements IDisposable
 
 @inject DataService _dataService
 
-<h1>Manage Dashboards</h1>
+<h1 class="my-2">Manage Dashboards</h1>
 
-<h3>Current Dashboards</h3>
-<RadzenListBox @bind-Value=@_chosenDashboard 
-               Data="@_dataService.FbDashboardSettings"
-               TextProperty="@nameof(DashboardSetting.Name)" 
-               Class="h-100 w-100" />
-
-<div class="my-3">
-	<CreateNewDashboard/>	
+<h3 class="my-2">Current Dashboards</h3>
+<div class="row">
+	<div class="col-md-8">
+		<RadzenListBox @bind-Value=@_chosenDashboard
+		               Data="@_dataService.FbDashboardSettings"
+		               TextProperty="@nameof(DashboardSetting.Name)"
+		               Class="w-100 h-100 text-center"
+		               Style="min-height: 100px; max-height: 200px;"
+		               Change="OnListBoxClick"/>
+	</div>
+	<div class="col-md-4">
+		<RadzenButton ButtonStyle="ButtonStyle.Success" Text="Create New Dashboard" Click="OnNewDashboardBtnClick"/>
+		<br/><br/>
+		<RadzenButton ButtonStyle="ButtonStyle.Danger" Text="Delete Dashboard" Click="OnDeleteDashboardBtnClick"/>
+	</div>
 </div>
+@if (_showEditDashboard)
+{
+	<div class="my-3">
+		<EditDashboard 
+			ExistingDashboardSetting="_chosenDashboard"
+			OnCreateButtonClick="OnDashboardEditFinished"/>
+	</div>
+}
 
 @code {
-	private DashboardSetting _chosenDashboard = new (new HashSet<CardSetting>());
+	private bool _showEditDashboard;
+	private DashboardSetting? _chosenDashboard = new(new HashSet<CardSetting>());
 
-	//todo oninitialized get dashboard from memory
+	public void Dispose() => _dataService.PropertyChanged -= PropertyHasChanged;
+
+	protected override async Task OnInitializedAsync()
+	{
+		_dataService.PropertyChanged += PropertyHasChanged;
+		if (_dataService.FbDashboardSettings == null)
+		{
+			await _dataService.SetFbDashboardsFromStorage();
+		}
+	}
+
+	private void PropertyHasChanged(object? sender, PropertyChangedEventArgs args)
+	{
+		if (args.PropertyName == nameof(_dataService.FbDashboardSettings))
+		{
+			StateHasChanged();
+		}
+	}
+
+	private void OnDashboardEditFinished()
+	{
+		_showEditDashboard = false;
+		_chosenDashboard = null;
+	}
+
+	private void OnNewDashboardBtnClick()
+	{
+		_chosenDashboard = null;
+		_showEditDashboard = true;
+	}
+
+	private void OnListBoxClick()
+	{
+		_showEditDashboard = true;
+	}
+
+	private async Task OnDeleteDashboardBtnClick()
+	{
+		await _dataService.UpdateFbDashboardSettings(_chosenDashboard, DataService.UpdateAction.Delete);
+
+		_chosenDashboard = null;
+		_showEditDashboard = false;
+	}
 }

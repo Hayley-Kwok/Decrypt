@@ -1,0 +1,104 @@
+﻿@using Privasight.Wasm.Services
+@using Privasight.Model.Shared.DataStructures.Dashboard
+
+@inject DataService _dataService
+@inject DialogService _dialogService
+
+@if (ExistingDashboardSetting == null)
+{
+	<h3>Create a New Dashboard</h3>
+}
+else
+{
+	<h3>Edit Dashboard</h3>
+}
+
+<div class="my-2">
+	@* todo add validation on title to confirm its unique *@
+	Name of the dashboard:
+	<RadzenTextBox Class="w-50" Value="@_dashboardName" Change="OnDashboardNameChange"/>
+</div>
+<div class="row">
+	<div class="col-md-8">
+		<RadzenListBox
+			class="w-100 h-100 text-center"
+			Data="_cardSettings"
+			@bind-Value="_chosenCard"
+			Style="min-height: 100px; max-height: 200px;"/>
+	</div>
+	<div class="col-md-4">
+		<RadzenButton ButtonStyle="ButtonStyle.Success" Text="Create New Card" Click="OnCreateCardButtonClick"/>
+		<br/><br/>
+		<RadzenButton ButtonStyle="ButtonStyle.Danger" Text="Delete Card" Click="OnDeleteCardButtonClick"/>
+	</div>
+</div>
+<br/>
+<RadzenButton ButtonStyle="ButtonStyle.Success" Text="@GetCreateDashboardButtonDisplayStr()"
+              Disabled="_cardSettings.Count == 0 || string.IsNullOrWhiteSpace(_dashboardName)" Click="OnCreateDashboardButtonClick"/>
+
+@code {
+	private CardSetting _chosenCard = new("");
+	private HashSet<CardSetting> _cardSettings = new();
+	private string _dashboardName = "";
+
+	[Parameter]
+	public DashboardSetting? ExistingDashboardSetting { get; set; }
+
+	[Parameter, EditorRequired] 
+	public EventCallback OnCreateButtonClick { get; set; }
+
+	protected override void OnParametersSet()
+	{
+
+		if (ExistingDashboardSetting == null)
+		{
+			_cardSettings = new HashSet<CardSetting>();
+			_dashboardName = "";
+		}
+		else
+		{
+			_cardSettings = new HashSet<CardSetting>(ExistingDashboardSetting.CardSettings);
+			_dashboardName = ExistingDashboardSetting.Name;
+		}
+	}
+
+	private void OnDashboardNameChange(string name)
+	{
+		_dashboardName = name;
+	}
+
+	private async Task OnCreateDashboardButtonClick()
+	{
+		var newDashboard = new DashboardSetting(_cardSettings, _dashboardName);
+		if (ExistingDashboardSetting == null)
+		{
+			await _dataService.UpdateFbDashboardSettings(newDashboard, DataService.UpdateAction.Add);
+		}
+		else
+		{
+			await _dataService.UpdateFbDashboardSettings(newDashboard, DataService.UpdateAction.Update, ExistingDashboardSetting);
+		}
+
+		await OnCreateButtonClick.InvokeAsync();
+	}
+
+	private string GetCreateDashboardButtonDisplayStr()
+	{
+		return ExistingDashboardSetting == null ? "Create New Dashboard" : "Edit Dashboard";
+	}
+
+	private async Task OnCreateCardButtonClick()
+	{
+		await _dialogService.OpenAsync<CreateNewCard>("Create New Card",
+			new Dictionary<string, object>
+			{
+				{ nameof(CreateNewCard.CardSettings), _cardSettings }
+			},
+			new DialogOptions { Width = "60%", Height = "70%", Resizable = true });
+	}
+
+	private void OnDeleteCardButtonClick()
+	{
+		_cardSettings.Remove(_chosenCard);
+	}
+}
