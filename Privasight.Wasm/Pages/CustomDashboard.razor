@@ -1,0 +1,34 @@
+﻿@page "/facebook/dashboards/{Id:int}"
+
+@using Privasight.Model.Shared.DataStructures.Dashboard
+@using Privasight.Wasm.Services
+@using Privasight.Wasm.UI
+
+@inject DataService _dataService
+
+<PageTitle>@_dashboardSetting?.Name</PageTitle>
+
+@if (_dashboardSetting != null)
+{
+	<Dashboard Setting="_dashboardSetting"/>
+}
+
+@code {
+	private DashboardSetting? _dashboardSetting;
+
+	[Parameter]
+	public int Id { get; set; }
+
+	protected override void OnParametersSet()
+	{
+		_dashboardSetting = _dataService.FbDashboardSettings?[Id];
+	}
+
+	protected override async Task OnInitializedAsync()
+	{
+		if (_dataService.FbDashboardSettings == null)
+		{
+			await _dataService.SetFbDashboardsFromStorage();
+		}
+	}
+}

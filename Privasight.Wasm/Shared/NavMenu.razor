@@ -1,4 +1,11 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@using Privasight.Wasm.Services
+@using System.ComponentModel
+
+@implements IDisposable
+
+@inject DataService _dataService
+
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">Privasight</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -12,8 +19,17 @@
 		<RadzenPanelMenu>
 			<RadzenPanelMenuItem Text="Facebook" Icon="facebook" Expanded="true" Path="/">
 				<RadzenPanelMenuItem Text="Load in Data" Path="/" Icon="backup"/>
-				<RadzenPanelMenuItem Text="All Available Data" Path="facebook/dashboards/default" Icon="assessment"/>
 				<RadzenPanelMenuItem Text="Manage Dashboards" Path="facebook/manageDashboards" Icon="build"/>
+				<RadzenPanelMenuItem Text="All Available Data" Path="facebook/dashboards/default" Icon="assessment"/>
+				@if (_dataService.FbDashboardSettings != null && _dataService.FbDashboardSettings.Count != 0)
+				{
+					<RadzenPanelMenuItem Text="Custom Dashboards" Icon="account_circle">
+						@for (var i = 0; i < _dataService.FbDashboardSettings.Count; i++)
+						{
+							<RadzenPanelMenuItem Text="@_dataService.FbDashboardSettings[i].Name" Path="@($"facebook/dashboards/{i}")"/>
+						}
+					</RadzenPanelMenuItem>
+				}
 			</RadzenPanelMenuItem>
 		</RadzenPanelMenu>
 	</nav>
@@ -28,4 +44,23 @@
     {
         _collapseNavMenu = !_collapseNavMenu;
     }
+
+	public void Dispose() => _dataService.PropertyChanged -= PropertyHasChanged;
+
+	protected override async Task OnInitializedAsync()
+	{
+		_dataService.PropertyChanged += PropertyHasChanged;
+		if (_dataService.FbDashboardSettings == null)
+		{
+			await _dataService.SetFbDashboardsFromStorage();
+		}
+	}
+
+	private void PropertyHasChanged(object? sender, PropertyChangedEventArgs args)
+	{
+		if (args.PropertyName == nameof(_dataService.FbDashboardSettings))
+		{
+			StateHasChanged();
+		}
+	}
 }
