@@ -14,7 +14,10 @@ else
 }
 
 <div class="my-2">
-	@* todo add validation on title to confirm its unique *@
+	@if (!string.IsNullOrWhiteSpace(_dashboardNameValidationMessage))
+	{
+		<p class="alert alert-danger">@_dashboardNameValidationMessage</p>
+	}
 	Name of the dashboard:
 	<RadzenTextBox Class="w-50" Value="@_dashboardName" Change="OnDashboardNameChange"/>
 </div>
@@ -35,9 +38,11 @@ else
 </div>
 <br/>
 <RadzenButton ButtonStyle="ButtonStyle.Success" Text="@GetCreateDashboardButtonDisplayStr()"
-              Disabled="_cardSettings.Count == 0 || string.IsNullOrWhiteSpace(_dashboardName)" Click="OnCreateDashboardButtonClick"/>
+              Disabled="_cardSettings.Count == 0 || string.IsNullOrWhiteSpace(_dashboardName) || !string.IsNullOrWhiteSpace(_dashboardNameValidationMessage)" 
+              Click="OnCreateDashboardButtonClick"/>
 
 @code {
+	private string _dashboardNameValidationMessage = "";
 	private CardSetting _chosenCard = new("", "");
 	private HashSet<CardSetting> _cardSettings = new();
 	private string _dashboardName = "";
@@ -45,12 +50,11 @@ else
 	[Parameter]
 	public DashboardSetting? ExistingDashboardSetting { get; set; }
 
-	[Parameter, EditorRequired] 
+	[Parameter, EditorRequired]
 	public EventCallback OnCreateButtonClick { get; set; }
 
 	protected override void OnParametersSet()
 	{
-
 		if (ExistingDashboardSetting == null)
 		{
 			_cardSettings = new HashSet<CardSetting>();
@@ -65,6 +69,20 @@ else
 
 	private void OnDashboardNameChange(string name)
 	{
+		if (_dataService.FbExistingDashboardNames != null)
+		{
+			var existingTitles = new List<string>(_dataService.FbExistingDashboardNames);
+			if (ExistingDashboardSetting != null)
+			{
+				existingTitles.Remove(ExistingDashboardSetting.Name);
+			}
+			if (existingTitles.Contains(name))
+			{
+				_dashboardNameValidationMessage = "This title has been used already. Please pick another name or edit the existing dashboard.";
+				return;
+			}
+		}
+		_dashboardNameValidationMessage = "";
 		_dashboardName = name;
 	}
 

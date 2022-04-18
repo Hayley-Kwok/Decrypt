@@ -23,6 +23,8 @@ namespace Privasight.Wasm.Services
             }
         }
 
+        public IEnumerable<string>? FbExistingDashboardNames => FbDashboardSettings?.Select(d => d.Name);
+
         public async Task UpdateFbDashboardSettings(DashboardSetting newSetting, UpdateAction action,
             DashboardSetting? oldSetting = null)
         {
