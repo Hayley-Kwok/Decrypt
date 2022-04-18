@@ -1,6 +1,7 @@
 ﻿namespace Privasight.Model.Shared.DataStructures.Dashboard
 {
-    public record CardSetting(string FileWrapperTypeName,
+    public record CardSetting(string FileWrapperTitle,
+        string FileWrapperTypeName,
         DialogTypes Dialog = DialogTypes.Nothing,
         CardTypes CardType = CardTypes.PlainNumberCard)
     {
@@ -10,9 +11,11 @@
 
         public string FileWrapperTypeName { get; set; } = FileWrapperTypeName;
 
+        public string FileWrapperTitle { get; set; } = FileWrapperTitle;
+
         public override string ToString()
         {
-            return $"Data Type: {FileWrapperTypeName}; CardType: {CardType}; PopUp: {Dialog}";
+            return $"Data Type: {FileWrapperTitle}; CardType: {CardType}; PopUp: {Dialog};";
         }
     }
 }

@@ -5,6 +5,7 @@
 @using Privasight.Model.Shared.DataStructures.Interfaces
 @using Privasight.Wasm.Services
 @using Privasight.Model.Shared.DataStructures
+@using Privasight.Model.Shared.Helpers
 
 @inject DataService _dataService
 
@@ -23,11 +24,13 @@
 
 			if (fileWrapperType.GetInterfaces().Contains(typeof(ISingleItemListFile<StringWrapperDbObj>)))
 			{
-				card = new CardSetting(fileWrapperType.Name, DialogTypes.DataList, CardTypes.WithLineChart);
+				var title = ReflectionHelper.GetTitleFromFileWrapper(fileWrapperType);
+				card = new CardSetting(title, fileWrapperType.Name, DialogTypes.DataList, CardTypes.WithLineChart);
 			}
 			else if (fileWrapperType.GetInterfaces().Contains(typeof(ISingleItemListFile)))
 			{
-				card = new CardSetting(fileWrapperType.Name, DialogTypes.DetailedTable);
+				var title = ReflectionHelper.GetTitleFromFileWrapper(fileWrapperType);
+				card = new CardSetting(title, fileWrapperType.Name, DialogTypes.DetailedTable);
 			}
 
 			if (card != null)

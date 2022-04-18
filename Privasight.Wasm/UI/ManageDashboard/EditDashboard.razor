@@ -38,7 +38,7 @@ else
               Disabled="_cardSettings.Count == 0 || string.IsNullOrWhiteSpace(_dashboardName)" Click="OnCreateDashboardButtonClick"/>
 
 @code {
-	private CardSetting _chosenCard = new("");
+	private CardSetting _chosenCard = new("", "");
 	private HashSet<CardSetting> _cardSettings = new();
 	private string _dashboardName = "";
 

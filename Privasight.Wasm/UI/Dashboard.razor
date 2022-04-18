@@ -23,7 +23,7 @@
 	</div>
 </div>
 <div class="row">
-	@foreach (var (fileWrapperTypeName, dialogType, cardType) in Setting.CardSettings)
+	@foreach (var (fileWrapperTitle,fileWrapperTypeName, dialogType, cardType) in Setting.CardSettings)
 	{
 		if (_dataService.FbRoot != null &&
 			_dataService.FbRoot.AvailableData.TryGetValue(fileWrapperTypeName, out var data))
@@ -41,7 +41,7 @@
 		else
 		{
 			<div class="@_colStr">
-				<NoDataCard Title="@fileWrapperTypeName"/>
+				<NoDataCard Title="@fileWrapperTitle"/>
 			</div>
 		}
 	}

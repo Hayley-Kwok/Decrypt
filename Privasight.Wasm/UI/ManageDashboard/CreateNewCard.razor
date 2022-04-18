@@ -2,6 +2,7 @@
 @using Privasight.Wasm.UI.CardComponents.NumberCards.Base
 @using Privasight.Model.Shared.Display
 @using Privasight.Model.Shared.DataStructures.Dashboard
+@using Privasight.Model.Shared.Helpers
 
 @inject DataService _dataService
 @inject DialogService _dialogService
@@ -13,19 +14,21 @@
 			<h3>1. Select a data type</h3>
 			<div class="d-flex justify-content-center">
 				<RadzenListBox
-					Data="_dataService.AvailableFileWrappers.Values.Select(t => t.Name)"
-					@bind-Value="_fileWrapperTypeName"
+					Data="@ReflectionHelper.GetDisplayDetailsFromFileWrapperTypes(_dataService.AvailableFileWrappers.Values)"
+					TextProperty="@nameof(FileWrapperTypeDisplayDetails.Title)"
+					@bind-Value="@_fileWrapperDisplayDetails"
+					TValue="FileWrapperTypeDisplayDetails"
 					Class="w-75 h-75 d-flex text-center"/>
 			</div>
-			<p class="d-flex justify-content-center">Picked Type: @_fileWrapperTypeName</p>
+			<p class="d-flex justify-content-center">Picked Type: @(_fileWrapperDisplayDetails?.Title ?? "")</p>
 		</RadzenStepsItem>
-		<RadzenStepsItem Text="Card Type" Disabled="@string.IsNullOrWhiteSpace(_fileWrapperTypeName)">
+		<RadzenStepsItem Text="Card Type" Disabled="@(_fileWrapperDisplayDetails == null)">
 			<div class="row">
 				<div class="col-md-6">
 					<NumberCard Title="Plain Number Card"/>
 				</div>
 				<div class="col-md-6">
-					<NumberCard Title="Card With Line Chart" ShowLineChart="true"
+					<NumberCard Title="Card With Line Chart" CardType="CardTypes.WithLineChart"
 					            Items="_templateItems"/>
 				</div>
 			</div>
@@ -39,7 +42,7 @@
 				</RadzenRadioButtonList>
 			</div>
 		</RadzenStepsItem>
-		<RadzenStepsItem Text="Detailed Dialog" Disabled="@string.IsNullOrWhiteSpace(_fileWrapperTypeName)">
+		<RadzenStepsItem Text="Detailed Dialog" Disabled="@(_fileWrapperDisplayDetails == null)">
 			<RadzenRadioButtonList @bind-Value="_chosenDialog"
 			                       TValue="DialogTypes">
 				<Items>
@@ -53,11 +56,11 @@
 	</Steps>
 </RadzenSteps>
 <div class="d-flex justify-content-center">
-	<RadzenButton Class="mx-2" Text="Create Card" 
-	              Disabled="@string.IsNullOrWhiteSpace(_fileWrapperTypeName)" 
+	<RadzenButton Class="mx-2" Text="Create Card"
+	              Disabled="@(_fileWrapperDisplayDetails == null)"
 	              ButtonStyle="ButtonStyle.Success"
 	              Click="OnCreateButtonClick"/>
-	<RadzenButton Class="mx-2" Text="Cancel" 
+	<RadzenButton Class="mx-2" Text="Cancel"
 	              ButtonStyle="ButtonStyle.Danger"
 	              Click="OnCancelButtonClick"/>
 </div>
@@ -71,7 +74,7 @@
 		new LineChartItem(2, DateTime.Parse("05/02/2022 00:00:00"))
 	};
 
-	private string _fileWrapperTypeName = "";
+	private FileWrapperTypeDisplayDetails? _fileWrapperDisplayDetails = null;
 	private CardTypes _cardStyle;
 	private DialogTypes _chosenDialog;
 
@@ -80,7 +83,7 @@
 
 	private void OnCreateButtonClick()
 	{
-		var newCardAdded = CardSettings.Add(new CardSetting(_fileWrapperTypeName, _chosenDialog, _cardStyle));
+		var newCardAdded = CardSettings.Add(new CardSetting(_fileWrapperDisplayDetails!.Title, _fileWrapperDisplayDetails!.TypeName, _chosenDialog, _cardStyle));
 		var message = newCardAdded ? "Card added successfully." : "A card with the same setting already exists. No changes were done.";
 		_notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = message, Duration = 3000 });
 		_dialogService.Close(true);
