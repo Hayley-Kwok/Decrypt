@@ -21,16 +21,16 @@ namespace Privasight.Model.Facebook
     {
         [DataListValue]
         [JsonPropertyName("title")]
-        [DisplayData("Title", "The title of the Ad")]
+        [DetailedTableDisplayData("Title", "The title of the Ad")]
         public string? AdTitle { get; set; }
 
         [JsonPropertyName("action")]
-        [DisplayData(nameof(Interaction), "The interaction with the Ad")]
+        [DetailedTableDisplayData(nameof(Interaction), "The interaction with the Ad")]
         public string? Interaction { get; set; }
 
         [JsonConverter(typeof(UnixDateTimeOffsetConverter))]
         [JsonPropertyName("timestamp")]
-        [DisplayData("Interacted on")]
+        [DetailedTableDisplayData("Interacted on")]
         public DateTimeOffset TimeStamp { get; set; }
     }
 }

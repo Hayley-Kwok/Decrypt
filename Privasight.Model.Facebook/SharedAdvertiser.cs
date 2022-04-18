@@ -21,18 +21,18 @@ public class SharedAdvertiser : DbTableObj
 {
     [DataListValue]
     [JsonPropertyName("advertiser_name")]
-    [DisplayData("Advertiser Name")]
+    [DetailedTableDisplayData("Advertiser Name")]
     public string? Name { get; set; }
 
     [JsonPropertyName("has_data_file_custom_audience")]
-    [DisplayData("Has Custom Audience File?", "Do you have a custom audience file uploaded by the advertiser?")]
+    [DetailedTableDisplayData("Has Custom Audience File?", "Do you have a custom audience file uploaded by the advertiser?")]
     public bool HasDataFileCustomAudience { get; set; }
 
     [JsonPropertyName("has_remarketing_custom_audience")]
-    [DisplayData("Remarketing Audience?", "Are you being targeted by the advertiser?")]
+    [DetailedTableDisplayData("Remarketing Audience?", "Are you being targeted by the advertiser?")]
     public bool HasRemarketingCustomAudience { get; set; }
 
     [JsonPropertyName("has_in_person_store_visit")]
-    [DisplayData("Has in person store visit?")]
+    [DetailedTableDisplayData("Has in person store visit?")]
     public bool HasInPersonStoreVisit { get; set; }
 }

@@ -14,7 +14,7 @@
 	<Columns>
 		@foreach (var propInfo in PropertyInfos)
 		{
-			var dto = DisplayDataAttributeHelper.GetDTO(propInfo);
+			var dto = DetailedTableDisplayDataAttributeHelper.GetDTO(propInfo);
 		
 			<RadzenDataGridColumn TItem="TItem" Property="@propInfo.Name">
 				<HeaderTemplate>
@@ -28,7 +28,7 @@
 					}
 				</HeaderTemplate>
 				<Template>
-					@DisplayDataAttributeHelper.FormatPropertyString(propInfo, context)
+					@DetailedTableDisplayDataAttributeHelper.FormatPropertyString(propInfo, context)
 				</Template>
 			</RadzenDataGridColumn>
 		}

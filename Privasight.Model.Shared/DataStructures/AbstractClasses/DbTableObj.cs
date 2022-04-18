@@ -7,6 +7,6 @@ namespace Privasight.Model.Shared.DataStructures.AbstractClasses;
 /// </summary>
 public abstract class DbTableObj
 {
-    [DisplayData("Generated on", "The last modified date of the zip file")]
+    [DetailedTableDisplayData("Generated on", "The last modified date of the zip file")]
     public DateTimeOffset GeneratedOn { get; set; }
 }

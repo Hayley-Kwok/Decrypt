@@ -3,12 +3,12 @@ using Privasight.Model.Shared.Display.Attributes;
 
 namespace Privasight.Model.Shared.Helpers
 {
-    public static class DisplayDataAttributeHelper
+    public static class DetailedTableDisplayDataAttributeHelper
     {
-        public static DisplayDataAttributeDTO GetDTO(PropertyInfo propertyInfo)
+        public static DetailedTableDisplayDataAttributeDTO GetDTO(PropertyInfo propertyInfo)
         {
-            var attr = propertyInfo.GetCustomAttribute<DisplayDataAttribute>();
-            return new DisplayDataAttributeDTO(attr?.DisplayName ?? string.Empty, attr?.Description ?? string.Empty);
+            var attr = propertyInfo.GetCustomAttribute<DetailedTableDisplayDataAttribute>();
+            return new DetailedTableDisplayDataAttributeDTO(attr?.DisplayName ?? string.Empty, attr?.Description ?? string.Empty);
         }
 
         private static string TransformBoolToYesNo(bool val) => val ? "Yes" : "No";
