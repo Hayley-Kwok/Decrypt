@@ -11,14 +11,13 @@ namespace Privasight.Wasm.Services
             Delete
         }
 
-        private HashSet<DashboardSetting>? _fbDashboardSettings;
+        private ICollection<DashboardSetting>? _fbDashboardSettings;
 
-        public HashSet<DashboardSetting>? FbDashboardSettings
+        public ICollection<DashboardSetting>? FbDashboardSettings
         {
             get => _fbDashboardSettings;
             private set
             {
-                if (_fbDashboardSettings != null && _fbDashboardSettings.Equals(value)) return;
                 _fbDashboardSettings = value;
                 OnPropertyChanged();
             }
@@ -55,14 +54,14 @@ namespace Privasight.Wasm.Services
         public async Task SetFbDashboardsFromStorage()
         {
             var dashboardSettings =
-                await _localStorage.GetItemAsync<HashSet<DashboardSetting>>(nameof(FbDashboardSettings));
-            FbDashboardSettings = dashboardSettings ?? new HashSet<DashboardSetting>();
+                await _localStorage.GetItemAsync<ICollection<DashboardSetting>>(nameof(FbDashboardSettings));
+            FbDashboardSettings = dashboardSettings ?? new List<DashboardSetting>();
         }
 
         public async Task ClearFbDashboardSettings()
         {
             await _localStorage.RemoveItemAsync(nameof(FbDashboardSettings));
-            FbDashboardSettings = new HashSet<DashboardSetting>();
+            FbDashboardSettings = new List<DashboardSetting>();
         }
     }
 }
