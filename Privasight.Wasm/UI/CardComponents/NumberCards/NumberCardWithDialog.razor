@@ -3,6 +3,8 @@
 @using Privasight.Wasm.UI.CardComponents.Tables
 @using Privasight.Model.Shared.DataStructures.Interfaces
 @using Privasight.Model.Shared.DataStructures.Dashboard
+@using Privasight.Model.Shared.Display
+@using Privasight.Model.Shared.Helpers
 
 @typeparam TItem where TItem : Privasight.Model.Shared.DataStructures.AbstractClasses.DbTableObj
 
@@ -10,6 +12,7 @@
 		Title="@SingleItemListFile.Title"
 		Number="SingleItemListFile.Items?.Count() ?? 0"
 		CardType="@CardType"
+		LineChartItems="@_lineChartItems"
 		OnClickFunc="ShowDialog"/>
 
 @code {
@@ -25,6 +28,16 @@
 
 	[Parameter]
 	public string DisplayPropertyName { get; set; } = "";
+
+	private IEnumerable<LineChartItem>? _lineChartItems;
+
+	protected override void OnParametersSet()
+	{
+		if (CardType == CardTypes.WithLineChart)
+		{
+			_lineChartItems = LineChartItemHelper.ConvertToLineChartItems(SingleItemListFile.Items ?? Array.Empty<TItem>()).OrderBy(l => l.Date);
+		}
+	}
 
 	private async Task ShowDialog()
 	{

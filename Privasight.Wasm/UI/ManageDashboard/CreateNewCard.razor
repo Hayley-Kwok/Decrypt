@@ -29,7 +29,7 @@
 				</div>
 				<div class="col-md-6">
 					<NumberCard Title="Card With Line Chart" CardType="CardTypes.WithLineChart"
-					            Items="_templateItems"/>
+					            LineChartItems="_templateLineChartItems"/>
 				</div>
 			</div>
 			<div class="d-flex justify-content-around">
@@ -66,12 +66,12 @@
 </div>
 
 @code {
-	private readonly IEnumerable<LineChartItem> _templateItems = new[]
+	private readonly IEnumerable<LineChartItem> _templateLineChartItems = new[]
 	{
-		new LineChartItem(0, DateTime.Parse("02/02/2022 00:00:00")),
-		new LineChartItem(1, DateTime.Parse("03/02/2022 00:00:00")),
-		new LineChartItem(2, DateTime.Parse("04/02/2022 00:00:00")),
-		new LineChartItem(2, DateTime.Parse("05/02/2022 00:00:00"))
+		new LineChartItem(DateTime.Parse("02/02/2022 00:00:00"), 0),
+		new LineChartItem(DateTime.Parse("03/02/2022 00:00:00"), 1),
+		new LineChartItem(DateTime.Parse("04/02/2022 00:00:00"), 2),
+		new LineChartItem(DateTime.Parse("05/02/2022 00:00:00"), 2)
 	};
 
 	private FileWrapperTypeDisplayDetails? _fileWrapperDisplayDetails = null;

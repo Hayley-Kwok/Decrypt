@@ -30,7 +30,7 @@
 			else if (fileWrapperType.GetInterfaces().Contains(typeof(ISingleItemListFile)))
 			{
 				var title = ReflectionHelper.GetTitleFromFileWrapper(fileWrapperType);
-				card = new CardSetting(title, fileWrapperType.Name, DialogTypes.DetailedTable);
+				card = new CardSetting(title, fileWrapperType.Name, DialogTypes.DetailedTable, CardTypes.WithLineChart);
 			}
 
 			if (card != null)

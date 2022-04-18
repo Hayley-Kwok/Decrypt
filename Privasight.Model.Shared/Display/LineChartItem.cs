@@ -1,3 +1,3 @@
 ﻿namespace Privasight.Model.Shared.Display;
 
-public record LineChartItem(int Number, DateTime Date);
+public record LineChartItem(DateTime Date, int Number);

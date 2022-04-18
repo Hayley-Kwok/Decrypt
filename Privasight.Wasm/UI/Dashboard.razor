@@ -33,14 +33,14 @@
 				_singleItemListFile = singleItemList;
 				_cardType = cardType;
 				_dialogType = dialogType;
-				<div class="@_colStr">
+				<div class="@ColStr">
 					@NumberCardWithDialogInstance
 				</div>
 			} 
 		}
 		else
 		{
-			<div class="@_colStr">
+			<div class="@ColStr">
 				<NoDataCard Title="@fileWrapperTitle"/>
 			</div>
 		}
@@ -48,8 +48,7 @@
 </div>
 
 @code {
-	private const int ColNumber = 3;
-	private string _colStr => $"col-md-{12 / ColNumber}";
+	private const string ColStr = "col-lg-4 col-md-6 my-lg-2 my-1 ";
 
 	private ISingleItemListFile _singleItemListFile = null!;
 	private CardTypes _cardType;

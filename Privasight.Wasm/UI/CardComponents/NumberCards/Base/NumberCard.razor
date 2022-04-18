@@ -3,24 +3,26 @@
 
 <RadzenCard class="@GetClasses()" @onclick="OnClickFunc">
 	<h3>@Title</h3>
-	@if (CardType == CardTypes.WithLineChart)
-	{
-		<div class="row">
-			<LineChart Title="@Title" Items="Items"/>
-			<h1 class="col-md-2 text-lg-center text-end align-self-end">
-				@Items?.Last().Number
-			</h1>
-		</div>
-	}
-	else
-	{
-		<h1 class="text-end me-3 mt-auto">@Number</h1>
-	}
+	<div class="mt-auto mb-2">
+		@if (CardType == CardTypes.WithLineChart)
+		{
+			<div class="row">
+				<LineChart Title="@Title" Items="LineChartItems"/>
+				<h2 class="col-md-5 col-lg-4 text-lg-center text-end align-self-end text-nowrap">
+					@LineChartItems?.Last().Number
+				</h2>
+			</div>
+		}
+		else
+		{
+			<h2 class="text-end me-3 mt-auto">@Number</h2>
+		}
+	</div>
 </RadzenCard>
 
 
 @code {
-	private const string DefaultClasses = "m-lg-3 m-2 h-90 clickable";
+	private const string DefaultClasses = "h-100 clickable d-flex";
 
 	[Parameter]
 	public Func<Task> OnClickFunc { get; set; } = () => Task.CompletedTask;
@@ -29,13 +31,7 @@
 	public CardTypes CardType { get; set; }
 
 	[Parameter]
-	public IEnumerable<LineChartItem>? Items { get; set; } = new[]
-	{
-		new LineChartItem(0, DateTime.Parse("02/02/2022 00:00:00")),
-		new LineChartItem(1, DateTime.Parse("03/02/2022 00:00:00")), 
-		new LineChartItem(2, DateTime.Parse("04/02/2022 00:00:00")),
-		new LineChartItem(2, DateTime.Parse("05/02/2022 00:00:00"))
-	};
+	public IEnumerable<LineChartItem>? LineChartItems { get; set; }
 
 	[Parameter]
 	public int Number { get; set; }

@@ -1,6 +1,6 @@
 ﻿@using Privasight.Model.Shared.Display
 
-<RadzenChart class="@Class" Style="height: 150px;">
+<RadzenChart class="@Class">
 	<RadzenLineSeries Data="@Items" Title="@Title"
 	                  ValueProperty="Number" CategoryProperty="Date">
 		<RadzenMarkers MarkerType="MarkerType.Square" />
@@ -18,5 +18,5 @@
 	public string? Title { get; set; }
 
 	[Parameter]
-	public string Class { get; set; } = "col-md-10";
+	public string Class { get; set; } = "col-md-7 col-lg-8 h-100";
 }
