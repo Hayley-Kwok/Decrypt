@@ -19,6 +19,7 @@ namespace Privasight.Model.Facebook
 
     public class InteractedAdvertiser : DbTableObj
     {
+        [DataListValue]
         [JsonPropertyName("title")]
         [DisplayData("Title", "The title of the Ad")]
         public string? AdTitle { get; set; }

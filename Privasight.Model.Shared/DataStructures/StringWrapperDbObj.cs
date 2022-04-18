@@ -8,6 +8,7 @@ namespace Privasight.Model.Shared.DataStructures
     /// </summary>
     public class StringWrapperDbObj : DbTableObj
     {
+        [DataListValue]
         [DisplayData("Title")]
         public string StrVal { get; set; }
 

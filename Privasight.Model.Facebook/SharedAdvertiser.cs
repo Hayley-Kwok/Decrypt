@@ -19,6 +19,7 @@ public class AdvertisersUsingYourActivity : ISingleItemListFile<SharedAdvertiser
 
 public class SharedAdvertiser : DbTableObj
 {
+    [DataListValue]
     [JsonPropertyName("advertiser_name")]
     [DisplayData("Advertiser Name")]
     public string? Name { get; set; }

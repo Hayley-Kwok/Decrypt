@@ -9,7 +9,7 @@
 	<p>@((MarkupString)Description)</p>
 }
 <RadzenDataList WrapItems="true" AllowPaging="true" 
-                Data="@DataListHelper.GenerateDataListDisplay(Items, DisplayPropertyName).OrderByDescending(d => d.GenerationDates.Count())" 
+                Data="@DataListHelper.GenerateDataListDisplay(Items, typeof(TItem)).OrderByDescending(d => d.GenerationDates.Count())" 
                 TItem="DataListDisplayDetails" PagerHorizontalAlign="HorizontalAlign.Left" 
                 ShowPagingSummary="true" PageSize="6">
 	<Template Context="item">
@@ -44,9 +44,6 @@
 	}
 </style>
 @code {
-
-	[Parameter]
-	public string DisplayPropertyName { get; set; } = "";
 	[Parameter]
 	public IEnumerable<TItem>? Items { get; set; }
 	[Parameter]

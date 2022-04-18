@@ -7,9 +7,6 @@ namespace Privasight.Model.Shared.Helpers
     {
         public static IEnumerable<PropertyInfo> GetProperties(object obj) => obj.GetType().GetProperties();
 
-        public static string GetPropertyStrValue(object obj, string propName) =>
-            obj.GetType().GetProperty(propName)?.GetValue(obj)?.ToString() ?? "";
-
         public static string GetTitleFromFileWrapper(Type fileWrapperType)
         {
             return fileWrapperType.GetProperty("Title")?.GetValue(null)?.ToString()
