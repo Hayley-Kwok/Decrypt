@@ -5,6 +5,7 @@
 @using Privasight.Model.Shared.DataStructures.Dashboard
 @using Privasight.Model.Shared.Display
 @using Privasight.Model.Shared.Helpers
+@using Privasight.Model.Shared.DataStructures.AbstractClasses
 
 @typeparam TItem where TItem : Privasight.Model.Shared.DataStructures.AbstractClasses.DbTableObj
 
@@ -71,9 +72,9 @@
 		await _dialogService.OpenAsync<DataListTable<TItem>>(SingleItemListFile.Title,
 			new Dictionary<string, object>
 			{
-				{ nameof(DataListTable<dynamic>.Items), SingleItemListFile.Items?? Array.Empty<TItem>() },
-				{ nameof(DataListTable<dynamic>.Description), SingleItemListFile.Description },
-				{ nameof(DataListTable<dynamic>.DisplayPropertyName), DisplayPropertyName }
+				{ nameof(DataListTable<DbTableObj>.Items), SingleItemListFile.Items?? Array.Empty<TItem>() },
+				{ nameof(DataListTable<DbTableObj>.Description), SingleItemListFile.Description },
+				{ nameof(DataListTable<DbTableObj>.DisplayPropertyName), DisplayPropertyName }
 			},
 			new DialogOptions { Width = "90%", Height = "90%", Resizable = true });
 	}

@@ -1,21 +1,28 @@
 ﻿@using Privasight.Model.Shared.Helpers
+@using Privasight.Model.Shared.Display.DataList
+@using System.Linq
 
-@typeparam TItem 
+@typeparam TItem where TItem : Privasight.Model.Shared.DataStructures.AbstractClasses.DbTableObj
 
 @if (!string.IsNullOrWhiteSpace(Description))
 {
 	<p>@((MarkupString)Description)</p>
 }
-<RadzenDataList WrapItems="true" AllowPaging="true" Data="@Items" TItem="TItem" PagerHorizontalAlign="HorizontalAlign.Left" ShowPagingSummary="true">
+<RadzenDataList WrapItems="true" AllowPaging="true" 
+                Data="@DataListHelper.GenerateDataListDisplay(Items, DisplayPropertyName).OrderByDescending(d => d.GenerationDates.Count())" 
+                TItem="DataListDisplayDetails" PagerHorizontalAlign="HorizontalAlign.Left" 
+                ShowPagingSummary="true" PageSize="6">
 	<Template Context="item">
-		<RadzenCard class="my-0 p-0" Style="width: 100%; overflow: hidden;">
+		<RadzenCard class="my-1 p-0" Style="width: 100%; overflow: hidden;">
 			<div class="ms-0 me-sm-0">
 				<div class="d-flex row">
-					<div class="col-md-3 p-3 new-status justify-content-start">
-						New
+					<div class="col-md-5 p-3 new-status">
+						@item.Value
 					</div>
-					<div class="col-md-9 p-3 text-center">
-						@ReflectionHelper.GetPropertyStrValue(item!, DisplayPropertyName)
+					<div class="col-md-7 p-3 text-center">
+						Appeared @item.GenerationDates.Count() times
+						<br/>
+						On @string.Join(", ", item.GenerationDates.OrderByDescending(d => d).Select(d => d.ToString("yyyy-MM-dd")).ToArray())
 					</div>
 				</div>
 			</div>
@@ -24,13 +31,16 @@
 </RadzenDataList>
 <style>
 	.new-status {
-		color: #077d1d;
+		color: rgb(0, 102, 102);
 		text-align: center;
-		background-color: rgba(165, 252, 134, .1);
+		background-color: rgba(157, 245, 227, .4);
 		font-size: 20px;
 		font-weight: bold;
 		line-height: 20px;
 		letter-spacing: -0.02em;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 </style>
 @code {
