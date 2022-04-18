@@ -8,23 +8,15 @@ public static class DataListHelper
     public static IEnumerable<DataListDisplayDetails> GenerateDataListDisplay(IEnumerable<DbTableObj> dbTableObjs,
         string displayPropertyName)
     {
-        var strValuesGenerationDates = new Dictionary<string, List<DateTimeOffset>>();
-        foreach (var dbTableObj in dbTableObjs)
-        {
-            var strVal = ReflectionHelper.GetPropertyStrValue(dbTableObj, displayPropertyName);
-            if (strValuesGenerationDates.TryGetValue(strVal, out var dateTimes))
-            {
-                dateTimes.Add(dbTableObj.GeneratedOn);
-            }
-            else
-            {
-                strValuesGenerationDates.Add(strVal, new List<DateTimeOffset> { dbTableObj.GeneratedOn });
-            }
-        }
+        
+        var tableObjs = dbTableObjs as DbTableObj[] ?? dbTableObjs.ToArray();
+        var objsByGenerationDate = tableObjs.ToLookup(
+            d => ReflectionHelper.GetPropertyStrValue(d, displayPropertyName),
+            d => d.GeneratedOn);
 
-        foreach (var (strVal, generationDates) in strValuesGenerationDates)
+        foreach (var objByGenerationDate in objsByGenerationDate)
         {
-            yield return new DataListDisplayDetails(strVal, generationDates);
+            yield return new DataListDisplayDetails(objByGenerationDate.Key, objByGenerationDate);
         }
     }
 }

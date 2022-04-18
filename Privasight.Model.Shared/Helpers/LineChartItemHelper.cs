@@ -8,7 +8,7 @@ public static class LineChartItemHelper
     public static IEnumerable<LineChartItem> ConvertToLineChartItems(IEnumerable<DbTableObj> dbTableObjs)
     {
         var objByGenerationDate = dbTableObjs.ToLookup(d => d.GeneratedOn);
-        foreach (var  generationDateObject in objByGenerationDate)
+        foreach (var generationDateObject in objByGenerationDate)
         {
             yield return new LineChartItem(generationDateObject.Key.DateTime, generationDateObject.Count());
         }
