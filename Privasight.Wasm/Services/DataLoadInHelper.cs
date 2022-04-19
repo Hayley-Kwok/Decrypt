@@ -17,7 +17,7 @@ namespace Privasight.Wasm.Services
             options.Converters.Add(new FbConverter());
             options.Converters.Add(new StringWrapperDbObjConverter());
 
-            //TODO: figure out a better way to do this
+            //TODO: not entire sure is this a good way to do this; Followed this guideline https://docs.microsoft.com/en-us/aspnet/core/blazor/file-uploads?view=aspnetcore-6.0&pivots=webassembly
             await using var stream = new MemoryStream();
             await e.File.OpenReadStream(MaxFileSize).CopyToAsync(stream);
 
@@ -46,7 +46,7 @@ namespace Privasight.Wasm.Services
                 {
                     case ISingleItemListFile:
                     {
-                        //todo improve this
+                        //todo using dynamic is not the best way to do this but cannot think of any better way at the moment
                         dynamic singleItemList = wrapper;
                         foreach (var item in singleItemList.Items)
                         {

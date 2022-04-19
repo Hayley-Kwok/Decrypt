@@ -2,7 +2,7 @@
 {
 	public enum DialogTypes
 	{
-		Nothing,
+		NoDialog,
 		DataList,
 		DetailedTable
     }

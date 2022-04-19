@@ -27,9 +27,6 @@
 	[Parameter]
 	public CardTypes CardType { get; set; }
 
-	[Parameter]
-	public string DisplayPropertyName { get; set; } = "";
-
 	private IEnumerable<LineChartItem>? _lineChartItems;
 
 	protected override void OnParametersSet()
@@ -50,7 +47,7 @@
 			case DialogTypes.DetailedTable:
 				await ShowDetailedTableDialog();
 				return;
-			case DialogTypes.Nothing:
+			case DialogTypes.NoDialog:
 			default:
 				return;
 		}

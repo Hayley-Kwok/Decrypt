@@ -2,7 +2,7 @@
 {
     public record CardSetting(string FileWrapperTitle,
         string FileWrapperTypeName,
-        DialogTypes Dialog = DialogTypes.Nothing,
+        DialogTypes Dialog = DialogTypes.NoDialog,
         CardTypes CardType = CardTypes.PlainNumberCard)
     {
         public DialogTypes Dialog { get; set; } = Dialog;

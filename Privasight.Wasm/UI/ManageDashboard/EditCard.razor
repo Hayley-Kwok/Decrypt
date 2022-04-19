@@ -23,14 +23,16 @@
 			<p class="d-flex justify-content-center">Picked Type: @(_fileWrapperDisplayDetails?.Title ?? "")</p>
 		</RadzenStepsItem>
 		<RadzenStepsItem Text="Card Type" Disabled="@(_fileWrapperDisplayDetails == null)">
-			<div class="row">
-				<div class="col-md-6">
-					<NumberCard Title="Plain Number Card"/>
+			<div class="row m-1">
+				<div class="col-md-1"></div>
+				<div class="col-md-5 m-1" data-toggle="tooltip" title="Show the total number regardless the generation date">
+					<NumberCard Title="Plain Number Card" Number="5"/>
 				</div>
-				<div class="col-md-6">
+				<div class="col-md-5 m-1" data-toggle="tooltip" title="Show the trend of changes based on the generation date.\n The number will be the latest total.">
 					<NumberCard Title="Card With Line Chart" CardType="CardTypes.WithLineChart"
 					            LineChartItems="_templateLineChartItems"/>
 				</div>
+				<div class="col-md-1"></div>
 			</div>
 			<div class="d-flex justify-content-around">
 				<RadzenRadioButtonList @bind-Value="_cardStyle"
@@ -47,7 +49,7 @@
 			                       TValue="DialogTypes">
 				<Items>
 					@* todo add demo display *@
-					<RadzenRadioButtonListItem Text="No pop up dialog" Value="DialogTypes.Nothing"/>
+					<RadzenRadioButtonListItem Text="@DialogTypes.NoDialog.ToString()" Value="DialogTypes.NoDialog"/>
 					<RadzenRadioButtonListItem Text="@DialogTypes.DataList.ToString()" Value="DialogTypes.DataList"/>
 					<RadzenRadioButtonListItem Text="@DialogTypes.DetailedTable.ToString()" Value="DialogTypes.DetailedTable"/>
 				</Items>
@@ -56,13 +58,23 @@
 	</Steps>
 </RadzenSteps>
 <div class="d-flex justify-content-center">
-	<RadzenButton Class="mx-2" Text="Create Card"
-	              Disabled="@(_fileWrapperDisplayDetails == null)"
-	              ButtonStyle="ButtonStyle.Success"
-	              Click="OnCreateButtonClick"/>
+	@if (ExistingCardSetting == null)
+	{
+		<RadzenButton Class="mx-2" Text="Create Card"
+		              Disabled="@(_fileWrapperDisplayDetails == null)"
+		              ButtonStyle="ButtonStyle.Success"
+		              Click="OnCreateButtonClick"/>
+	}
+	else
+	{
+		<RadzenButton Class="mx-2" Text="Update Card"
+		              ButtonStyle="ButtonStyle.Success"
+		              Click="OnUpdateButtonClick"/>
+	}
+
 	<RadzenButton Class="mx-2" Text="Cancel"
-	              ButtonStyle="ButtonStyle.Danger"
-	              Click="OnCancelButtonClick"/>
+              ButtonStyle="ButtonStyle.Danger"
+              Click="OnCancelButtonClick"/>
 </div>
 
 @code {
@@ -81,11 +93,32 @@
 	[Parameter, EditorRequired]
 	public HashSet<CardSetting> CardSettings { get; set; } = null!;
 
+	[Parameter]
+	public CardSetting? ExistingCardSetting { get; set; }
+
+	protected override void OnParametersSet()
+	{
+		if (ExistingCardSetting != null)
+		{
+			_cardStyle = ExistingCardSetting.CardType;
+			_chosenDialog = ExistingCardSetting.Dialog;
+			_fileWrapperDisplayDetails = new FileWrapperTypeDisplayDetails(ExistingCardSetting.FileWrapperTypeName, ExistingCardSetting.FileWrapperTitle);
+		}
+	}
+
 	private void OnCreateButtonClick()
 	{
 		var newCardAdded = CardSettings.Add(new CardSetting(_fileWrapperDisplayDetails!.Title, _fileWrapperDisplayDetails!.TypeName, _chosenDialog, _cardStyle));
 		var message = newCardAdded ? "Card added successfully." : "A card with the same setting already exists. No changes were done.";
 		_notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = message, Duration = 3000 });
+		_dialogService.Close(true);
+	}
+
+	private void OnUpdateButtonClick()
+	{
+		CardSettings.Remove(ExistingCardSetting!);
+		CardSettings.Add(new CardSetting(_fileWrapperDisplayDetails!.Title, _fileWrapperDisplayDetails!.TypeName, _chosenDialog, _cardStyle));
+		_notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Card updated successfully.", Duration = 3000 });
 		_dialogService.Close(true);
 	}
 

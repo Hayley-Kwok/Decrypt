@@ -52,6 +52,7 @@ public partial class DataService : INotifyPropertyChanged
             {
                 if (FbRoot.AvailableData[key] is ISingleItemListFile singleItemList)
                 {
+                    //todo using dynamic is not the best way to do this but cannot think of any better way at the moment
                     dynamic oldWrapper = singleItemList;
                     dynamic newWrapper = value;
                     if (oldWrapper.Items != null && newWrapper.Items != null)
