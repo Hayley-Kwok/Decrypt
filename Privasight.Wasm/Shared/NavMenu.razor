@@ -17,9 +17,9 @@
 <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
 	<nav class="flex-column">
 		<RadzenPanelMenu>
-			<RadzenPanelMenuItem Text="Home" Icon="home" Path="/"/>
+			<RadzenPanelMenuItem Text="Home" Icon="home" Path=""/>
 			<RadzenPanelMenuItem Text="Facebook" Icon="facebook" Expanded="true">
-				<RadzenPanelMenuItem Text="Load in Data" Path="/facebook/loaddata" Icon="backup"/>
+				<RadzenPanelMenuItem Text="Load in Data" Path="facebook/loaddata" Icon="backup"/>
 				<RadzenPanelMenuItem Text="Manage Dashboards" Path="facebook/manageDashboards" Icon="build"/>
 				<RadzenPanelMenuItem Text="All Available Data" Path="facebook/dashboards/default" Icon="assessment"/>
 				@if (_dataService.FbDashboardSettings != null && _dataService.FbDashboardSettings.Count != 0)
