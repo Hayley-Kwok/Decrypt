@@ -133,7 +133,7 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-Kq9b2GIleBOgokMyjn\/oW0rT9JCxisEC2ZNyKMIiSAc=",
+      "hash": "sha256-PdZxSD\/PlSl9fljTw2zf87xewMM9\/OJ7vAzv++jSmAo=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -221,7 +221,7 @@
       "url": "_framework\/Privasight.Model.Shared.dll"
     },
     {
-      "hash": "sha256-eVOCLc83J7RpGNvt5SxQ3IQLRSL32d7LgUBIXwXhD7Y=",
+      "hash": "sha256-eh0MJLdBrcbQZEYvWMgteHJAyultUnu5nOUwSC5Utm0=",
       "url": "_framework\/Privasight.Wasm.dll"
     },
     {
@@ -525,5 +525,5 @@
       "url": "_content\/Radzen.Blazor\/Radzen.Blazor.js"
     }
   ],
-  "version": "lYmNu29v"
+  "version": "KeZLzk3m"
 };
