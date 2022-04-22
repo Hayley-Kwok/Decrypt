@@ -6,7 +6,7 @@
 @inject DialogService _dialogService
 @inject NotificationService _notificationService
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Load in data | Privasight</PageTitle>
 
 <h1>Load in zip files</h1>
 <div class="my-3">
@@ -24,6 +24,7 @@
 </div>
 
 @code {
+	// todo make this a variable in data service so it won't lost after clicking away
 	private string _message = "";
 
 	private async Task LoadFiles(InputFileChangeEventArgs e)

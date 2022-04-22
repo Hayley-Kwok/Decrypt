@@ -1,13 +1,14 @@
-﻿using System.IO.Compression;
-using System.Text.Json;
-using Microsoft.AspNetCore.Components.Forms;
+﻿using Microsoft.AspNetCore.Components.Forms;
 using Privasight.Model.Shared.Converters;
 using Privasight.Model.Shared.DataStructures.Interfaces;
+using System.IO.Compression;
+using System.Text.Json;
 
 namespace Privasight.Wasm.Services
 {
     public static class DataLoadInHelper
     {
+        //possibly capable of handling larger files. This is the tested limit on local machine.
         private const long MaxFileSize = 560000000; // ~512 MB
 
         public static async Task<(Dictionary<string, IFileWrapper> newData, DateTimeOffset generationDate)> TransformJsonToObj(InputFileChangeEventArgs e, Dictionary<string, Type> availableFileWrappers)
