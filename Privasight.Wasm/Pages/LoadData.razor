@@ -1,0 +1,54 @@
+﻿@page "/facebook/loaddata"
+@using Privasight.Wasm.Services
+@using Privasight.Wasm.UI
+
+@inject DataService _dataService
+@inject DialogService _dialogService
+@inject NotificationService _notificationService
+
+<PageTitle>Home</PageTitle>
+
+<h1>Load in zip files</h1>
+<div class="my-3">
+	<InputFile label="file_upload" title="file_upload" OnChange="@LoadFiles" accept=".zip"/>
+</div>
+@if (!string.IsNullOrWhiteSpace(_message))
+{
+	<div>Data loading Status: @_message</div>
+}
+
+<div class="my-3 d-flex flex-column flex-lg-row">
+	<RadzenButton class="m-2" Text="How to download your Facebook data" Click=@OpenFbInfoDialog ButtonStyle="ButtonStyle.Info"/>
+	
+	<ClearFbDataButton Class="m-2"/>
+</div>
+
+@code {
+	private string _message = "";
+
+	private async Task LoadFiles(InputFileChangeEventArgs e)
+	{
+		_message = "Loading ...";
+		try
+		{
+			var (newData, generationDate) = await DataLoadInHelper.TransformJsonToObj(e, _dataService.AvailableFileWrappers);
+			DataLoadInHelper.AddGenerationDate(newData, generationDate);
+
+			await _dataService.UpdateFbData(newData);
+			_message = "loading finished";
+			_notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Data loaded in successfully", Duration = 4000 });
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine(ex.Message);
+			_message = "The file is too large. The file size limit is 512 MB.";
+			_notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Data loading failed",Detail = "The file is too large. The file size limit is 512 MB.",Duration = 4000 });
+		}
+	}
+
+	public async Task OpenFbInfoDialog()
+	{
+		await _dialogService.OpenAsync<FBDownloadInstruction>("How to download your Facebook Data",
+			options: new DialogOptions { Width = "95%", Height = "95%", Resizable = true });
+	}
+}

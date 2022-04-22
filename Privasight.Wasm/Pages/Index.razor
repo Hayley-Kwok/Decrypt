@@ -1,54 +1,29 @@
 ﻿@page "/"
-@using Privasight.Wasm.Services
-@using Privasight.Wasm.UI
+<h1>Welcome to Privasight - An insight into Your Privacy</h1>
+<br/>
+<h3>What is Privasight?</h3>
+<b>We aim to help you make the first step of gaining back the control of your own data</b> <br/>
+<p>Privasight aims to allow anyone to understand their copy of data returned by different social media companies. 
+	With the right of access protected by the GDPR, users can request a copy of their data from companies. 
+	But the data returned by these companies are usually in various data format and sometimes even incorrectly encoded.<br/>
+	Privasight aims to remove the technical barrier for everyone and ease the understanding and analysis of their data.
+</p>
+<h3>How does it all work?</h3>
+<ol>
+	<li>You request the data from the company and download the data from them.</li>
+	<li>You upload the data to Privasight and TADA you can see the data with a lovely predefined dashboard.</li>
+	<li>You can also create your own dashboard and view your data in whatever way you want.</li>
+</ol>
+<br/>
+<h3>How Privasight handle your data?</h3>
+<p>
+	<b>WE DON'T STORE YOUR DATA</b>
+	We are not interested in storing any of your data. All of your data never leave your device. 
+	<br/>
+	<h6><code>Information for nerds: How is this even possible in technical terms?</code></h6>
+	Privasight is a client-side web app built with .NET Blazor WebAssembly. This means all operations are performed
+	within your browser without the need of sending data and requests back and forth to a server. <b>Your data never leave your browser!</b> <br/>
+	@* todo need more information for local storage we love you all so much bye *@
+	In terms of data storage, we make use of localstorage of browser so that your data won't be lost after a refresh and you can still see them the next time you visit us. 
 
-@inject DataService _dataService
-@inject DialogService _dialogService
-@inject NotificationService _notificationService
-
-<PageTitle>Home</PageTitle>
-
-<h1>Load in zip files</h1>
-<div class="my-3">
-	<InputFile label="file_upload" title="file_upload" OnChange="@LoadFiles" accept=".zip"/>
-</div>
-@if (!string.IsNullOrWhiteSpace(_message))
-{
-	<div>Data loading Status: @_message</div>
-}
-
-<div class="my-3 d-flex flex-column flex-lg-row">
-	<RadzenButton class="m-2" Text="How to download your Facebook data" Click=@OpenFbInfoDialog ButtonStyle="ButtonStyle.Info"/>
-	
-	<ClearFbDataButton Class="m-2"/>
-</div>
-
-@code {
-	private string _message = "";
-
-	private async Task LoadFiles(InputFileChangeEventArgs e)
-	{
-		_message = "Loading ...";
-		try
-		{
-			var (newData, generationDate) = await DataLoadInHelper.TransformJsonToObj(e, _dataService.AvailableFileWrappers);
-			DataLoadInHelper.AddGenerationDate(newData, generationDate);
-
-			await _dataService.UpdateFbData(newData);
-			_message = "loading finished";
-			_notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Data loaded in successfully", Duration = 4000 });
-		}
-		catch (Exception ex)
-		{
-			Console.WriteLine(ex.Message);
-			_message = "The file is too large. The file size limit is 512 MB.";
-			_notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Data loading failed",Detail = "The file is too large. The file size limit is 512 MB.",Duration = 4000 });
-		}
-	}
-
-	public async Task OpenFbInfoDialog()
-	{
-		await _dialogService.OpenAsync<FBDownloadInstruction>("How to download your Facebook Data",
-			options: new DialogOptions { Width = "95%", Height = "95%", Resizable = true });
-	}
-}
+</p>

@@ -11,7 +11,7 @@ namespace Privasight.Model.Facebook
         public static readonly string Filepath = @"ads_information/advertisers_you've_interacted_with.json";
 
         public string Title => "Advertisers you have interacted with";
-        public string Description => "Advertisers whose ads you've clicked on Facebook";
+        public string Description => "Advertisers whose ads you've clicked on Facebook<br/> <a target=\"_blank\" class=\"text-decoration-underline\" href=\"https://www.facebook.com/adpreferences/ad_settings\">Ad Settings on Facebook (link only accessible after you logged into Facebook) </a><br/>";
 
         [JsonPropertyName("history_v2")]
         public IEnumerable<InteractedAdvertiser>? Items { get; set; }
