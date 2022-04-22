@@ -93,7 +93,7 @@
       "url": "icon-512.png"
     },
     {
-      "hash": "sha256-oYduu6j/vZz/S0fhRdcs9oQ8+DuLQVW9lfH6DZWO0zU=",
+      "hash": "sha256-5fpu6qUPEsVcmGlRaBgpFxhGHZ3di8mH656EfOo083M=",
       "url": "index.html"
     },
     {
@@ -133,7 +133,7 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-tpTEF1QMkvTkROFzWraaIllro8S2KpBzuNPn0rPHDzk=",
+      "hash": "sha256-rWt+fls1Tzk2fhe07eam0zgitn8UcWp3Zd6Vufruq0c=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -213,7 +213,7 @@
       "url": "_framework\/Newtonsoft.Json.dll"
     },
     {
-      "hash": "sha256-A1bokofAtQeS46k3ylqQ+YNAck2UbN7kutiWvhuW+SE=",
+      "hash": "sha256-UAn3hJobzQtoW8bM7Iu\/wFi5QVzmboDqv6aPasDZe8E=",
       "url": "_framework\/Privasight.Model.Facebook.dll"
     },
     {
@@ -221,7 +221,7 @@
       "url": "_framework\/Privasight.Model.Shared.dll"
     },
     {
-      "hash": "sha256-6tJi3dUROEPEzX7cktPNWobmcERr7LySLKGG0TEINqU=",
+      "hash": "sha256-dtu\/+VgDtjozT2\/0C+CRMvwJdfsIHmv9rSwvDXoXc7o=",
       "url": "_framework\/Privasight.Wasm.dll"
     },
     {
@@ -525,5 +525,5 @@
       "url": "_content\/Radzen.Blazor\/Radzen.Blazor.js"
     }
   ],
-  "version": "Pz\/0ZqLn"
+  "version": "b\/TJYHFG"
 };
