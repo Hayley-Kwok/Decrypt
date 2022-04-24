@@ -8,8 +8,8 @@ namespace Privasight.Wasm.Services
 {
     public static class DataLoadInHelper
     {
-        //possibly capable of handling larger files. This is the tested limit on local machine.
-        private const long MaxFileSize = 560000000; // ~512 MB
+        //Tested limit on local machine ~512 MB (560000000 Byte)
+        private const long MaxFileSize = 1073741824; // ~ 1GB
 
         public static async Task<(Dictionary<string, IFileWrapper> newData, DateTimeOffset generationDate)> TransformJsonToObj(InputFileChangeEventArgs e, Dictionary<string, Type> availableFileWrappers)
         {

@@ -1,5 +1,5 @@
 {
-  "name": "Privasight.Wasm",
+  "name": "Privasight",
   "short_name": "Privasight",
   "start_url": "./",
   "display": "standalone",

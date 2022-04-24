@@ -20,6 +20,9 @@ public partial class DataService : INotifyPropertyChanged
     }
     #endregion
 
+    public string DataLoadingStatus { get; set; } = "";
+    public bool LoadingData { get; set; }
+
     private CompanyRoot? _fbRoot;
     public CompanyRoot? FbRoot
     {
