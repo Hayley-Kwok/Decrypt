@@ -32,7 +32,7 @@
 	{
 		var cardSettings = new HashSet<CardSetting>();
 
-		foreach (var fileWrapperType in _dataService.AvailableFileWrappers.Values)
+		foreach (var fileWrapperType in _dataService.AvailableFileWrappers[_company].Values)
 		{
 			CardSetting? card = null;
 

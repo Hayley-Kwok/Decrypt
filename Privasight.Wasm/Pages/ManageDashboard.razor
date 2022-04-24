@@ -1,4 +1,4 @@
-﻿@page "/facebook/manageDashboards"
+﻿@page "/{UrlCompany}/manageDashboards"
 
 @using Privasight.Wasm.Services
 @using Privasight.Model.Shared.DataStructures.Dashboard
@@ -34,7 +34,8 @@
 	<div class="my-3">
 		<EditDashboard 
 			ExistingDashboardSetting="_chosenDashboard"
-			OnCreateButtonClick="OnDashboardEditFinished"/>
+			OnCreateButtonClick="OnDashboardEditFinished"
+			Company="_company"/>
 	</div>
 }
 
@@ -42,10 +43,15 @@
 	private bool _showEditDashboard;
 	private DashboardSetting? _chosenDashboard = new(new HashSet<CardSetting>());
 
+	private AvailableCompany _company;
+	[Parameter]
+	public string UrlCompany { get; set; } = "";
+
 	public void Dispose() => _dataService.PropertyChanged -= PropertyHasChanged;
 
 	protected override async Task OnInitializedAsync()
 	{
+		_company = Enum.Parse<AvailableCompany>(UrlCompany);
 		_dataService.PropertyChanged += PropertyHasChanged;
 		if (_dataService.FbDashboardSettings == null)
 		{

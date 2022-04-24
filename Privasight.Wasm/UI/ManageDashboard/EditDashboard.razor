@@ -56,6 +56,9 @@ else
 	[Parameter, EditorRequired]
 	public EventCallback OnCreateButtonClick { get; set; }
 
+	[Parameter, EditorRequired]
+	public AvailableCompany Company { get; set; }
+
 	protected override void OnParametersSet()
 	{
 		if (ExistingDashboardSetting == null)
@@ -114,7 +117,8 @@ else
 		await _dialogService.OpenAsync<EditCard>("Create New Card",
 			new Dictionary<string, object>
 			{
-				{ nameof(EditCard.CardSettings), _cardSettings }
+				{ nameof(EditCard.CardSettings), _cardSettings },
+				{ nameof(EditCard.Company), Company}
 			},
 			new DialogOptions { Width = "60%", Height = "70%", Resizable = true });
 	}
@@ -131,7 +135,8 @@ else
 			new Dictionary<string, object>
 			{
 				{ nameof(EditCard.CardSettings), _cardSettings },
-				{ nameof(EditCard.ExistingCardSetting), _chosenCard! }
+				{ nameof(EditCard.ExistingCardSetting), _chosenCard! },
+				{ nameof(EditCard.Company), Company}
 			},
 			new DialogOptions { Width = "60%", Height = "70%", Resizable = true });
 		_chosenCard = null;

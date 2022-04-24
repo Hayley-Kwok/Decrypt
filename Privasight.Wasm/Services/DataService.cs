@@ -2,7 +2,6 @@
 using System.Runtime.CompilerServices;
 using Blazored.LocalStorage;
 using Privasight.Model.Facebook;
-using Privasight.Model.Shared.DataStructures;
 using Privasight.Model.Shared.DataStructures.Interfaces;
 
 namespace Privasight.Wasm.Services;
@@ -10,14 +9,16 @@ namespace Privasight.Wasm.Services;
 public partial class DataService : INotifyPropertyChanged
 {
     private readonly ILocalStorageService _localStorage;
-    
+
     #region PropertyChanged
+
     public event PropertyChangedEventHandler? PropertyChanged;
 
     private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
     #endregion
 
     public string DataLoadingStatus { get; set; } = "";
@@ -30,6 +31,7 @@ public partial class DataService : INotifyPropertyChanged
     ///     Key: Name of the type of the FileWrapper stored in value; Value: The FileWrapper Object
     /// </summary>
     private Dictionary<AvailableCompany, Dictionary<string, IFileWrapper>>? _companyAvailableData;
+
     public Dictionary<AvailableCompany, Dictionary<string, IFileWrapper>>? CompanyAvailableData
     {
         get => _companyAvailableData;
@@ -40,7 +42,10 @@ public partial class DataService : INotifyPropertyChanged
         }
     }
 
-    public Dictionary<string, Type> AvailableFileWrappers => FbConfig.AvailableFileWrappers;
+    public Dictionary<AvailableCompany, Dictionary<string, Type>> AvailableFileWrappers => new()
+    {
+        { AvailableCompany.Facebook, FbConfig.AvailableFileWrappers }
+    };
 
     public DataService(ILocalStorageService localStorage)
     {
@@ -89,8 +94,10 @@ public partial class DataService : INotifyPropertyChanged
     }
 
     public async Task SetCompanyAvailableDataFromStorage()
-    { 
-        var storageData = await _localStorage.GetItemAsync<Dictionary<AvailableCompany, Dictionary<string, IFileWrapper>>>(nameof(CompanyAvailableData));
+    {
+        var storageData =
+            await _localStorage.GetItemAsync<Dictionary<AvailableCompany, Dictionary<string, IFileWrapper>>>(
+                nameof(CompanyAvailableData));
         CompanyAvailableData = storageData ?? new Dictionary<AvailableCompany, Dictionary<string, IFileWrapper>>();
     }
 

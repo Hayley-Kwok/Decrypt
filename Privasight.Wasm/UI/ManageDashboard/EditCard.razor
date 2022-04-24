@@ -16,7 +16,7 @@
 			<h3>1. Select a data type</h3>
 			<div class="d-flex justify-content-center">
 				<RadzenListBox
-					Data="@ReflectionHelper.GetDisplayDetailsFromFileWrapperTypes(_dataService.AvailableFileWrappers.Values)"
+					Data="@ReflectionHelper.GetDisplayDetailsFromFileWrapperTypes(_dataService.AvailableFileWrappers[Company].Values)"
 					TextProperty="@nameof(FileWrapperTypeDisplayDetails.Title)"
 					@bind-Value="@_fileWrapperDisplayDetails"
 					TValue="FileWrapperTypeDisplayDetails"
@@ -109,6 +109,9 @@
 	private FileWrapperTypeDisplayDetails? _fileWrapperDisplayDetails = null;
 	private CardTypes _cardStyle;
 	private DialogTypes _chosenDialog;
+
+	[Parameter, EditorRequired]
+	public AvailableCompany Company { get; set; }
 
 	[Parameter, EditorRequired]
 	public HashSet<CardSetting> CardSettings { get; set; } = null!;

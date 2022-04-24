@@ -39,7 +39,7 @@
 		_dataService.DataLoadingStatus = "Loading ...";
 		try
 		{
-			var (newData, generationDate) = await DataLoadInHelper.TransformJsonToObj(e, _dataService.AvailableFileWrappers);
+			var (newData, generationDate) = await DataLoadInHelper.TransformJsonToObj(e, _dataService.AvailableFileWrappers[_company]);
 			DataLoadInHelper.AddGenerationDate(newData, generationDate);
 
 			await _dataService.UpdateCompanyAvailableData(_company, newData);
