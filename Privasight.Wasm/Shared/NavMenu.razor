@@ -18,20 +18,23 @@
 	<nav class="flex-column">
 		<RadzenPanelMenu>
 			<RadzenPanelMenuItem Text="Home" Icon="home" Path=" " />
-			<RadzenPanelMenuItem Text="Facebook" Icon="facebook" Expanded="true">
-				<RadzenPanelMenuItem Text="Load in Data" Path="facebook/loaddata" Icon="backup"/>
-				<RadzenPanelMenuItem Text="Manage Dashboards" Path="facebook/manageDashboards" Icon="build"/>
-				<RadzenPanelMenuItem Text="All Available Data" Path="facebook/dashboards/default" Icon="assessment"/>
-				@if (_dataService.FbDashboardSettings != null && _dataService.FbDashboardSettings.Count != 0)
-				{
-					<RadzenPanelMenuItem Text="Custom Dashboards" Icon="account_circle">
-						@for (var i = 0; i < _dataService.FbDashboardSettings.Count; i++)
-						{
-							<RadzenPanelMenuItem Text="@_dataService.FbDashboardSettings[i].Name" Path="@($"facebook/dashboards/{i}")"/>
-						}
-					</RadzenPanelMenuItem>
-				}
-			</RadzenPanelMenuItem>
+			@foreach (AvailableCompany company in Enum.GetValues(typeof(AvailableCompany)))
+			{
+				<RadzenPanelMenuItem Text="Facebook" Icon="dashboard" Expanded="true">
+					<RadzenPanelMenuItem Text="Load in Data" Path="@($"{company}/loadData")" Icon="backup"/>
+					<RadzenPanelMenuItem Text="Manage Dashboards" Path="@($"{company}/manageDashboards")" Icon="build"/>
+					<RadzenPanelMenuItem Text="All Available Data" Path="@($"{company}/dashboards/default")" Icon="assessment"/>
+					@if (_dataService.FbDashboardSettings != null && _dataService.FbDashboardSettings.Count != 0)
+					{
+						<RadzenPanelMenuItem Text="Custom Dashboards" Icon="account_circle">
+							@for (var i = 0; i < _dataService.FbDashboardSettings.Count; i++)
+							{
+								<RadzenPanelMenuItem Text="@_dataService.FbDashboardSettings[i].Name" Path="@($"{company}/dashboards/{i}")"/>
+							}
+						</RadzenPanelMenuItem>
+					}
+				</RadzenPanelMenuItem>
+			}
 		</RadzenPanelMenu>
 	</nav>
 </div>

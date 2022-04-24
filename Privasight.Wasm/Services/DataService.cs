@@ -23,14 +23,19 @@ public partial class DataService : INotifyPropertyChanged
     public string DataLoadingStatus { get; set; } = "";
     public bool LoadingData { get; set; }
 
-    private CompanyRoot? _fbRoot;
-    public CompanyRoot? FbRoot
+    /// <summary>
+    /// Key: the company
+    /// Value: Store the transformed FileWrappers (Json object that has transformed to supported C# object)
+    /// 1 FileWrapper correspond to 1 Json File in the zip file
+    ///     Key: Name of the type of the FileWrapper stored in value; Value: The FileWrapper Object
+    /// </summary>
+    private Dictionary<AvailableCompany, Dictionary<string, IFileWrapper>>? _companyAvailableData;
+    public Dictionary<AvailableCompany, Dictionary<string, IFileWrapper>>? CompanyAvailableData
     {
-        get => _fbRoot;
+        get => _companyAvailableData;
         private set
         {
-            if (_fbRoot != null && _fbRoot.Equals(value)) return;
-            _fbRoot = value;
+            _companyAvailableData = value;
             OnPropertyChanged();
         }
     }
@@ -42,18 +47,23 @@ public partial class DataService : INotifyPropertyChanged
         _localStorage = localStorage;
     }
 
-    public async Task UpdateFbData(Dictionary<string, IFileWrapper> newData)
+    public async Task UpdateCompanyAvailableData(AvailableCompany company, Dictionary<string, IFileWrapper> newData)
     {
-        if (FbRoot == null)
+        if (CompanyAvailableData == null)
         {
-            await SetFbRootFromStorage();
+            await SetCompanyAvailableDataFromStorage();
+        }
+
+        if (!CompanyAvailableData!.ContainsKey(company))
+        {
+            CompanyAvailableData.Add(company, new Dictionary<string, IFileWrapper>());
         }
 
         foreach (var (key, value) in newData)
         {
-            if (FbRoot!.AvailableData.ContainsKey(key))
+            if (CompanyAvailableData[company].ContainsKey(key))
             {
-                if (FbRoot.AvailableData[key] is ISingleItemListFile singleItemList)
+                if (CompanyAvailableData[company][key] is ISingleItemListFile singleItemList)
                 {
                     //todo using dynamic is not the best way to do this but cannot think of any better way at the moment
                     dynamic oldWrapper = singleItemList;
@@ -64,29 +74,32 @@ public partial class DataService : INotifyPropertyChanged
                     }
                     else if (oldWrapper.Items == null)
                     {
-                        FbRoot.AvailableData[key] = value;
+                        CompanyAvailableData[company][key] = value;
                     }
                 }
             }
             else
             {
-                FbRoot.AvailableData.Add(key, value);
+                CompanyAvailableData[company].Add(key, value);
             }
         }
 
-        OnPropertyChanged(nameof(FbRoot));
-        await _localStorage.SetItemAsync(nameof(FbRoot), FbRoot);
+        OnPropertyChanged(nameof(CompanyAvailableData));
+        await _localStorage.SetItemAsync(nameof(CompanyAvailableData), CompanyAvailableData);
     }
 
-    public async Task SetFbRootFromStorage()
+    public async Task SetCompanyAvailableDataFromStorage()
     { 
-        var storageData = await _localStorage.GetItemAsync<CompanyRoot>(nameof(FbRoot));
-        FbRoot = storageData ?? new CompanyRoot();
+        var storageData = await _localStorage.GetItemAsync<Dictionary<AvailableCompany, Dictionary<string, IFileWrapper>>>(nameof(CompanyAvailableData));
+        CompanyAvailableData = storageData ?? new Dictionary<AvailableCompany, Dictionary<string, IFileWrapper>>();
     }
 
-    public async Task RemoveFbData()
+    public async Task RemoveCompanyData(AvailableCompany company)
     {
-        await _localStorage.RemoveItemAsync(nameof(FbRoot));
-        FbRoot = new CompanyRoot();
+        if (CompanyAvailableData == null) return;
+
+        CompanyAvailableData[company] = new Dictionary<string, IFileWrapper>();
+        await _localStorage.SetItemAsync(nameof(CompanyAvailableData), CompanyAvailableData);
+        OnPropertyChanged(nameof(CompanyAvailableData));
     }
 }

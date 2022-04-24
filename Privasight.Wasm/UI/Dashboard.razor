@@ -19,14 +19,15 @@
 		<h1>@Setting.Name</h1>
 	</div>
 	<div>
-		<ClearFbDataButton/>
+		<ClearCompanyDataButton Company="Company"/>
 	</div>
 </div>
 <div class="row">
 	@foreach (var (fileWrapperTitle,fileWrapperTypeName, dialogType, cardType) in Setting.CardSettings)
 	{
-		if (_dataService.FbRoot != null &&
-			_dataService.FbRoot.AvailableData.TryGetValue(fileWrapperTypeName, out var data))
+		if (_dataService.CompanyAvailableData != null &&
+			_dataService.CompanyAvailableData.ContainsKey(Company) &&
+			_dataService.CompanyAvailableData[Company].TryGetValue(fileWrapperTypeName, out var data))
 		{
 			if (data is ISingleItemListFile singleItemList)
 			{
@@ -55,6 +56,9 @@
 	private DialogTypes _dialogType;
 
 	[Parameter, EditorRequired]
+	public AvailableCompany Company { get; set; }
+
+	[Parameter, EditorRequired]
 	public DashboardSetting Setting { get; set; } = null!;
 
 	RenderFragment NumberCardWithDialogInstance => builder =>
@@ -73,9 +77,9 @@
 	protected override async Task OnInitializedAsync()
 	{
 		_dataService.PropertyChanged += PropertyHasChanged;
-		if (_dataService.FbRoot == null)
+		if (_dataService.CompanyAvailableData == null)
 		{
-			await _dataService.SetFbRootFromStorage();
+			await _dataService.SetCompanyAvailableDataFromStorage();
 		}
 	}
 

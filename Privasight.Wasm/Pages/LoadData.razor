@@ -1,4 +1,4 @@
-﻿@page "/facebook/loaddata"
+﻿@page "/{UrlCompany}/loaddata"
 @using Privasight.Wasm.Services
 @using Privasight.Wasm.UI
 
@@ -20,10 +20,19 @@
 <div class="my-3 d-flex flex-column flex-lg-row">
 	<RadzenButton class="m-2" Text="How to download your Facebook data" Click=@OpenFbInfoDialog ButtonStyle="ButtonStyle.Info"/>
 	
-	<ClearFbDataButton Class="m-2"/>
+	<ClearCompanyDataButton Class="m-2" Company="_company"/>
 </div>
 
 @code {
+	private AvailableCompany _company;
+	[Parameter]
+	public string UrlCompany { get; set; } = "";
+
+	protected override void OnInitialized()
+	{
+		_company = Enum.Parse<AvailableCompany>(UrlCompany);
+	}
+
 	private async Task LoadFiles(InputFileChangeEventArgs e)
 	{
 		_dataService.LoadingData = true;
@@ -33,7 +42,7 @@
 			var (newData, generationDate) = await DataLoadInHelper.TransformJsonToObj(e, _dataService.AvailableFileWrappers);
 			DataLoadInHelper.AddGenerationDate(newData, generationDate);
 
-			await _dataService.UpdateFbData(newData);
+			await _dataService.UpdateCompanyAvailableData(_company, newData);
 			_dataService.DataLoadingStatus = "loading finished";
 			_notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Data loaded in successfully", Duration = 4000 });
 		}

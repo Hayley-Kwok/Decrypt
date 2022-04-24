@@ -1,4 +1,4 @@
-﻿@page "/facebook/dashboards/default"
+﻿@page "//{UrlCompany}/dashboards/default"
 
 @using Privasight.Wasm.UI
 @using Privasight.Model.Shared.DataStructures.Dashboard
@@ -9,10 +9,24 @@
 
 @inject DataService _dataService
 
-<PageTitle>All Available Data | Privasight</PageTitle>
+<PageTitle>
+	@_title| Privasight
+</PageTitle>
 
-<Dashboard Setting="GetDefaultDashboardSetting()"/>
+<Dashboard Setting="GetDefaultDashboardSetting()" Company="_company"/>
+
 @code {
+	private string _title = "All Available Data";
+	private AvailableCompany _company;
+
+	[Parameter]
+	public string UrlCompany { get; set; } = "";
+
+	protected override void OnInitialized()
+	{
+		_company = Enum.Parse<AvailableCompany>(UrlCompany);
+		_title = $"All Available Data from {_company}";
+	}
 
 	private DashboardSetting GetDefaultDashboardSetting()
 	{
@@ -39,6 +53,6 @@
 			}
 		}
 
-		return new DashboardSetting(cardSettings, "All Available Data");
+		return new DashboardSetting(cardSettings, _title);
 	}
 }

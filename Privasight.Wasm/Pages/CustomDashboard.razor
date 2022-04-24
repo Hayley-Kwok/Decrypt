@@ -1,4 +1,4 @@
-﻿@page "/facebook/dashboards/{Id:int}"
+﻿@page "/{UrlCompany}/dashboards/{Id:int}"
 
 @using Privasight.Model.Shared.DataStructures.Dashboard
 @using Privasight.Wasm.Services
@@ -10,11 +10,15 @@
 
 @if (_dashboardSetting != null)
 {
-	<Dashboard Setting="_dashboardSetting"/>
+	<Dashboard Setting="_dashboardSetting" Company="_company"/>
 }
 
 @code {
 	private DashboardSetting? _dashboardSetting;
+	private AvailableCompany _company;
+
+	[Parameter]
+	public string UrlCompany { get; set; } = "";
 
 	[Parameter]
 	public int Id { get; set; }
@@ -26,6 +30,7 @@
 
 	protected override async Task OnInitializedAsync()
 	{
+		_company = Enum.Parse<AvailableCompany>(UrlCompany);
 		if (_dataService.FbDashboardSettings == null)
 		{
 			await _dataService.SetFbDashboardsFromStorage();
