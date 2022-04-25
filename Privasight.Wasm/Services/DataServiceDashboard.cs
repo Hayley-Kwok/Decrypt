@@ -11,53 +11,79 @@ namespace Privasight.Wasm.Services
             Delete
         }
 
-        private IList<DashboardSetting>? _fbDashboardSettings;
+        private Dictionary<AvailableCompany, IList<DashboardSetting>>? _dashboardSettings;
 
-        public IList<DashboardSetting>? FbDashboardSettings
+        public Dictionary<AvailableCompany,IList<DashboardSetting>>? DashboardSettings
         {
-            get => _fbDashboardSettings;
+            get => _dashboardSettings;
             private set
             {
-                _fbDashboardSettings = value;
+                _dashboardSettings = value;
                 OnPropertyChanged();
             }
         }
 
-        public IEnumerable<string>? FbExistingDashboardNames => FbDashboardSettings?.Select(d => d.Name);
+        private Dictionary<AvailableCompany, IEnumerable<string>>? _existingDashboardNames;
+        public Dictionary<AvailableCompany, IEnumerable<string>>? ExistingDashboardNames
+        {
+            get
+            {
+                if (DashboardSettings == null) return null;
 
-        public async Task UpdateFbDashboardSettings(DashboardSetting newSetting, UpdateAction action,
+                if (_existingDashboardNames != null)
+                {
+                    return _existingDashboardNames;
+                }
+
+                _existingDashboardNames = new Dictionary<AvailableCompany, IEnumerable<string>>();
+                foreach (var (company, dashboardSettings) in DashboardSettings)
+                {
+                    var names = dashboardSettings.Select(d => d.Name);
+                    _existingDashboardNames.Add(company, names);
+                }
+
+                return _existingDashboardNames;
+            }
+        }
+
+        public async Task UpdateDashboardSettings(AvailableCompany company, DashboardSetting newSetting, UpdateAction action,
             DashboardSetting? oldSetting = null)
         {
-            if (FbDashboardSettings == null)
+            if (DashboardSettings == null)
             {
-                await SetFbDashboardsFromStorage();
+                await SetDashboardSettingsFromStorage();
+            }
+
+            if (!DashboardSettings!.ContainsKey(company))
+            {
+                DashboardSettings.Add(company, new List<DashboardSetting>());
             }
 
             switch (action)
             {
                 case UpdateAction.Add:
-                    FbDashboardSettings!.Add(newSetting);
+                    DashboardSettings![company].Add(newSetting);
                     break;
                 case UpdateAction.Update:
-                    FbDashboardSettings!.Add(newSetting);
-                    if (oldSetting != null) FbDashboardSettings!.Remove(oldSetting);
+                    DashboardSettings![company].Add(newSetting);
+                    if (oldSetting != null) DashboardSettings![company].Remove(oldSetting);
                     break;
                 case UpdateAction.Delete:
-                    FbDashboardSettings!.Remove(newSetting);
+                    DashboardSettings![company].Remove(newSetting);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(action), action, null);
             }
 
-            OnPropertyChanged(nameof(FbDashboardSettings));
-            await _localStorage.SetItemAsync(nameof(FbDashboardSettings), FbDashboardSettings);
+            OnPropertyChanged(nameof(DashboardSettings));
+            await _localStorage.SetItemAsync(nameof(DashboardSettings), DashboardSettings);
         }
 
-        public async Task SetFbDashboardsFromStorage()
+        public async Task SetDashboardSettingsFromStorage()
         {
             var dashboardSettings =
-                await _localStorage.GetItemAsync<IList<DashboardSetting>>(nameof(FbDashboardSettings));
-            FbDashboardSettings = dashboardSettings ?? new List<DashboardSetting>();
+                await _localStorage.GetItemAsync<Dictionary<AvailableCompany, IList<DashboardSetting>>>(nameof(DashboardSettings));
+            DashboardSettings = dashboardSettings ?? new Dictionary<AvailableCompany, IList<DashboardSetting>>();
         }
     }
 }

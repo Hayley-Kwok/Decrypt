@@ -24,12 +24,14 @@
 					<RadzenPanelMenuItem Text="Load in Data" Path="@($"{company}/loadData")" Icon="backup"/>
 					<RadzenPanelMenuItem Text="Manage Dashboards" Path="@($"{company}/manageDashboards")" Icon="build"/>
 					<RadzenPanelMenuItem Text="All Available Data" Path="@($"{company}/dashboards/default")" Icon="assessment"/>
-					@if (_dataService.FbDashboardSettings != null && _dataService.FbDashboardSettings.Count != 0)
+					@if (_dataService.DashboardSettings != null && 
+					     _dataService.DashboardSettings.ContainsKey(company) &&
+					     _dataService.DashboardSettings[company].Count != 0)
 					{
 						<RadzenPanelMenuItem Text="Custom Dashboards" Icon="account_circle">
-							@for (var i = 0; i < _dataService.FbDashboardSettings.Count; i++)
+							@for (var i = 0; i < _dataService.DashboardSettings[company].Count; i++)
 							{
-								<RadzenPanelMenuItem Text="@_dataService.FbDashboardSettings[i].Name" Path="@($"{company}/dashboards/{i}")"/>
+								<RadzenPanelMenuItem Text="@_dataService.DashboardSettings[company][i].Name" Path="@($"{company}/dashboards/{i}")"/>
 							}
 						</RadzenPanelMenuItem>
 					}
@@ -54,15 +56,15 @@
 	protected override async Task OnInitializedAsync()
 	{
 		_dataService.PropertyChanged += PropertyHasChanged;
-		if (_dataService.FbDashboardSettings == null)
+		if (_dataService.DashboardSettings == null)
 		{
-			await _dataService.SetFbDashboardsFromStorage();
+			await _dataService.SetDashboardSettingsFromStorage();
 		}
 	}
 
 	private void PropertyHasChanged(object? sender, PropertyChangedEventArgs args)
 	{
-		if (args.PropertyName == nameof(_dataService.FbDashboardSettings))
+		if (args.PropertyName == nameof(_dataService.DashboardSettings))
 		{
 			StateHasChanged();
 		}

@@ -25,15 +25,15 @@
 
 	protected override void OnParametersSet()
 	{
-		_dashboardSetting = _dataService.FbDashboardSettings?[Id];
+		_dashboardSetting = _dataService.DashboardSettings?[_company][Id];
 	}
 
 	protected override async Task OnInitializedAsync()
 	{
 		_company = Enum.Parse<AvailableCompany>(UrlCompany);
-		if (_dataService.FbDashboardSettings == null)
+		if (_dataService.DashboardSettings == null)
 		{
-			await _dataService.SetFbDashboardsFromStorage();
+			await _dataService.SetDashboardSettingsFromStorage();
 		}
 	}
 }

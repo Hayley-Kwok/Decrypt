@@ -75,9 +75,10 @@ else
 
 	private void OnDashboardNameChange(string name)
 	{
-		if (_dataService.FbExistingDashboardNames != null)
+		if (_dataService.ExistingDashboardNames != null && 
+		    _dataService.ExistingDashboardNames.ContainsKey(Company))
 		{
-			var existingTitles = new List<string>(_dataService.FbExistingDashboardNames);
+			var existingTitles = new List<string>(_dataService.ExistingDashboardNames[Company]);
 			if (ExistingDashboardSetting != null)
 			{
 				existingTitles.Remove(ExistingDashboardSetting.Name);
@@ -97,11 +98,11 @@ else
 		var newDashboard = new DashboardSetting(_cardSettings, _dashboardName);
 		if (ExistingDashboardSetting == null)
 		{
-			await _dataService.UpdateFbDashboardSettings(newDashboard, DataService.UpdateAction.Add);
+			await _dataService.UpdateDashboardSettings(Company, newDashboard, DataService.UpdateAction.Add);
 		}
 		else
 		{
-			await _dataService.UpdateFbDashboardSettings(newDashboard, DataService.UpdateAction.Update, ExistingDashboardSetting);
+			await _dataService.UpdateDashboardSettings(Company, newDashboard, DataService.UpdateAction.Update, ExistingDashboardSetting);
 		}
 
 		await OnCreateButtonClick.InvokeAsync();
