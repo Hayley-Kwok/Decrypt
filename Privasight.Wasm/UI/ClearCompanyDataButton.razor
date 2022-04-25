@@ -4,9 +4,9 @@
 @inject NotificationService _notificationService
 
 <RadzenButton class="@Class"
-              Text="Delete Loaded Facebook Data"
+              Text=@($"Delete Loaded {Company} Data")
               ButtonStyle="ButtonStyle.Danger"
-              Click="@RemoveFbData"/>
+              Click="@RemoveData"/>
 
 @code {
 	[Parameter, EditorRequired]
@@ -15,9 +15,9 @@
 	[Parameter]
 	public string Class { get; set; } = "";
 
-	public async Task RemoveFbData()
+	public async Task RemoveData()
 	{
 		await _dataService.RemoveCompanyData(Company);
-		_notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Facebook Data Removed Successfully", Duration = 4000 });
+		_notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = $"{Company} Data Removed Successfully", Duration = 4000 });
 	}
 }

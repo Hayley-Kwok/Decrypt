@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Blazored.LocalStorage;
-using Privasight.Model.Facebook;
 using Privasight.Model.Shared.DataStructures.Interfaces;
 
 namespace Privasight.Wasm.Services;
@@ -41,11 +40,6 @@ public partial class DataService : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-
-    public Dictionary<AvailableCompany, Dictionary<string, Type>> AvailableFileWrappers => new()
-    {
-        { AvailableCompany.Facebook, FbConfig.AvailableFileWrappers }
-    };
 
     public DataService(ILocalStorageService localStorage)
     {

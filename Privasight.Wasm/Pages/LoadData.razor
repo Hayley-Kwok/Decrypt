@@ -18,7 +18,7 @@
 }
 
 <div class="my-3 d-flex flex-column flex-lg-row">
-	<RadzenButton class="m-2" Text="How to download your Facebook data" Click=@OpenFbInfoDialog ButtonStyle="ButtonStyle.Info"/>
+	<RadzenButton class="m-2" Text="@($"How to download your {UrlCompany} data")" Click=@OpenInfoDialog ButtonStyle="ButtonStyle.Info"/>
 	
 	<ClearCompanyDataButton Class="m-2" Company="_company"/>
 </div>
@@ -56,9 +56,17 @@
 		StateHasChanged();
 	}
 
-	public async Task OpenFbInfoDialog()
+	public async Task OpenInfoDialog()
 	{
-		await _dialogService.OpenAsync<FBDownloadInstruction>("How to download your Facebook Data",
-			options: new DialogOptions { Width = "95%", Height = "95%", Resizable = true });
+		await _dialogService.OpenAsync($"How to download your {UrlCompany} Data",
+			ds => DataDownloadInfoFragment,
+			new DialogOptions { Width = "95%", Height = "95%", Resizable = true });
 	}
+
+	
+	RenderFragment DataDownloadInfoFragment => builder =>
+	{
+		builder.OpenComponent(1, _dataService.DataDownloadInfo[_company]);
+		builder.CloseComponent();
+	};
 }

@@ -20,7 +20,7 @@
 			<RadzenPanelMenuItem Text="Home" Icon="home" Path=" " />
 			@foreach (AvailableCompany company in Enum.GetValues(typeof(AvailableCompany)))
 			{
-				<RadzenPanelMenuItem Text="Facebook" Icon="dashboard" Expanded="true">
+				<RadzenPanelMenuItem Text=@company.ToString() Icon="dashboard" Expanded="true">
 					<RadzenPanelMenuItem Text="Load in Data" Path="@($"{company}/loadData")" Icon="backup"/>
 					<RadzenPanelMenuItem Text="Manage Dashboards" Path="@($"{company}/manageDashboards")" Icon="build"/>
 					<RadzenPanelMenuItem Text="All Available Data" Path="@($"{company}/dashboards/default")" Icon="assessment"/>
