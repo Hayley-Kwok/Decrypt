@@ -1,12 +1,11 @@
-﻿@using Privasight.Wasm.Services
-@using Privasight.Wasm.UI.CardComponents.NumberCards.Base
+﻿@using Privasight.Wasm.UI.CardComponents.NumberCards.Base
 @using Privasight.Model.Shared.Display
 @using Privasight.Model.Shared.DataStructures.Dashboard
 @using Privasight.Model.Shared.Helpers
 @using Privasight.Wasm.UI.CardComponents.Tables
 @using Privasight.Model.Shared.DataStructures
+@using Privasight.Wasm.Configs
 
-@inject DataService _dataService
 @inject DialogService _dialogService
 @inject NotificationService _notificationService
 
@@ -16,7 +15,7 @@
 			<h3>1. Select a data type</h3>
 			<div class="d-flex justify-content-center">
 				<RadzenListBox
-					Data="@ReflectionHelper.GetDisplayDetailsFromFileWrapperTypes(_dataService.AvailableFileWrappers[Company].Values)"
+					Data="@ReflectionHelper.GetDisplayDetailsFromFileWrapperTypes(CompanyConfigs.AvailableFileWrappers[Company].Values)"
 					TextProperty="@nameof(FileWrapperTypeDisplayDetails.Title)"
 					@bind-Value="@_fileWrapperDisplayDetails"
 					TValue="FileWrapperTypeDisplayDetails"

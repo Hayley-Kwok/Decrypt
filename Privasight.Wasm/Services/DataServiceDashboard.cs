@@ -1,4 +1,5 @@
 ﻿using Privasight.Model.Shared.DataStructures.Dashboard;
+using Privasight.Wasm.Configs;
 
 namespace Privasight.Wasm.Services
 {

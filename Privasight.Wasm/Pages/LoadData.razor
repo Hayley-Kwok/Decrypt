@@ -1,6 +1,7 @@
 ﻿@page "/{UrlCompany}/loaddata"
 @using Privasight.Wasm.Services
 @using Privasight.Wasm.UI
+@using Privasight.Wasm.Configs
 
 @inject DataService _dataService
 @inject DialogService _dialogService
@@ -39,7 +40,7 @@
 		_dataService.DataLoadingStatus = "Loading ...";
 		try
 		{
-			var (newData, generationDate) = await DataLoadInHelper.TransformJsonToObj(e, _dataService.AvailableFileWrappers[_company]);
+			var (newData, generationDate) = await DataLoadInHelper.TransformJsonToObj(e, CompanyConfigs.AvailableFileWrappers[_company]);
 			DataLoadInHelper.AddGenerationDate(newData, generationDate);
 
 			await _dataService.UpdateCompanyAvailableData(_company, newData);
@@ -66,7 +67,7 @@
 	
 	RenderFragment DataDownloadInfoFragment => builder =>
 	{
-		builder.OpenComponent(1, _dataService.DataDownloadInfo[_company]);
+		builder.OpenComponent(1, CompanyConfigs.DataDownloadInfo[_company]);
 		builder.CloseComponent();
 	};
 }

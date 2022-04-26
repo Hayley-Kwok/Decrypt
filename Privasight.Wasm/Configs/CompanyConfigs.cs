@@ -1,16 +1,16 @@
 ﻿using Privasight.Model.Facebook;
 using Privasight.Wasm.Pages;
 
-namespace Privasight.Wasm.Services
+namespace Privasight.Wasm.Configs
 {
-    public partial class DataService
+    public static class CompanyConfigs
     {
-        public Dictionary<AvailableCompany, Dictionary<string, Type>> AvailableFileWrappers => new()
+        public static Dictionary<AvailableCompany, Dictionary<string, Type>> AvailableFileWrappers => new()
         {
             { AvailableCompany.Facebook, FbConfig.AvailableFileWrappers }
         };
 
-        public Dictionary<AvailableCompany, Type> DataDownloadInfo => new()
+        public static Dictionary<AvailableCompany, Type> DataDownloadInfo => new()
         {
             { AvailableCompany.Facebook, typeof(FBDownloadInstruction) }
         };

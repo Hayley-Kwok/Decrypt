@@ -2,9 +2,13 @@
 using System.Runtime.CompilerServices;
 using Blazored.LocalStorage;
 using Privasight.Model.Shared.DataStructures.Interfaces;
+using Privasight.Wasm.Configs;
 
 namespace Privasight.Wasm.Services;
 
+/// <summary>
+/// Service used to communicate with the local storage and store 
+/// </summary>
 public partial class DataService : INotifyPropertyChanged
 {
     private readonly ILocalStorageService _localStorage;

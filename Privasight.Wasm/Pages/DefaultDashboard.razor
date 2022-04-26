@@ -6,6 +6,7 @@
 @using Privasight.Wasm.Services
 @using Privasight.Model.Shared.DataStructures
 @using Privasight.Model.Shared.Helpers
+@using Privasight.Wasm.Configs
 
 @inject DataService _dataService
 
@@ -32,7 +33,7 @@
 	{
 		var cardSettings = new HashSet<CardSetting>();
 
-		foreach (var fileWrapperType in _dataService.AvailableFileWrappers[_company].Values)
+		foreach (var fileWrapperType in CompanyConfigs.AvailableFileWrappers[_company].Values)
 		{
 			CardSetting? card = null;
 

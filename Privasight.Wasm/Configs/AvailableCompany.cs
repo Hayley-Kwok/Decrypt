@@ -1,4 +1,4 @@
-﻿namespace Privasight.Wasm.Services
+﻿namespace Privasight.Wasm.Configs
 {
     public enum AvailableCompany
     {
