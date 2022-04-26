@@ -2,7 +2,7 @@
 @using Privasight.Model.Shared.DataStructures.Dashboard
 @using Privasight.Wasm.Configs
 
-@inject DataService _dataService
+@inject DashboardService _dashboardService
 @inject DialogService _dialogService
 
 @if (ExistingDashboardSetting == null)
@@ -76,10 +76,10 @@ else
 
 	private void OnDashboardNameChange(string name)
 	{
-		if (_dataService.ExistingDashboardNames != null && 
-		    _dataService.ExistingDashboardNames.ContainsKey(Company))
+		if (_dashboardService.ExistingDashboardNames != null && 
+		    _dashboardService.ExistingDashboardNames.ContainsKey(Company))
 		{
-			var existingTitles = new List<string>(_dataService.ExistingDashboardNames[Company]);
+			var existingTitles = new List<string>(_dashboardService.ExistingDashboardNames[Company]);
 			if (ExistingDashboardSetting != null)
 			{
 				existingTitles.Remove(ExistingDashboardSetting.Name);
@@ -99,11 +99,11 @@ else
 		var newDashboard = new DashboardSetting(_cardSettings, _dashboardName);
 		if (ExistingDashboardSetting == null)
 		{
-			await _dataService.UpdateDashboardSettings(Company, newDashboard, DataService.UpdateAction.Add);
+			await _dashboardService.UpdateDashboardSettings(Company, newDashboard, DashboardService.UpdateAction.Add);
 		}
 		else
 		{
-			await _dataService.UpdateDashboardSettings(Company, newDashboard, DataService.UpdateAction.Update, ExistingDashboardSetting);
+			await _dashboardService.UpdateDashboardSettings(Company, newDashboard, DashboardService.UpdateAction.Update, ExistingDashboardSetting);
 		}
 
 		await OnCreateButtonClick.InvokeAsync();

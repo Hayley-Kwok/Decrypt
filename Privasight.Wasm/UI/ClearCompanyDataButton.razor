@@ -1,7 +1,7 @@
 ﻿@using Privasight.Wasm.Services
 @using Privasight.Wasm.Configs
 
-@inject DataService _dataService
+@inject CompanyDataService _companyDataService
 @inject NotificationService _notificationService
 
 <RadzenButton class="@Class"
@@ -18,7 +18,7 @@
 
 	public async Task RemoveData()
 	{
-		await _dataService.RemoveCompanyData(Company);
+		await _companyDataService.RemoveAvailableData(Company);
 		_notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = $"{Company} Data Removed Successfully", Duration = 4000 });
 	}
 }

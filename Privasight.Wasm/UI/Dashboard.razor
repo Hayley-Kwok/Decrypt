@@ -13,7 +13,7 @@
 @implements IDisposable
 
 @inject DialogService _dialogService
-@inject DataService _dataService
+@inject CompanyDataService _companyDataService
 
 <div class="d-flex justify-content-between">
 	<div>
@@ -26,9 +26,9 @@
 <div class="row">
 	@foreach (var (fileWrapperTitle,fileWrapperTypeName, dialogType, cardType) in Setting.CardSettings)
 	{
-		if (_dataService.CompanyAvailableData != null &&
-			_dataService.CompanyAvailableData.ContainsKey(Company) &&
-			_dataService.CompanyAvailableData[Company].TryGetValue(fileWrapperTypeName, out var data))
+		if (_companyDataService.AvailableData != null &&
+			_companyDataService.AvailableData.ContainsKey(Company) &&
+			_companyDataService.AvailableData[Company].TryGetValue(fileWrapperTypeName, out var data))
 		{
 			if (data is ISingleItemListFile singleItemList)
 			{
@@ -73,14 +73,14 @@
 		builder.CloseComponent();
 	};
 
-	public void Dispose() => _dataService.PropertyChanged -= PropertyHasChanged;
+	public void Dispose() => _companyDataService.PropertyChanged -= PropertyHasChanged;
 
 	protected override async Task OnInitializedAsync()
 	{
-		_dataService.PropertyChanged += PropertyHasChanged;
-		if (_dataService.CompanyAvailableData == null)
+		_companyDataService.PropertyChanged += PropertyHasChanged;
+		if (_companyDataService.AvailableData == null)
 		{
-			await _dataService.SetCompanyAvailableDataFromStorage();
+			await _companyDataService.SetAvailableDataFromStorage();
 		}
 	}
 

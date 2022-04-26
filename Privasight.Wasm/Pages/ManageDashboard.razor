@@ -8,7 +8,7 @@
 
 @implements IDisposable
 
-@inject DataService _dataService
+@inject DashboardService _dashboardService
 
 <PageTitle>Manage Dashboards | Privasight</PageTitle>
 
@@ -18,7 +18,7 @@
 <div class="row">
 	<div class="col-md-8">
 		<RadzenListBox @bind-Value=@_chosenDashboard
-		               Data="@_dataService.DashboardSettings?[_company]"
+		               Data="@_dashboardService.DashboardSettings?[_company]"
 		               TextProperty="@nameof(DashboardSetting.Name)"
 		               Class="w-100 h-100 text-center"
 		               Style="min-height: 100px; max-height: 200px;"
@@ -48,26 +48,26 @@
 	[Parameter]
 	public string UrlCompany { get; set; } = "";
 
-	public void Dispose() => _dataService.PropertyChanged -= PropertyHasChanged;
+	public void Dispose() => _dashboardService.PropertyChanged -= PropertyHasChanged;
 
 	protected override async Task OnInitializedAsync()
 	{
 		_company = Enum.Parse<AvailableCompany>(UrlCompany);
-		_dataService.PropertyChanged += PropertyHasChanged;
-		if (_dataService.DashboardSettings == null)
+		_dashboardService.PropertyChanged += PropertyHasChanged;
+		if (_dashboardService.DashboardSettings == null)
 		{
-			await _dataService.SetDashboardSettingsFromStorage();
+			await _dashboardService.SetDashboardSettingsFromStorage();
 		}
 
-		if (!_dataService.DashboardSettings!.ContainsKey(_company))
+		if (!_dashboardService.DashboardSettings!.ContainsKey(_company))
 		{
-			_dataService.DashboardSettings.Add(_company, new List<DashboardSetting>());
+			_dashboardService.DashboardSettings.Add(_company, new List<DashboardSetting>());
 		}
 	}
 
 	private void PropertyHasChanged(object? sender, PropertyChangedEventArgs args)
 	{
-		if (args.PropertyName == nameof(_dataService.DashboardSettings))
+		if (args.PropertyName == nameof(_dashboardService.DashboardSettings))
 		{
 			StateHasChanged();
 		}
@@ -92,7 +92,7 @@
 
 	private async Task OnDeleteDashboardBtnClick()
 	{
-		await _dataService.UpdateDashboardSettings(_company, _chosenDashboard, DataService.UpdateAction.Delete);
+		await _dashboardService.UpdateDashboardSettings(_company, _chosenDashboard, DashboardService.UpdateAction.Delete);
 
 		_chosenDashboard = null;
 		_showEditDashboard = false;

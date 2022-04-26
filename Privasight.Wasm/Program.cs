@@ -24,7 +24,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 builder.Services.AddScoped<DialogService>();
 builder.Services.AddScoped<NotificationService>();
-builder.Services.AddScoped<DataService>();
+builder.Services.AddScoped<CompanyDataService>();
+builder.Services.AddScoped<DashboardService>();
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.Replace(ServiceDescriptor.Scoped<IJsonSerializer, NewtonSoftJsonSerializer>());
 

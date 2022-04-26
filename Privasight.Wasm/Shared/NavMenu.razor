@@ -4,7 +4,7 @@
 
 @implements IDisposable
 
-@inject DataService _dataService
+@inject DashboardService _dashboardService
 
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
@@ -25,14 +25,14 @@
 					<RadzenPanelMenuItem Text="Load in Data" Path="@($"{company}/loadData")" Icon="backup"/>
 					<RadzenPanelMenuItem Text="Manage Dashboards" Path="@($"{company}/manageDashboards")" Icon="build"/>
 					<RadzenPanelMenuItem Text="All Available Data" Path="@($"{company}/dashboards/default")" Icon="assessment"/>
-					@if (_dataService.DashboardSettings != null && 
-					     _dataService.DashboardSettings.ContainsKey(company) &&
-					     _dataService.DashboardSettings[company].Count != 0)
+					@if (_dashboardService.DashboardSettings != null && 
+					     _dashboardService.DashboardSettings.ContainsKey(company) &&
+					     _dashboardService.DashboardSettings[company].Count != 0)
 					{
 						<RadzenPanelMenuItem Text="Custom Dashboards" Icon="account_circle">
-							@for (var i = 0; i < _dataService.DashboardSettings[company].Count; i++)
+							@for (var i = 0; i < _dashboardService.DashboardSettings[company].Count; i++)
 							{
-								<RadzenPanelMenuItem Text="@_dataService.DashboardSettings[company][i].Name" Path="@($"{company}/dashboards/{i}")"/>
+								<RadzenPanelMenuItem Text="@_dashboardService.DashboardSettings[company][i].Name" Path="@($"{company}/dashboards/{i}")"/>
 							}
 						</RadzenPanelMenuItem>
 					}
@@ -52,20 +52,20 @@
         _collapseNavMenu = !_collapseNavMenu;
     }
 
-	public void Dispose() => _dataService.PropertyChanged -= PropertyHasChanged;
+	public void Dispose() => _dashboardService.PropertyChanged -= PropertyHasChanged;
 
 	protected override async Task OnInitializedAsync()
 	{
-		_dataService.PropertyChanged += PropertyHasChanged;
-		if (_dataService.DashboardSettings == null)
+		_dashboardService.PropertyChanged += PropertyHasChanged;
+		if (_dashboardService.DashboardSettings == null)
 		{
-			await _dataService.SetDashboardSettingsFromStorage();
+			await _dashboardService.SetDashboardSettingsFromStorage();
 		}
 	}
 
 	private void PropertyHasChanged(object? sender, PropertyChangedEventArgs args)
 	{
-		if (args.PropertyName == nameof(_dataService.DashboardSettings))
+		if (args.PropertyName == nameof(_dashboardService.DashboardSettings))
 		{
 			StateHasChanged();
 		}

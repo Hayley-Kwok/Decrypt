@@ -3,7 +3,7 @@
 @using Privasight.Wasm.UI
 @using Privasight.Wasm.Configs
 
-@inject DataService _dataService
+@inject CompanyDataService _companyDataService
 @inject DialogService _dialogService
 @inject NotificationService _notificationService
 
@@ -11,11 +11,11 @@
 
 <h1>Load in zip files</h1>
 <div class="my-3">
-	<InputFile label="file_upload" title="file_upload" OnChange="@LoadFiles" accept=".zip" disabled="@_dataService.LoadingData"/>
+	<InputFile label="file_upload" title="file_upload" OnChange="@LoadFiles" accept=".zip" disabled="@_companyDataService.LoadingData"/>
 </div>
-@if (!string.IsNullOrWhiteSpace(_dataService.DataLoadingStatus))
+@if (!string.IsNullOrWhiteSpace(_companyDataService.DataLoadingStatus))
 {
-	<div>Data loading Status: @_dataService.DataLoadingStatus</div>
+	<div>Data loading Status: @_companyDataService.DataLoadingStatus</div>
 }
 
 <div class="my-3 d-flex flex-column flex-lg-row">
@@ -36,31 +36,31 @@
 
 	private async Task LoadFiles(InputFileChangeEventArgs e)
 	{
-		_dataService.LoadingData = true;
-		_dataService.DataLoadingStatus = "Loading ...";
+		_companyDataService.LoadingData = true;
+		_companyDataService.DataLoadingStatus = "Loading ...";
 		try
 		{
 			var (newData, generationDate) = await DataLoadInHelper.TransformJsonToObj(e, CompanyConfigs.AvailableFileWrappers[_company]);
 			DataLoadInHelper.AddGenerationDate(newData, generationDate);
 
-			await _dataService.UpdateCompanyAvailableData(_company, newData);
-			_dataService.DataLoadingStatus = "loading finished";
+			await _companyDataService.UpdateAvailableData(_company, newData);
+			_companyDataService.DataLoadingStatus = "loading finished";
 			_notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Data loaded in successfully", Duration = 4000 });
 		}
 		catch (Exception ex)
 		{
 			Console.WriteLine(ex.Message);
-			_dataService.DataLoadingStatus = "The file is too large. The file size limit is 512 MB.";
+			_companyDataService.DataLoadingStatus = "The file is too large. The file size limit is 512 MB.";
 			_notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Data loading failed", Detail = "The file is too large. The file size limit is 512 MB.",Duration = 4000 });
 		}
-		_dataService.LoadingData = false;
+		_companyDataService.LoadingData = false;
 		StateHasChanged();
 	}
 
 	public async Task OpenInfoDialog()
 	{
 		await _dialogService.OpenAsync($"How to download your {UrlCompany} Data",
-			ds => DataDownloadInfoFragment,
+			_ => DataDownloadInfoFragment,
 			new DialogOptions { Width = "95%", Height = "95%", Resizable = true });
 	}
 

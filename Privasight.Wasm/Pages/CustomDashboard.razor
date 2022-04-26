@@ -5,7 +5,7 @@
 @using Privasight.Wasm.Services
 @using Privasight.Wasm.UI
 
-@inject DataService _dataService
+@inject DashboardService _dashboardService
 
 <PageTitle>@_dashboardSetting?.Name | Privasight</PageTitle>
 
@@ -26,15 +26,15 @@
 
 	protected override void OnParametersSet()
 	{
-		_dashboardSetting = _dataService.DashboardSettings?[_company][Id];
+		_dashboardSetting = _dashboardService.DashboardSettings?[_company][Id];
 	}
 
 	protected override async Task OnInitializedAsync()
 	{
 		_company = Enum.Parse<AvailableCompany>(UrlCompany);
-		if (_dataService.DashboardSettings == null)
+		if (_dashboardService.DashboardSettings == null)
 		{
-			await _dataService.SetDashboardSettingsFromStorage();
+			await _dashboardService.SetDashboardSettingsFromStorage();
 		}
 	}
 }
