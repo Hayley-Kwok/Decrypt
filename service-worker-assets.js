@@ -133,7 +133,7 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-K1YvjJ\/O1ScIbzAbBN4Fe2Ae\/Zw+ynsW+x6\/suPdIDc=",
+      "hash": "sha256-qsuwppWgXaMiQOLiNuzqbdpcGSkEE6OTAYwDlJT+wp0=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -213,15 +213,15 @@
       "url": "_framework\/Newtonsoft.Json.dll"
     },
     {
-      "hash": "sha256-f+aFQhXtjGv2H\/5RrLk9XT4kneQRB0J7C92agO2z4Ew=",
+      "hash": "sha256-o3dETThgQ3n48nfZt0NzMrz4Qe5I7adJwTW0p2jFV+s=",
       "url": "_framework\/Privasight.Model.Facebook.dll"
     },
     {
-      "hash": "sha256-nxGozULlRX2QsNVwY0BjgWaJMPpbna68sQsMT98HqPg=",
+      "hash": "sha256-u7vkkc69d50mbrT9YhD7R8nvXoyl3GyVcymH0QoAlYY=",
       "url": "_framework\/Privasight.Model.Shared.dll"
     },
     {
-      "hash": "sha256-W1usrKWVvMSvR9l7YICXhY6MN9t6\/223TVtz1zamfO4=",
+      "hash": "sha256-bcVZnHQ3d4Y1t47LDW6QR8FP+Ft9BD6sni8Fa8SdyU4=",
       "url": "_framework\/Privasight.Wasm.dll"
     },
     {
@@ -525,5 +525,5 @@
       "url": "_content\/Radzen.Blazor\/Radzen.Blazor.js"
     }
   ],
-  "version": "hP0fjZ\/4"
+  "version": "eS5zcTno"
 };
