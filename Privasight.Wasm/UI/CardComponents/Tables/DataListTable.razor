@@ -44,8 +44,9 @@
 	}
 </style>
 @code {
-	[Parameter]
-	public IEnumerable<TItem>? Items { get; set; }
+	[Parameter, EditorRequired]
+	public IEnumerable<TItem> Items { get; set; } = null!;
+
 	[Parameter]
 	public string Description { get; set; } = "";
 }

@@ -27,13 +27,14 @@
 	<div class="col-md-4">
 		<RadzenButton ButtonStyle="ButtonStyle.Success" Text="Create New Dashboard" Click="OnNewDashboardBtnClick"/>
 		<br/><br/>
-		<RadzenButton ButtonStyle="ButtonStyle.Danger" Text="Delete Dashboard" Click="OnDeleteDashboardBtnClick"/>
+		<RadzenButton ButtonStyle="ButtonStyle.Danger" Text="Delete Dashboard"
+		              Disabled="_chosenDashboard == null" Click="OnDeleteDashboardBtnClick"/>
 	</div>
 </div>
 @if (_showEditDashboard)
 {
 	<div class="my-3">
-		<EditDashboard 
+		<EditDashboard
 			ExistingDashboardSetting="_chosenDashboard"
 			OnCreateButtonClick="OnDashboardEditFinished"
 			Company="_company"/>
@@ -42,9 +43,9 @@
 
 @code {
 	private bool _showEditDashboard;
-	private DashboardSetting? _chosenDashboard = new(new HashSet<CardSetting>());
-
+	private DashboardSetting? _chosenDashboard;
 	private AvailableCompany _company;
+
 	[Parameter]
 	public string UrlCompany { get; set; } = "";
 
@@ -92,9 +93,10 @@
 
 	private async Task OnDeleteDashboardBtnClick()
 	{
-		await _dashboardService.UpdateDashboardSettings(_company, _chosenDashboard, DashboardService.UpdateAction.Delete);
+		await _dashboardService.UpdateDashboardSettings(_company, _chosenDashboard!, DashboardService.UpdateAction.Delete);
 
 		_chosenDashboard = null;
 		_showEditDashboard = false;
 	}
+
 }
