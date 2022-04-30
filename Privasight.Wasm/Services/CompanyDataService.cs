@@ -1,4 +1,5 @@
 ﻿using Blazored.LocalStorage;
+using Microsoft.JSInterop;
 using Privasight.Model.Shared.DataStructures.Interfaces;
 using Privasight.Wasm.Configs;
 
@@ -9,6 +10,7 @@ namespace Privasight.Wasm.Services;
 /// </summary>
 public class CompanyDataService : ServiceUsingLocalStorage
 {
+    private readonly IJSRuntime _js;
     public string DataLoadingStatus { get; set; } = "";
     public bool LoadingData { get; set; }
 
@@ -30,8 +32,9 @@ public class CompanyDataService : ServiceUsingLocalStorage
         }
     }
 
-    public CompanyDataService(ILocalStorageService localStorage) : base(localStorage)
+    public CompanyDataService(ILocalStorageService localStorage, IJSRuntime js) : base(localStorage)
     {
+        _js = js;
     }
 
     public async Task UpdateAvailableData(AvailableCompany company, Dictionary<string, IFileWrapper> newData)
@@ -77,6 +80,7 @@ public class CompanyDataService : ServiceUsingLocalStorage
 
     public async Task SetAvailableDataFromStorage()
     {
+        await _js.InvokeVoidAsync("test");
         var storageData =
             await LocalStorage.GetItemAsync<Dictionary<AvailableCompany, Dictionary<string, IFileWrapper>>>(
                 nameof(AvailableData));
