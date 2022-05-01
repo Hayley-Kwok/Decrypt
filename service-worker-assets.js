@@ -97,7 +97,7 @@
       "url": "index.html"
     },
     {
-      "hash": "sha256-IYrW7lZmLkXuGcQSlBDdLN7RqaQYm5JJqKRKJY2Y6gs=",
+      "hash": "sha256-Ph0vQKx1ztoanrEx1QQsSztFTF1CmV1wfXduZolRMRs=",
       "url": "js\/encrypt.js"
     },
     {
@@ -137,12 +137,8 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-9x6Hx3jaq02jCB2JIJaNrVmiKNUwOhbuyD6QiGShBuE=",
+      "hash": "sha256-aI6U+TGty3WktMXeCcsT8MPVikUBC9fUcWJfyUXzvbE=",
       "url": "_framework\/blazor.boot.json"
-    },
-    {
-      "hash": "sha256-6RRoYeDP3d0xabXmcCMF66wXeJlXVPem28Trs8sQiis=",
-      "url": "_framework\/Blazored.LocalStorage.dll"
     },
     {
       "hash": "sha256-Yq9qQP+04t\/zWXM3tdT+XFJRhKwzlK+nzQCMLUWHRTw=",
@@ -177,7 +173,7 @@
       "url": "_framework\/Microsoft.Extensions.Configuration.Json.dll"
     },
     {
-      "hash": "sha256-syLdWOpRMP0CiODYJFruwNz5c1Hs\/MEonc0FBqVC+rI=",
+      "hash": "sha256-m2\/xzSOctwuYomJR22rmVjlvFqUol\/l5srcKrwiBNnE=",
       "url": "_framework\/Microsoft.Extensions.DependencyInjection.Abstractions.dll"
     },
     {
@@ -193,7 +189,7 @@
       "url": "_framework\/Microsoft.Extensions.Logging.dll"
     },
     {
-      "hash": "sha256-1tB1TdOK1QaMSk7+PPe5sikuuMC9hs8bkujWqFMdAx4=",
+      "hash": "sha256-eZmnmowgP5leOxVRX6H1YZim4pQMB8QipOnBJ2aowWU=",
       "url": "_framework\/Microsoft.Extensions.Options.dll"
     },
     {
@@ -201,7 +197,7 @@
       "url": "_framework\/Microsoft.Extensions.Primitives.dll"
     },
     {
-      "hash": "sha256-a5XuSTMbMQogaKrLyvBfmnJ8uk7tNxTSpcJyB7dqq4E=",
+      "hash": "sha256-g39peN14Yc9+GZ4FwKiZ2+oGNdKXEfNEdQ2+rnIidds=",
       "url": "_framework\/Microsoft.JSInterop.dll"
     },
     {
@@ -225,7 +221,7 @@
       "url": "_framework\/Privasight.Model.Shared.dll"
     },
     {
-      "hash": "sha256-4mrBUrcY20+yrcE1MnGBDar5bDESoTmIk6RHBGbqOqw=",
+      "hash": "sha256-LIZoEEek8FkGuCHC8q5+S7CYYZ2cknGkm4sI+b933ss=",
       "url": "_framework\/Privasight.Wasm.dll"
     },
     {
@@ -329,7 +325,7 @@
       "url": "_framework\/System.ObjectModel.dll"
     },
     {
-      "hash": "sha256-mZGCfNZiqsRm4ljESpzBu7QvQn3lXpKNFgGcrl1+lFQ=",
+      "hash": "sha256-99fSUM5mEa5IDHFAMvD0248QhmP7IW\/\/iguppIkODuI=",
       "url": "_framework\/System.Private.CoreLib.dll"
     },
     {
@@ -365,7 +361,7 @@
       "url": "_framework\/System.Runtime.CompilerServices.Unsafe.dll"
     },
     {
-      "hash": "sha256-G9Lk+Gfc49UCeQ1HLjs9LKGO6bmUTcn50xEf6AX5VN4=",
+      "hash": "sha256-d2T7uS\/VTnYZ3B4SfRbmvHwJq5hnOZud5Cdq5TfgvsA=",
       "url": "_framework\/System.Runtime.dll"
     },
     {
@@ -529,5 +525,5 @@
       "url": "_content\/Radzen.Blazor\/Radzen.Blazor.js"
     }
   ],
-  "version": "9ez2bRN\/"
+  "version": "lxYmUQ7p"
 };
