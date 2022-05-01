@@ -7,15 +7,10 @@ using System.Globalization;
 using Blazored.LocalStorage;
 using Blazored.LocalStorage.Serialization;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Newtonsoft.Json;
 using Privasight.Wasm.Data;
 
 CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("en-GB");
 CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-GB");
-JsonConvert.DefaultSettings = () => new JsonSerializerSettings()
-{
-    TypeNameHandling = TypeNameHandling.Auto
-};
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
