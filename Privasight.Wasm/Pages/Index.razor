@@ -3,28 +3,45 @@
 <h1>Welcome to Privasight - An insight into Your Privacy</h1>
 <br/>
 <h3>What is Privasight?</h3>
-<b>We aim to help you make the first step of gaining back the control of your own data</b> <br/>
-<p>Privasight aims to allow anyone to understand their copy of data returned by different social media companies. 
-	With the right of access protected by the GDPR, users can request a copy of their data from companies. 
-	But the data returned by these companies are usually in various data format and sometimes even incorrectly encoded.<br/>
+<b>We aim to assist you to make the first step toward gaining back the control of your data.</b> <br/>
+<p>Privasight aims to allow anyone to understand their copy of data returned by different companies. 
+	With the right of access protected by the GDPR, users can request a copy of their data. 
+	But the returned data are usually in various data formats and sometimes even incorrectly encoded.<br/>
 	Privasight aims to remove the technical barrier for everyone and ease the understanding and analysis of their data.
 </p>
 <h3>How does it all work?</h3>
 <ol>
 	<li>You request the data from the company and download the data from them.</li>
-	<li>You upload the data to Privasight and TADA you can see the data with a lovely predefined dashboard.</li>
-	<li>You can also create your own dashboard and view your data in whatever way you want.</li>
+	<li>You upload the data to Privasight and TADA you can see the data with a lovely predefined dashboard on the "All Available Data" tab.</li>
+	<li>If you upload data generated on different dates, you can see the trend of the data.</li>
+	<li>You can also create your own dashboard on the "Manage Dashboards" tab and view your data in whatever way you want.</li>
 </ol>
-<br/>
-<h3>How Privasight handle your data?</h3>
+An example of the dashboard with data generated on different dates: <br/>
+<img class="w-75 h-auto my-3" src="img/dashboard-example.PNG" alt="dashboard example"/>
+<h3>How does Privasight handle your data?</h3>
 <p>
-	<b>WE DON'T STORE YOUR DATA</b>
-	We are not interested in storing any of your data. All of your data never leave your device. 
-	<br/>
-	<h6><code>Information for nerds: How is this even possible in technical terms?</code></h6>
-	Privasight is a client-side web app built with .NET Blazor WebAssembly. This means all operations are performed
+	<b>WE DON'T KEEP A COPY OF YOUR DATA!  </b>
+	All of your data never leaves your device. All data processes and storage stay within your device.
+	<h6><code>How is this even possible in technical terms?</code></h6>
+	Privasight is a client-side web app built with .NET Blazor WebAssembly. This means that all operations are performed
 	within your browser without the need of sending data and requests back and forth to a server. This is in fact a static website.
-	<b>Your data never leave your browser!</b> <br/>
-	@* todo need more information for local storage*@
-	In terms of data storage, we make use of localstorage of browser so that your data won't be lost after a refresh and you can still see them the next time you visit us.
+	<b>Your data never leaves your browser!</b><br/>
+	In terms of data storage, we make use of 
+	<a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API" target="_blank" class="text-decoration-underline">indexedDb</a> 
+	of the browser so that your data won't be lost after a refresh and 
+	you can still see them the next time you visit us. This also allows you to compare data from different generation dates easily.
+</p>
+<h3>What does Privasight do to keep your data safe?</h3>
+<p>
+	Other than storing your data only on your device, we also apply encryption to protect your data. When you load in your data, Privasight 
+	will ask you for a password which has to be at least 16 characters long for the encryption. No one will be able to decrypt the data without the 
+	password.
+	<h6><code>How does it work in a technical sense?</code></h6>
+	We used <a href="https://en.wikipedia.org/wiki/PBKDF2" target="_blank" class="text-decoration-underline">PBKDF2</a> to derive a key 
+	from your password. We will ask for the password when you try to load data in or view the data at the first time of every session (every 
+	refresh/revisit of the site). Data won't be encrypted/decrypted properly if the password doesn't match the previous one. 
+	It is important for you to remember the password when you create it because there is no way for us to recover it.
+	<br/>
+	After generating the key, we will use it to encrypt the data with 
+	<a href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard" target="_blank" class="text-decoration-underline">AES</a>-128-<a href="https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher_block_chaining_(CBC)" target="_blank" class="text-decoration-underline">CBC</a>.
 </p>

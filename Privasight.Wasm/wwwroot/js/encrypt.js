@@ -131,7 +131,7 @@ async function generateKey() {
     let passphrase;
 
     const message = newPassword
-        ? "Create Password(at least 16 characters long)"
+        ? "Create Password (at least 16 characters long)"
         : "Enter your password (at least 16 characters long)";
 
     do {
