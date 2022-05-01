@@ -45,14 +45,22 @@
 
 			await _companyDataService.UpdateAvailableData(_company, newData);
 			_companyDataService.DataLoadingStatus = "loading finished";
-			_notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Data loaded in successfully", Duration = 4000 });
+			_notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Success, Summary = "Data loaded in successfully", 
+				Duration = 4000 });
 		}
 		catch (Exception ex)
 		{
-			Console.WriteLine(ex.Message);
-			_companyDataService.DataLoadingStatus = "The file is too large. The file size limit is 512 MB.";
-			_notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, Summary = "Data loading failed", Detail = "The file is too large. The file size limit is 512 MB.",Duration = 4000 });
+			var message = "An error occurred. Please refresh and try again.";
+			if (ex is IOException)
+			{
+				message = "The file is too large. The file size limit is 512 MB.";
+			}
+			_companyDataService.DataLoadingStatus = message;
+			_notificationService.Notify(new NotificationMessage { Severity = NotificationSeverity.Error, 
+				Summary = "Failed to load in the data", 
+				Detail = message, Duration = 4000 });
 		}
+
 		_companyDataService.LoadingData = false;
 		StateHasChanged();
 	}

@@ -78,6 +78,11 @@ public class CompanyDataService : ServiceUsingIndexedDb
     public async Task SetAvailableDataFromStorage()
     {
         var dataStr = await JsRuntime.InvokeAsync<string>("getCompanyData");
+        if (dataStr == "error")
+        {
+            return;
+        }
+
         if (string.IsNullOrWhiteSpace(dataStr))
         {
             AvailableData = new Dictionary<AvailableCompany, Dictionary<string, IFileWrapper>>();
