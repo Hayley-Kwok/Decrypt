@@ -1,6 +1,7 @@
-﻿//referenced https://coolaj86.com/articles/webcrypto-encrypt-and-decrypt-with-aes/ & 
+﻿//referenced https://coolaj86.com/articles/webcrypto-encrypt-and-decrypt-with-aes/ &
 // https://medium.com/perimeterx/fun-times-with-webcrypto-part-2-encrypting-decrypting-dfb9fadba5bc
 
+const idbPromise = import("https://cdn.jsdelivr.net/npm/idb-keyval@6/+esm");
 const utf8Encoder = new TextEncoder("utf-8");
 const utf8decoder = new TextDecoder("utf-8");
 const crypto = window.crypto;
@@ -8,6 +9,7 @@ const ivLen = 16; // the IV is always 16 bytes
 const aesName = "AES-CBC";
 let rawKey;
 let encryptedMessage;
+let idb;
 
 function deriveKey(saltBuf, passphrase) {
     const keyLenBits = 128;
@@ -97,24 +99,75 @@ function decrypt(buf, key) {
     });
 }
 
-async function test() {
-    await generateKey();
-    const message = await encryptText("privasight");
-    console.log(message);
-    const decryptedBuff = await decryptText(message);
+async function getIdb() {
+    if (idb === undefined) {
+        idb = await idbPromise;
+    }
+}
+
+async function setCompanyData() {
+    const keyGenerated = await generateKey();
+    if (!keyGenerated) {
+        return;
+    }
+
+    const encryptedBuff = await encryptText("privasight");
+
+    await getIdb();
+    
+    await idb.set("companyData", encryptedBuff);
+    console.log(encryptedBuff);
+}
+ 
+async function getCompanyData() {
+    const keyGenerated = await generateKey();
+    if (!keyGenerated) {
+        return;
+    }
+    await getIdb();
+    const encryptedBuff = await idb.get("companyData");
+    console.log(encryptedBuff);
+    const decryptedBuff = await decryptText(encryptedBuff);
     console.log(utf8decoder.decode(decryptedBuff));
 }
 
 async function generateKey() {
-    //todo save the saltBuf to indexedDb
-    let saltBuf = new Uint8Array(ivLen);
-    crypto.getRandomValues(saltBuf);
-    //todo check if it is 16 characters long
-    const passphrase = prompt("Enter Password");
+    if (typeof rawKey !== "undefined") {
+        return true;
+    }
+
+    await getIdb();
+    let saltBuf;
+    const saltFromStorage = await idb.get("salt");
+
+    if (saltFromStorage === undefined) {
+        saltBuf = new Uint8Array(ivLen);
+        crypto.getRandomValues(saltBuf);
+        await idb.set("salt", saltBuf);
+    } else {
+        saltBuf = saltFromStorage;
+    }
+
+    let passhphraseValidated = false;
+    let passphrase = "";
+    let triedTimes = 0;
+    while (!passhphraseValidated && triedTimes < 5) {
+        passphrase = prompt("Enter Password (at least 16 characters long");
+        if (passphrase.length > 15) {
+            passhphraseValidated = true;
+        }
+        triedTimes += 1;
+    }
+
+    if (triedTimes >= 5) {
+        window.alert("wrong password and ran out of attempts");
+        return false;
+    }
 
     await deriveKey(saltBuf, passphrase).then(function (aesKey) {
         rawKey = aesKey;
     });
+    return true;
 }
 
 async function encryptText(text) {

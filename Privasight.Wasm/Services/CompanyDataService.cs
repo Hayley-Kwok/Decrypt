@@ -80,7 +80,7 @@ public class CompanyDataService : ServiceUsingLocalStorage
 
     public async Task SetAvailableDataFromStorage()
     {
-        await _js.InvokeVoidAsync("test");
+        await _js.InvokeVoidAsync("getCompanyData");
         var storageData =
             await LocalStorage.GetItemAsync<Dictionary<AvailableCompany, Dictionary<string, IFileWrapper>>>(
                 nameof(AvailableData));
