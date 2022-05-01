@@ -12,6 +12,7 @@ const aesName = "AES-CBC";
 const companyDataKey = "companyData";
 const dashboardSettingsKey = "dashboardSettings";
 
+let pwTriedTimes = 0;
 let rawKey;
 let encryptedMessage;
 let idb;
@@ -19,7 +20,7 @@ let idb;
 function deriveKey(saltBuf, passphrase) {
     const keyLenBits = 128;
     const kdfName = "PBKDF2";
-    const iterations = 1000; 
+    const iterations = 1000;
     const hashName = "SHA-256";
 
     // First, create a PBKDF2 "key" containing the password
@@ -30,24 +31,24 @@ function deriveKey(saltBuf, passphrase) {
             false,
             ["deriveKey"]).
         // Derive a key from the password
-        then(function (passphraseKey) {
+        then(function(passphraseKey) {
             return crypto.subtle.deriveKey(
                 {
-                    "name": kdfName
-                    , "salt": saltBuf
-                    , "iterations": iterations
-                    , "hash": hashName
-                }
-                , passphraseKey
-                , { "name": aesName, "length": keyLenBits } // Key we want
-                , true                                      // Extractable
-                , ["encrypt", "decrypt"]                    // For new key
+                    "name": kdfName,
+                    "salt": saltBuf,
+                    "iterations": iterations,
+                    "hash": hashName
+                },
+                passphraseKey,
+                { "name": aesName, "length": keyLenBits } // Key we want
+                ,
+                true // Extractable
+                ,
+                ["encrypt", "decrypt"] // For new key
             );
-        }).
-        then(function (aesKey) {
+        }).then(function(aesKey) {
             return crypto.subtle.exportKey("raw", aesKey);
-        }).
-        catch(function (err) {
+        }).catch(function(err) {
             console.log(`Key derivation failed: ${err.message}`);
         });
 }
@@ -55,12 +56,14 @@ function deriveKey(saltBuf, passphrase) {
 
 function joinIvAndData(iv, data) {
     let buf = new Uint8Array(iv.length + data.length);
-    Array.prototype.forEach.call(iv, function (byte, i) {
-        buf[i] = byte;
-    });
-    Array.prototype.forEach.call(data, function (byte, i) {
-        buf[ivLen + i] = byte;
-    });
+    Array.prototype.forEach.call(iv,
+        function(byte, i) {
+            buf[i] = byte;
+        });
+    Array.prototype.forEach.call(data,
+        function(byte, i) {
+            buf[ivLen + i] = byte;
+        });
     return buf;
 }
 
@@ -70,10 +73,10 @@ async function encrypt(data, key) {
     crypto.getRandomValues(initializationVector);
 
     return crypto.subtle.encrypt(
-        { name: aesName, iv: initializationVector }
-        , key
-        , data
-    ).then(function (encrypted) {
+        { name: aesName, iv: initializationVector },
+        key,
+        data
+    ).then(function(encrypted) {
         return joinIvAndData(initializationVector, new Uint8Array(encrypted));
     });
 }
@@ -82,26 +85,29 @@ function separateIvFromData(buf) {
     let iv = new Uint8Array(ivLen);
     let data = new Uint8Array(buf.length - ivLen);
 
-    Array.prototype.forEach.call(buf, function (byte, i) {
-        if (i < ivLen) {
-            iv[i] = byte;
-        } else {
-            data[i - ivLen] = byte;
-        }
-    });
+    Array.prototype.forEach.call(buf,
+        function(byte, i) {
+            if (i < ivLen) {
+                iv[i] = byte;
+            } else {
+                data[i - ivLen] = byte;
+            }
+        });
     return { iv: iv, data: data };
 }
 
-function decrypt(buf, key) {
+async function decrypt(buf, key) {
     const parts = separateIvFromData(buf);
 
-    return crypto.subtle.decrypt(
-        { name: aesName, iv: parts.iv }
-        , key
-        , parts.data
-    ).then(function (decrypted) {
-        return decrypted;
-    });
+    try {
+        return await crypto.subtle.decrypt(
+            { name: aesName, iv: parts.iv },
+            key,
+            parts.data
+        );
+    } catch (e) {
+        throw e;
+    }
 }
 
 async function getIdb() {
@@ -116,10 +122,31 @@ async function generateKey() {
     }
 
     await getIdb();
-    let saltBuf;
+    let newPassword = false;
     const saltFromStorage = await idb.get("salt");
-
     if (saltFromStorage === undefined) {
+        newPassword = true;
+    }
+
+    let passphrase;
+
+    const message = newPassword
+        ? "Create Password(at least 16 characters long)"
+        : "Enter your password (at least 16 characters long)";
+
+    do {
+        passphrase = prompt(message);
+        pwTriedTimes += 1;
+    } while
+        (pwTriedTimes < 5 &&
+        (passphrase === undefined || passphrase === null || passphrase === "" || passphrase.length < 16));
+    if (pwTriedTimes >= 5) {
+        window.alert("wrong password and ran out of attempts");
+        return false;
+    }
+
+    let saltBuf;
+    if (newPassword) {
         saltBuf = new Uint8Array(ivLen);
         crypto.getRandomValues(saltBuf);
         await idb.set("salt", saltBuf);
@@ -127,23 +154,7 @@ async function generateKey() {
         saltBuf = saltFromStorage;
     }
 
-    let passhphraseValidated = false;
-    let passphrase = "";
-    let triedTimes = 0;
-    while (!passhphraseValidated && triedTimes < 5) {
-        passphrase = prompt("Enter Password (at least 16 characters long");
-        if (passphrase.length > 15) {
-            passhphraseValidated = true;
-        }
-        triedTimes += 1;
-    }
-
-    if (triedTimes >= 5) {
-        window.alert("wrong password and ran out of attempts");
-        return false;
-    }
-
-    await deriveKey(saltBuf, passphrase).then(function (aesKey) {
+    await deriveKey(saltBuf, passphrase).then(function(aesKey) {
         rawKey = aesKey;
     });
     return true;
@@ -158,8 +169,11 @@ async function encryptText(text) {
 
 async function decryptText(text) {
     const key = await crypto.subtle.importKey("raw", rawKey, aesName, true, ["decrypt"]);
-    const decryptStr = await decrypt(text, key);
-    return decryptStr;
+    try {
+        return await decrypt(text, key);
+    } catch (e) {
+        throw e;
+    }
 }
 
 
@@ -186,8 +200,14 @@ async function getCompanyData() {
     if (encryptedBuff === undefined) {
         return "";
     }
-    const decryptedBuff = await decryptText(encryptedBuff);
-    return utf8decoder.decode(decryptedBuff);
+    try {
+        const decryptedBuff = await decryptText(encryptedBuff);
+        return utf8decoder.decode(decryptedBuff);
+    } catch (e) {
+        window.alert("Failed to decrypt data. It could be caused by the wrong password. " +
+            "Please refresh and try again.");
+        return "error";
+    }
 }
 
 async function setDashboardSettings(dashBoardSettings) {
