@@ -53,38 +53,6 @@
       "url": "favicon.ico"
     },
     {
-      "hash": "sha256-n3MawhgXdHhz1MlSNHwqlqAIJrMhBUcyFN6\/Eg\/3bh8=",
-      "url": "fb_download_instruction\/ads-info.png"
-    },
-    {
-      "hash": "sha256-\/d0ZnGxuq7oqTqZCdtyWoZTVuMsjVIP9Qe+XPWa19ik=",
-      "url": "fb_download_instruction\/step1.png"
-    },
-    {
-      "hash": "sha256-L55\/iH3IXwgWF77UCMHd15T6Mi3BhKtrrr6lShHf6qg=",
-      "url": "fb_download_instruction\/step2.png"
-    },
-    {
-      "hash": "sha256-wrJo+ofbJT1o++uZxJQO5n\/nBbo\/lMNlgdeSpTXYuu4=",
-      "url": "fb_download_instruction\/step3.png"
-    },
-    {
-      "hash": "sha256-ymZUJlz8ejuHNEukFnHMSQpORPiB7ktu5w+dELop9IY=",
-      "url": "fb_download_instruction\/step4.png"
-    },
-    {
-      "hash": "sha256-O0cTPS2RNEtB53Mg1ett0cNbSh4\/tH1PetXGwYQNoe8=",
-      "url": "fb_download_instruction\/step5.png"
-    },
-    {
-      "hash": "sha256-B34oT7U5vMyGsJib65aRjzfwwqVWeC45ZVnMC6ETjwM=",
-      "url": "fb_download_instruction\/step6.png"
-    },
-    {
-      "hash": "sha256-qeZ0DqR9xhJ99dXmOUaIbfEW2zwGUtJa4QyIi\/yOOMk=",
-      "url": "fb_download_instruction\/your-topics.png"
-    },
-    {
       "hash": "sha256-DbpQaq68ZSb5IoPosBErM1QWBfsbTxpJqhU0REi6wP4=",
       "url": "icon-192.png"
     },
@@ -93,11 +61,47 @@
       "url": "icon-512.png"
     },
     {
+      "hash": "sha256-uz947RK4kf\/klg7qV65fjC9eSrs3yViJtU73LtAHiP0=",
+      "url": "img\/dashboard-example.PNG"
+    },
+    {
+      "hash": "sha256-n3MawhgXdHhz1MlSNHwqlqAIJrMhBUcyFN6\/Eg\/3bh8=",
+      "url": "img\/fb_download_instruction\/ads-info.png"
+    },
+    {
+      "hash": "sha256-\/d0ZnGxuq7oqTqZCdtyWoZTVuMsjVIP9Qe+XPWa19ik=",
+      "url": "img\/fb_download_instruction\/step1.png"
+    },
+    {
+      "hash": "sha256-L55\/iH3IXwgWF77UCMHd15T6Mi3BhKtrrr6lShHf6qg=",
+      "url": "img\/fb_download_instruction\/step2.png"
+    },
+    {
+      "hash": "sha256-wrJo+ofbJT1o++uZxJQO5n\/nBbo\/lMNlgdeSpTXYuu4=",
+      "url": "img\/fb_download_instruction\/step3.png"
+    },
+    {
+      "hash": "sha256-ymZUJlz8ejuHNEukFnHMSQpORPiB7ktu5w+dELop9IY=",
+      "url": "img\/fb_download_instruction\/step4.png"
+    },
+    {
+      "hash": "sha256-O0cTPS2RNEtB53Mg1ett0cNbSh4\/tH1PetXGwYQNoe8=",
+      "url": "img\/fb_download_instruction\/step5.png"
+    },
+    {
+      "hash": "sha256-B34oT7U5vMyGsJib65aRjzfwwqVWeC45ZVnMC6ETjwM=",
+      "url": "img\/fb_download_instruction\/step6.png"
+    },
+    {
+      "hash": "sha256-qeZ0DqR9xhJ99dXmOUaIbfEW2zwGUtJa4QyIi\/yOOMk=",
+      "url": "img\/fb_download_instruction\/your-topics.png"
+    },
+    {
       "hash": "sha256-m0fuFna3eDB2AARK1TBy4yXGgd9qJa7nQTCz4pKwAs0=",
       "url": "index.html"
     },
     {
-      "hash": "sha256-m8DHjBTc1BStL\/oQaZcdTyvu\/T9UjDA5wLPZjZdSYCw=",
+      "hash": "sha256-BRCoVmCpe1Tunb\/T4wrp4sErL7LnC0C6Hpqz+UVSfM4=",
       "url": "js\/encrypt.js"
     },
     {
@@ -137,7 +141,7 @@
       "url": "_framework\/icudt.dat"
     },
     {
-      "hash": "sha256-0UiT8n+dTeH\/zI1FOvjwd13sVN7F8XRx+H6UI0RL5As=",
+      "hash": "sha256-6InM11O7GAFnovkkMFXt1nqjO1MahvheYq7BcSjLa7U=",
       "url": "_framework\/blazor.boot.json"
     },
     {
@@ -221,7 +225,7 @@
       "url": "_framework\/Privasight.Model.Shared.dll"
     },
     {
-      "hash": "sha256-6oZ7gpYAGF1+f+AZuzVFypkifgFrbw8h+CMU\/K3f1\/c=",
+      "hash": "sha256-gP5Fzu7eiqRntPqbHYo1r4UWAAXGMLzIyPGJvqFD30Q=",
       "url": "_framework\/Privasight.Wasm.dll"
     },
     {
@@ -521,5 +525,5 @@
       "url": "_content\/Radzen.Blazor\/Radzen.Blazor.js"
     }
   ],
-  "version": "q3hK38pv"
+  "version": "rXIsIoz+"
 };
