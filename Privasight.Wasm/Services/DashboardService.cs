@@ -1,4 +1,5 @@
-﻿using Blazored.LocalStorage;
+﻿using Microsoft.JSInterop;
+using Newtonsoft.Json;
 using Privasight.Model.Shared.DataStructures.Dashboard;
 using Privasight.Wasm.Configs;
 
@@ -7,7 +8,7 @@ namespace Privasight.Wasm.Services;
 /// <summary>
 /// Service for storing & accessing dashboard settings
 /// </summary>
-public class DashboardService : ServiceUsingLocalStorage
+public class DashboardService : ServiceUsingIndexedDb
 {
     public enum UpdateAction
     {
@@ -51,7 +52,7 @@ public class DashboardService : ServiceUsingLocalStorage
         }
     }
 
-    public DashboardService(ILocalStorageService localStorage) : base(localStorage)
+    public DashboardService(IJSRuntime jsRuntime) : base(jsRuntime)
     {
     }
 
@@ -85,13 +86,18 @@ public class DashboardService : ServiceUsingLocalStorage
         }
 
         OnPropertyChanged(nameof(DashboardSettings));
-        await LocalStorage.SetItemAsync(nameof(DashboardSettings), DashboardSettings);
+        var jsonStr = JsonConvert.SerializeObject(DashboardSettings);
+        await JsRuntime.InvokeVoidAsync("setDashboardSettings", jsonStr);
     }
 
     public async Task SetDashboardSettingsFromStorage()
     {
-        var dashboardSettings =
-            await LocalStorage.GetItemAsync<Dictionary<AvailableCompany, IList<DashboardSetting>>>(nameof(DashboardSettings));
-        DashboardSettings = dashboardSettings ?? new Dictionary<AvailableCompany, IList<DashboardSetting>>();
+        var dataStr = await JsRuntime.InvokeAsync<string>("getDashboardSettings");
+        if (string.IsNullOrWhiteSpace(dataStr))
+        {
+            DashboardSettings = new Dictionary<AvailableCompany, IList<DashboardSetting>>();
+        }
+        DashboardSettings = JsonConvert.DeserializeObject<Dictionary<AvailableCompany, IList<DashboardSetting>>>(dataStr) ??
+                            new Dictionary<AvailableCompany, IList<DashboardSetting>>();
     }
 }

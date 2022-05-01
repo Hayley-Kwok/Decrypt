@@ -4,9 +4,13 @@
 const idbPromise = import("https://cdn.jsdelivr.net/npm/idb-keyval@6/+esm");
 const utf8Encoder = new TextEncoder("utf-8");
 const utf8decoder = new TextDecoder("utf-8");
+
 const crypto = window.crypto;
 const ivLen = 16; // the IV is always 16 bytes
 const aesName = "AES-CBC";
+
+const companyDataKey = "companyData";
+const dashboardSettingsKey = "dashboardSettings";
 
 let rawKey;
 let encryptedMessage;
@@ -107,7 +111,7 @@ async function getIdb() {
 }
 
 async function generateKey() {
-    if (typeof rawKey !== "undefined") {
+    if (rawKey !== undefined) {
         return true;
     }
 
@@ -169,8 +173,7 @@ async function setCompanyData(companyData) {
 
     await getIdb();
 
-    await idb.set("companyData", encryptedBuff);
-    console.log(encryptedBuff);
+    await idb.set(companyDataKey, encryptedBuff);
 }
 
 async function getCompanyData() {
@@ -179,10 +182,26 @@ async function getCompanyData() {
         return "";
     }
     await getIdb();
-    const encryptedBuff = await idb.get("companyData");
+    const encryptedBuff = await idb.get(companyDataKey);
     if (encryptedBuff === undefined) {
         return "";
     }
     const decryptedBuff = await decryptText(encryptedBuff);
     return utf8decoder.decode(decryptedBuff);
+}
+
+async function setDashboardSettings(dashBoardSettings) {
+    await getIdb();
+
+    await idb.set(dashboardSettingsKey, dashBoardSettings);
+}
+
+async function getDashboardSettings() {
+    await getIdb();
+
+    const dashboardSettings = await idb.get(dashboardSettingsKey);
+    if (dashboardSettings === undefined) {
+        return "";
+    }
+    return dashboardSettings;
 }

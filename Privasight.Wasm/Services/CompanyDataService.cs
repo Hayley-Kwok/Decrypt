@@ -1,5 +1,4 @@
-﻿using Blazored.LocalStorage;
-using Microsoft.JSInterop;
+﻿using Microsoft.JSInterop;
 using Newtonsoft.Json;
 using Privasight.Model.Shared.DataStructures.Interfaces;
 using Privasight.Wasm.Configs;
@@ -9,10 +8,8 @@ namespace Privasight.Wasm.Services;
 /// <summary>
 /// Service for storing & accessing companies data
 /// </summary>
-public class CompanyDataService : ServiceUsingLocalStorage
+public class CompanyDataService : ServiceUsingIndexedDb
 {
-    private readonly JsonSerializerSettings _serializerSettings;
-    private readonly IJSRuntime _js;
     public string DataLoadingStatus { get; set; } = "";
     public bool LoadingData { get; set; }
 
@@ -34,13 +31,8 @@ public class CompanyDataService : ServiceUsingLocalStorage
         }
     }
 
-    public CompanyDataService(ILocalStorageService localStorage, IJSRuntime js) : base(localStorage)
+    public CompanyDataService(IJSRuntime jsRuntime) : base(jsRuntime)
     {
-        _js = js;
-        _serializerSettings = new JsonSerializerSettings
-        {
-            TypeNameHandling = TypeNameHandling.Auto
-        };
     }
 
     public async Task UpdateAvailableData(AvailableCompany company, Dictionary<string, IFileWrapper> newData)
@@ -85,13 +77,16 @@ public class CompanyDataService : ServiceUsingLocalStorage
 
     public async Task SetAvailableDataFromStorage()
     {
-        var dataStr = await _js.InvokeAsync<string>("getCompanyData");
+        var dataStr = await JsRuntime.InvokeAsync<string>("getCompanyData");
         if (string.IsNullOrWhiteSpace(dataStr))
         {
             AvailableData = new Dictionary<AvailableCompany, Dictionary<string, IFileWrapper>>();
         }
-        AvailableData = JsonConvert.DeserializeObject<Dictionary<AvailableCompany, Dictionary<string, IFileWrapper>>>(dataStr, _serializerSettings)?? 
-                        new Dictionary<AvailableCompany, Dictionary<string, IFileWrapper>>();
+
+        AvailableData =
+            JsonConvert.DeserializeObject<Dictionary<AvailableCompany, Dictionary<string, IFileWrapper>>>(dataStr,
+                TypeAutoSettings) ??
+            new Dictionary<AvailableCompany, Dictionary<string, IFileWrapper>>();
     }
 
     public async Task RemoveAvailableData(AvailableCompany company)
@@ -104,8 +99,8 @@ public class CompanyDataService : ServiceUsingLocalStorage
 
     private async Task UpdateAvailableDataInStorage()
     {
-        var jsonStr = JsonConvert.SerializeObject(AvailableData, _serializerSettings);
-        await _js.InvokeVoidAsync("setCompanyData", jsonStr);
+        var jsonStr = JsonConvert.SerializeObject(AvailableData, TypeAutoSettings);
+        await JsRuntime.InvokeVoidAsync("setCompanyData", jsonStr);
         OnPropertyChanged(nameof(AvailableData));
     }
 }
