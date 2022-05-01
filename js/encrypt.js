@@ -7,6 +7,7 @@ const utf8decoder = new TextDecoder("utf-8");
 const crypto = window.crypto;
 const ivLen = 16; // the IV is always 16 bytes
 const aesName = "AES-CBC";
+
 let rawKey;
 let encryptedMessage;
 let idb;
@@ -105,32 +106,6 @@ async function getIdb() {
     }
 }
 
-async function setCompanyData() {
-    const keyGenerated = await generateKey();
-    if (!keyGenerated) {
-        return;
-    }
-
-    const encryptedBuff = await encryptText("privasight");
-
-    await getIdb();
-    
-    await idb.set("companyData", encryptedBuff);
-    console.log(encryptedBuff);
-}
- 
-async function getCompanyData() {
-    const keyGenerated = await generateKey();
-    if (!keyGenerated) {
-        return;
-    }
-    await getIdb();
-    const encryptedBuff = await idb.get("companyData");
-    console.log(encryptedBuff);
-    const decryptedBuff = await decryptText(encryptedBuff);
-    console.log(utf8decoder.decode(decryptedBuff));
-}
-
 async function generateKey() {
     if (typeof rawKey !== "undefined") {
         return true;
@@ -181,4 +156,33 @@ async function decryptText(text) {
     const key = await crypto.subtle.importKey("raw", rawKey, aesName, true, ["decrypt"]);
     const decryptStr = await decrypt(text, key);
     return decryptStr;
+}
+
+
+async function setCompanyData(companyData) {
+    const keyGenerated = await generateKey();
+    if (!keyGenerated) {
+        return;
+    }
+
+    const encryptedBuff = await encryptText(companyData);
+
+    await getIdb();
+
+    await idb.set("companyData", encryptedBuff);
+    console.log(encryptedBuff);
+}
+
+async function getCompanyData() {
+    const keyGenerated = await generateKey();
+    if (!keyGenerated) {
+        return "";
+    }
+    await getIdb();
+    const encryptedBuff = await idb.get("companyData");
+    if (encryptedBuff === undefined) {
+        return "";
+    }
+    const decryptedBuff = await decryptText(encryptedBuff);
+    return utf8decoder.decode(decryptedBuff);
 }
