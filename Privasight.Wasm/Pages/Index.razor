@@ -21,15 +21,17 @@ An example of the dashboard with data generated on different dates: <br/>
 <h3>How does Privasight handle your data?</h3>
 <p>
 	<b>WE DON'T KEEP A COPY OF YOUR DATA!  </b>
-	All of your data never leaves your device. All data processes and storage stay within your device.
+	All of your data never leaves your device and you are the only one that can see your data. All data processes and storage stay within your device. <br/>
+	We only save your data on your browser so that your data won't be lost after a refresh and you can still see them the next time you 
+	visit us. This also allows you to compare data from different generation dates easily. 
 	<h6><code>How is this even possible in technical terms?</code></h6>
 	Privasight is a client-side web app built with .NET Blazor WebAssembly. This means that all operations are performed
 	within your browser without the need of sending data and requests back and forth to a server. This is in fact a static website.
 	<b>Your data never leaves your browser!</b><br/>
-	In terms of data storage, we make use of 
-	<a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API" target="_blank" class="text-decoration-underline">indexedDb</a> 
-	of the browser so that your data won't be lost after a refresh and 
-	you can still see them the next time you visit us. This also allows you to compare data from different generation dates easily.
+	In terms of data storage, We made use of 
+	<a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API" target="_blank" class="text-decoration-underline">IndexedDb</a> 
+	of the browser. IndexedDb follows the <a href="https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API" target="_blank" class="text-decoration-underline">
+	same-origin policy</a> which makes Privasight the only origin that can access the data. Other origins cannot access it.
 </p>
 <h3>What does Privasight do to keep your data safe?</h3>
 <p>
