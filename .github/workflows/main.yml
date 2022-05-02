@@ -65,7 +65,7 @@ jobs:
         run: touch release/wwwroot/.nojekyll 
       
       - name: Update Cache Version Number
-        run: sed -i ''s/{#CACHE_VERSION#}/$(github.run_id)/'' release/wwwroot/service-worker.published.js
+        run: sed -i ''s/{#CACHE_VERSION#}/$(github.run_id)/'' Privasight.Wasm/wwwroot/service-worker.published.js
 
       - name: Commit wwwroot to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@3.7.1
