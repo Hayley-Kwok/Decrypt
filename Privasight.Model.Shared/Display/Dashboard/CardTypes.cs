@@ -1,4 +1,4 @@
-﻿namespace Privasight.Model.Shared.DataStructures.Dashboard
+﻿namespace Privasight.Model.Shared.Display.Dashboard
 {
     public enum CardTypes
     {

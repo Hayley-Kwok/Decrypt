@@ -1,6 +1,6 @@
 ﻿using Microsoft.JSInterop;
 using Newtonsoft.Json;
-using Privasight.Model.Shared.DataStructures.Dashboard;
+using Privasight.Model.Shared.Display.Dashboard;
 using Privasight.Wasm.Configs;
 
 namespace Privasight.Wasm.Services;
