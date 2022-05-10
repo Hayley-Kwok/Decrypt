@@ -18,7 +18,6 @@ namespace Privasight.Wasm.Services
             options.Converters.Add(new FbConverter());
             options.Converters.Add(new StringWrapperDbObjConverter());
 
-            //TODO: not entire sure is this a good way to do this; Followed this guideline https://docs.microsoft.com/en-us/aspnet/core/blazor/file-uploads?view=aspnetcore-6.0&pivots=webassembly
             await using var stream = new MemoryStream();
             await e.File.OpenReadStream(MaxFileSize).CopyToAsync(stream);
 

@@ -13,14 +13,14 @@ public class CompanyDataService : ServiceUsingIndexedDb
     public string DataLoadingStatus { get; set; } = "";
     public bool LoadingData { get; set; }
 
+    private Dictionary<AvailableCompany, Dictionary<string, IFileWrapper>>? _availableData;
+
     /// <summary>
     /// Key: the company
     /// Value: Store the transformed FileWrappers (Json object that has transformed to supported C# object)
     /// 1 FileWrapper correspond to 1 Json File in the zip file
     ///     Key: Name of the type of the FileWrapper stored in value; Value: The FileWrapper Object
     /// </summary>
-    private Dictionary<AvailableCompany, Dictionary<string, IFileWrapper>>? _availableData;
-
     public Dictionary<AvailableCompany, Dictionary<string, IFileWrapper>>? AvailableData
     {
         get => _availableData;
