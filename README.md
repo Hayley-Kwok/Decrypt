@@ -31,7 +31,7 @@ The future development plan for Privasight is to slowly migrate to .NET MAUI app
 The web version will stay as a taster version for users to try the application out before downloading the desktop version.
 
 There is a lot more formal justification for the technical decisions made for Privasight, and they are all documented in my dissertation report. 
-I will slowly move the important decisions I made from my report to here, but in the meantime, feel free to take a look at the report here to see how it all works.
+I will slowly move the important decisions I made from my report to here, but in the meantime, feel free to take a look at the report [here](documentation/dissertation-report.pdf) to see how it all works.
 
 ## Contribute to the application
 Despite how much I want to continue the development of Privasight, I have limited time for it. Feel free to raise any PRs to continue the development and solve any issues.
